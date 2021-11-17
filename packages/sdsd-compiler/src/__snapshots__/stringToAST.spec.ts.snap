@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stringToAST() converts milestone definitions 1`] = `
+Object {
+}
+`;
+
+exports[`stringToAST() converts study metadata 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 27,
+            "type": "key",
+            "value": "id",
+          },
+          "loc": 27,
+          "rhs": Object {
+            "loc": 31,
+            "type": "string",
+            "value": "TER101-AD-201",
+          },
+          "type": "key-value-pair",
+        },
+        Object {
+          "lhs": Object {
+            "loc": 57,
+            "type": "key",
+            "value": "name",
+          },
+          "loc": 57,
+          "rhs": Object {
+            "loc": 63,
+            "type": "string",
+            "value": "Teres Atopic Derm Phase 2a",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 9,
+      "type": "study-definition",
+    },
+  ],
+  "loc": 0,
+  "type": "document",
+}
+`;
