@@ -2,7 +2,7 @@ import {
   BothWindow,
   DayExpression,
   Document,
-  Expression,
+  Value,
   Identifier,
   KeyValuePair,
   MilestoneDefinition,
@@ -104,8 +104,7 @@ export const keyValuePair = ([identifier, , , , string]: [
   rhs: string,
 });
 
-export const expression = ([[expression]]: [Expression][]): Expression =>
-  expression;
+export const value = ([[expression]]: [Value][]): Value => expression;
 
 export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   type: "identifier",

@@ -5,7 +5,7 @@ import { lexer } from './lexer';
 import {
   _,
   __,
-  expression,
+  value,
   identifier as identifierFn,
   keyValuePair,
   main,
@@ -32,9 +32,9 @@ main                -> (studyDefinition |
 studyDefinition     -> _ "study" _ %openbr _ keyValuePair:* _ %closebr _ {% studyDefinition %}
 milestoneDefinition -> _ "milestone" __ identifier _ %openbr _ keyValuePair:* _ %closebr _ {% milestoneDefinition %}
 
-keyValuePair        -> identifier _ %colon _ expression _ {% keyValuePair %}
+keyValuePair        -> identifier _ %colon _ value _ {% keyValuePair %}
 
-expression          -> (string | timeconf) {% expression %}
+value               -> (string | timeconf) {% value %}
 identifier          -> %identifier {% identifierFn %}
 
 timeconf            -> %timeconf _ (studyDay | timeExpression) _ %timeconfend {% timeconfFn %}
