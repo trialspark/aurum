@@ -26,27 +26,32 @@ import {
 
 @lexer lexer
 
-main -> (studyDefinition | milestoneDefinition):* {% main %}
+main                -> (studyDefinition |
+                        milestoneDefinition):* {% main %}
 
-studyDefinition -> _ "study" _ %openbr _ keyValuePair:* _ %closebr _ {% studyDefinition %}
+studyDefinition     -> _ "study" _ %openbr _ keyValuePair:* _ %closebr _ {% studyDefinition %}
 milestoneDefinition -> _ "milestone" __ identifier _ %openbr _ keyValuePair:* _ %closebr _ {% milestoneDefinition %}
 
-keyValuePair -> identifier _ %colon _ expression _ {% keyValuePair %}
+keyValuePair        -> identifier _ %colon _ expression _ {% keyValuePair %}
 
-expression -> (string | timeconf) {% expression %}
-identifier -> %identifier {% identifierFn %}
+expression          -> (string | timeconf) {% expression %}
+identifier          -> %identifier {% identifierFn %}
 
-timeconf -> %timeconf _ (studyDay | timeExpression) _ %timeconfend {% timeconfFn %}
-studyDay -> day (__ window):? {% studyDay %}
-window -> (positiveWindow | negativeWindow | bothWindow | (positiveWindow __ negativeWindow) | (negativeWindow __ positiveWindow)) {% window %}
-positiveWindow -> %plus day {% positiveWindow %}
-negativeWindow -> %minus day {% negativeWindow %}
-bothWindow -> %plus %minus day {% bothWindow %}
-day -> %day {% dayFn %}
-timeExpression -> timeOperator _ identifier {% timeExpression %}
-timeOperator -> (%gt | %lt | %gte | %lte) {% timeOperator %}
+timeconf            -> %timeconf _ (studyDay | timeExpression) _ %timeconfend {% timeconfFn %}
+studyDay            -> day (__ window):? {% studyDay %}
+window              -> (positiveWindow |
+                        negativeWindow |
+                        bothWindow |
+                        (positiveWindow __ negativeWindow) |
+                        (negativeWindow __ positiveWindow)) {% window %}
+positiveWindow      -> %plus day {% positiveWindow %}
+negativeWindow      -> %minus day {% negativeWindow %}
+bothWindow          -> %plus %minus day {% bothWindow %}
+day                 -> %day {% dayFn %}
+timeExpression      -> timeOperator _ identifier {% timeExpression %}
+timeOperator        -> (%gt | %lt | %gte | %lte) {% timeOperator %}
 
-string -> %string {% stringFn %}
+string              -> %string {% stringFn %}
 
-__ -> %ws {% __ %}
-_ -> __:? {% _ %}
+__                  -> %ws {% __ %}
+_                   -> __:? {% _ %}
