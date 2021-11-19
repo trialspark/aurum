@@ -2,6 +2,210 @@
 
 exports[`stringToAST() converts milestone definitions 1`] = `
 Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 41,
+            "type": "identifier",
+            "value": "at",
+          },
+          "loc": 41,
+          "rhs": Object {
+            "loc": 45,
+            "type": "string",
+            "value": "d-14 +d14 -d10",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 9,
+      "name": Object {
+        "loc": 19,
+        "type": "identifier",
+        "value": "SCREENING",
+      },
+      "type": "milestone-definition",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 120,
+            "type": "identifier",
+            "value": "at",
+          },
+          "loc": 120,
+          "rhs": Object {
+            "loc": 124,
+            "type": "string",
+            "value": "d0",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 89,
+      "name": Object {
+        "loc": 99,
+        "type": "identifier",
+        "value": "BASELINE",
+      },
+      "type": "milestone-definition",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 187,
+            "type": "identifier",
+            "value": "at",
+          },
+          "loc": 187,
+          "rhs": Object {
+            "loc": 191,
+            "type": "string",
+            "value": "d7 +-d4",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 156,
+      "name": Object {
+        "loc": 166,
+        "type": "identifier",
+        "value": "CLINIC_1",
+      },
+      "type": "milestone-definition",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 259,
+            "type": "identifier",
+            "value": "at",
+          },
+          "loc": 259,
+          "rhs": Object {
+            "loc": 263,
+            "type": "string",
+            "value": "d14 +-d4",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 228,
+      "name": Object {
+        "loc": 238,
+        "type": "identifier",
+        "value": "CLINIC_2",
+      },
+      "type": "milestone-definition",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 332,
+            "type": "identifier",
+            "value": "at",
+          },
+          "loc": 332,
+          "rhs": Object {
+            "loc": 336,
+            "type": "string",
+            "value": "d21 +-d3",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 301,
+      "name": Object {
+        "loc": 311,
+        "type": "identifier",
+        "value": "CLINIC_3",
+      },
+      "type": "milestone-definition",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 405,
+            "type": "identifier",
+            "value": "day",
+          },
+          "loc": 405,
+          "rhs": Object {
+            "loc": 410,
+            "type": "string",
+            "value": "d28 +-d4",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 374,
+      "name": Object {
+        "loc": 384,
+        "type": "identifier",
+        "value": "CLINIC_4",
+      },
+      "type": "milestone-definition",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 479,
+            "type": "identifier",
+            "value": "day",
+          },
+          "loc": 479,
+          "rhs": Object {
+            "loc": 484,
+            "type": "string",
+            "value": "d35 +d2 -d4",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 448,
+      "name": Object {
+        "loc": 458,
+        "type": "identifier",
+        "value": "CLOSEOUT",
+      },
+      "type": "milestone-definition",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "lhs": Object {
+            "loc": 558,
+            "type": "identifier",
+            "value": "day",
+          },
+          "loc": 558,
+          "rhs": Object {
+            "loc": 563,
+            "type": "string",
+            "value": "> BASELINE",
+          },
+          "type": "key-value-pair",
+        },
+      ],
+      "loc": 525,
+      "name": Object {
+        "loc": 535,
+        "type": "identifier",
+        "value": "EARLY_TERM",
+      },
+      "type": "milestone-definition",
+    },
+  ],
+  "loc": 0,
+  "type": "document",
 }
 `;
 
@@ -13,7 +217,7 @@ Object {
         Object {
           "lhs": Object {
             "loc": 27,
-            "type": "key",
+            "type": "identifier",
             "value": "id",
           },
           "loc": 27,
@@ -27,7 +231,7 @@ Object {
         Object {
           "lhs": Object {
             "loc": 57,
-            "type": "key",
+            "type": "identifier",
             "value": "name",
           },
           "loc": 57,
