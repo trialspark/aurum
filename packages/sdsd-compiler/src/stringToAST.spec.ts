@@ -16,35 +16,35 @@ describe("stringToAST()", () => {
     expect(
       stringToAST(`
         milestone SCREENING {
-          at: "d-14 +d14 -d10"
+          at: t"d-14 +d14 -d10"
         }
         
         milestone BASELINE {
-          at: "d0"
+          at: t"d0"
         }
         
         milestone CLINIC_1 {
-          at: "d7 +-d4"
+          at: t"d7 +-d4"
         }
         
         milestone CLINIC_2 {
-          at: "d14 +-d4"
+          at: t"d14 +-d4"
         }
         
         milestone CLINIC_3 {
-          at: "d21 +-d3"
+          at: t"d21 +-d3"
         }
         
         milestone CLINIC_4 {
-          day: "d28 +-d4"
+          day: t"d28 +-d4"
         }
         
         milestone CLOSEOUT {
-          day: "d35 +d2 -d4"
+          day: t"d35 +d2 -d4"
         }
         
         milestone EARLY_TERM {
-          day: "> BASELINE"
+          day: t"> BASELINE"
         }
     `)
     ).toMatchSnapshot();

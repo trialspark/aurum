@@ -1,5 +1,6 @@
 import {
   Document,
+  Expression,
   Identifier,
   KeyValuePair,
   MilestoneDefinition,
@@ -84,6 +85,9 @@ export const keyValuePair = ([identifier, , , , string]: [
   lhs: identifier,
   rhs: string,
 });
+
+export const expression = ([[expression]]: [Expression][]): Expression =>
+  expression;
 
 export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   type: "identifier",

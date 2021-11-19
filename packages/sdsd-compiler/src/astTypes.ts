@@ -23,6 +23,8 @@ export interface KeyValuePair extends Node<"key-value-pair"> {
   rhs: String;
 }
 
+export type Expression = String;
+
 export interface Identifier extends Node<"identifier"> {
   value: string;
 }
