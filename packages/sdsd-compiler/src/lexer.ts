@@ -7,6 +7,15 @@ export type MilestoneToken = Token;
 export type ColonToken = Token;
 export type IdentifierToken = Token;
 export type StringToken = Token;
+export type TimeconfToken = Token;
+export type DayToken = Token;
+export type PlusToken = Token;
+export type MinusToken = Token;
+export type GtToken = Token & { type: "gt"; value: ">" };
+export type LtToken = Token & { type: "lt"; value: "<" };
+export type GteToken = Token & { type: "gte"; value: ">=" };
+export type LteToken = Token & { type: "lte"; value: "<=" };
+export type TimeconfendToken = Token;
 
 const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_.]*/;
 

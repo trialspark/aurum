@@ -3,15 +3,24 @@
 @{%
 import { lexer } from './lexer';
 import {
-  main,
-  studyDefinition,
-  milestoneDefinition,
-  keyValuePair,
-  identifier as identifierFn,
-  string as stringFn,
-  __,
   _,
+  __,
   expression,
+  identifier as identifierFn,
+  keyValuePair,
+  main,
+  milestoneDefinition,
+  string as stringFn,
+  studyDefinition,
+  timeOperator,
+  timeconf as timeconfFn,
+  timeExpression,
+  day as dayFn,
+  window,
+  bothWindow,
+  negativeWindow,
+  positiveWindow,
+  studyDay,
 } from './postprocessors';
 %}
 
@@ -27,14 +36,15 @@ keyValuePair -> identifier _ %colon _ expression _ {% keyValuePair %}
 expression -> (string | timeconf) {% expression %}
 identifier -> %identifier {% identifierFn %}
 
-timeconf -> %timeconf _ (studyDay | timeExpression) _ %timeconfend
-studyDay -> %day (__ window):?
-window -> positiveWindow | negativeWindow | bothWindow | (positiveWindow __ negativeWindow) | (negativeWindow __ positiveWindow)
-positiveWindow -> %plus %day
-negativeWindow -> %minus %day
-bothWindow -> %plus %minus %day
-timeExpression -> timeOperator _ identifier
-timeOperator -> %gt | %lt | %gte | %lte
+timeconf -> %timeconf _ (studyDay | timeExpression) _ %timeconfend {% timeconfFn %}
+studyDay -> day (__ window):? {% studyDay %}
+window -> (positiveWindow | negativeWindow | bothWindow | (positiveWindow __ negativeWindow) | (negativeWindow __ positiveWindow)) {% window %}
+positiveWindow -> %plus day {% positiveWindow %}
+negativeWindow -> %minus day {% negativeWindow %}
+bothWindow -> %plus %minus day {% bothWindow %}
+day -> %day {% dayFn %}
+timeExpression -> timeOperator _ identifier {% timeExpression %}
+timeOperator -> (%gt | %lt | %gte | %lte) {% timeOperator %}
 
 string -> %string {% stringFn %}
 

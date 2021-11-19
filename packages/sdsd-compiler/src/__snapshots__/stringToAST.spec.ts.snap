@@ -14,8 +14,45 @@ Object {
           "loc": 41,
           "rhs": Object {
             "loc": 45,
-            "type": "string",
-            "value": "d-14 +d14 -d10",
+            "type": "timeconf",
+            "value": Object {
+              "day": Object {
+                "loc": 47,
+                "type": "day-expression",
+                "unit": "day",
+                "value": -14,
+              },
+              "loc": 47,
+              "type": "study-day",
+              "window": Object {
+                "loc": 52,
+                "type": "window",
+                "window": Array [
+                  Object {
+                    "days": Object {
+                      "loc": 53,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 14,
+                    },
+                    "loc": 52,
+                    "operator": "+",
+                    "type": "positive-window",
+                  },
+                  Object {
+                    "days": Object {
+                      "loc": 58,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 10,
+                    },
+                    "loc": 57,
+                    "operator": "-",
+                    "type": "negative-window",
+                  },
+                ],
+              },
+            },
           },
           "type": "key-value-pair",
         },
@@ -32,22 +69,32 @@ Object {
       "children": Array [
         Object {
           "lhs": Object {
-            "loc": 120,
+            "loc": 121,
             "type": "identifier",
             "value": "at",
           },
-          "loc": 120,
+          "loc": 121,
           "rhs": Object {
-            "loc": 124,
-            "type": "string",
-            "value": "d0",
+            "loc": 125,
+            "type": "timeconf",
+            "value": Object {
+              "day": Object {
+                "loc": 127,
+                "type": "day-expression",
+                "unit": "day",
+                "value": 0,
+              },
+              "loc": 127,
+              "type": "study-day",
+              "window": null,
+            },
           },
           "type": "key-value-pair",
         },
       ],
-      "loc": 89,
+      "loc": 90,
       "name": Object {
-        "loc": 99,
+        "loc": 100,
         "type": "identifier",
         "value": "BASELINE",
       },
@@ -57,22 +104,48 @@ Object {
       "children": Array [
         Object {
           "lhs": Object {
-            "loc": 187,
+            "loc": 189,
             "type": "identifier",
             "value": "at",
           },
-          "loc": 187,
+          "loc": 189,
           "rhs": Object {
-            "loc": 191,
-            "type": "string",
-            "value": "d7 +-d4",
+            "loc": 193,
+            "type": "timeconf",
+            "value": Object {
+              "day": Object {
+                "loc": 195,
+                "type": "day-expression",
+                "unit": "day",
+                "value": 7,
+              },
+              "loc": 195,
+              "type": "study-day",
+              "window": Object {
+                "loc": 198,
+                "type": "window",
+                "window": Array [
+                  Object {
+                    "days": Object {
+                      "loc": 200,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 4,
+                    },
+                    "loc": 198,
+                    "operator": "+-",
+                    "type": "both-window",
+                  },
+                ],
+              },
+            },
           },
           "type": "key-value-pair",
         },
       ],
-      "loc": 156,
+      "loc": 158,
       "name": Object {
-        "loc": 166,
+        "loc": 168,
         "type": "identifier",
         "value": "CLINIC_1",
       },
@@ -82,22 +155,48 @@ Object {
       "children": Array [
         Object {
           "lhs": Object {
-            "loc": 259,
+            "loc": 262,
             "type": "identifier",
             "value": "at",
           },
-          "loc": 259,
+          "loc": 262,
           "rhs": Object {
-            "loc": 263,
-            "type": "string",
-            "value": "d14 +-d4",
+            "loc": 266,
+            "type": "timeconf",
+            "value": Object {
+              "day": Object {
+                "loc": 268,
+                "type": "day-expression",
+                "unit": "day",
+                "value": 14,
+              },
+              "loc": 268,
+              "type": "study-day",
+              "window": Object {
+                "loc": 272,
+                "type": "window",
+                "window": Array [
+                  Object {
+                    "days": Object {
+                      "loc": 274,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 4,
+                    },
+                    "loc": 272,
+                    "operator": "+-",
+                    "type": "both-window",
+                  },
+                ],
+              },
+            },
           },
           "type": "key-value-pair",
         },
       ],
-      "loc": 228,
+      "loc": 231,
       "name": Object {
-        "loc": 238,
+        "loc": 241,
         "type": "identifier",
         "value": "CLINIC_2",
       },
@@ -107,22 +206,48 @@ Object {
       "children": Array [
         Object {
           "lhs": Object {
-            "loc": 332,
+            "loc": 336,
             "type": "identifier",
             "value": "at",
           },
-          "loc": 332,
+          "loc": 336,
           "rhs": Object {
-            "loc": 336,
-            "type": "string",
-            "value": "d21 +-d3",
+            "loc": 340,
+            "type": "timeconf",
+            "value": Object {
+              "day": Object {
+                "loc": 342,
+                "type": "day-expression",
+                "unit": "day",
+                "value": 21,
+              },
+              "loc": 342,
+              "type": "study-day",
+              "window": Object {
+                "loc": 346,
+                "type": "window",
+                "window": Array [
+                  Object {
+                    "days": Object {
+                      "loc": 348,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 3,
+                    },
+                    "loc": 346,
+                    "operator": "+-",
+                    "type": "both-window",
+                  },
+                ],
+              },
+            },
           },
           "type": "key-value-pair",
         },
       ],
-      "loc": 301,
+      "loc": 305,
       "name": Object {
-        "loc": 311,
+        "loc": 315,
         "type": "identifier",
         "value": "CLINIC_3",
       },
@@ -132,22 +257,48 @@ Object {
       "children": Array [
         Object {
           "lhs": Object {
-            "loc": 405,
+            "loc": 410,
             "type": "identifier",
             "value": "day",
           },
-          "loc": 405,
+          "loc": 410,
           "rhs": Object {
-            "loc": 410,
-            "type": "string",
-            "value": "d28 +-d4",
+            "loc": 415,
+            "type": "timeconf",
+            "value": Object {
+              "day": Object {
+                "loc": 417,
+                "type": "day-expression",
+                "unit": "day",
+                "value": 28,
+              },
+              "loc": 417,
+              "type": "study-day",
+              "window": Object {
+                "loc": 421,
+                "type": "window",
+                "window": Array [
+                  Object {
+                    "days": Object {
+                      "loc": 423,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 4,
+                    },
+                    "loc": 421,
+                    "operator": "+-",
+                    "type": "both-window",
+                  },
+                ],
+              },
+            },
           },
           "type": "key-value-pair",
         },
       ],
-      "loc": 374,
+      "loc": 379,
       "name": Object {
-        "loc": 384,
+        "loc": 389,
         "type": "identifier",
         "value": "CLINIC_4",
       },
@@ -157,22 +308,59 @@ Object {
       "children": Array [
         Object {
           "lhs": Object {
-            "loc": 479,
+            "loc": 485,
             "type": "identifier",
             "value": "day",
           },
-          "loc": 479,
+          "loc": 485,
           "rhs": Object {
-            "loc": 484,
-            "type": "string",
-            "value": "d35 +d2 -d4",
+            "loc": 490,
+            "type": "timeconf",
+            "value": Object {
+              "day": Object {
+                "loc": 492,
+                "type": "day-expression",
+                "unit": "day",
+                "value": 35,
+              },
+              "loc": 492,
+              "type": "study-day",
+              "window": Object {
+                "loc": 496,
+                "type": "window",
+                "window": Array [
+                  Object {
+                    "days": Object {
+                      "loc": 497,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 2,
+                    },
+                    "loc": 496,
+                    "operator": "+",
+                    "type": "positive-window",
+                  },
+                  Object {
+                    "days": Object {
+                      "loc": 501,
+                      "type": "day-expression",
+                      "unit": "day",
+                      "value": 4,
+                    },
+                    "loc": 500,
+                    "operator": "-",
+                    "type": "negative-window",
+                  },
+                ],
+              },
+            },
           },
           "type": "key-value-pair",
         },
       ],
-      "loc": 448,
+      "loc": 454,
       "name": Object {
-        "loc": 458,
+        "loc": 464,
         "type": "identifier",
         "value": "CLOSEOUT",
       },
@@ -182,22 +370,35 @@ Object {
       "children": Array [
         Object {
           "lhs": Object {
-            "loc": 558,
+            "loc": 565,
             "type": "identifier",
             "value": "day",
           },
-          "loc": 558,
+          "loc": 565,
           "rhs": Object {
-            "loc": 563,
-            "type": "string",
-            "value": "> BASELINE",
+            "loc": 570,
+            "type": "timeconf",
+            "value": Object {
+              "loc": 572,
+              "operator": Object {
+                "loc": 572,
+                "type": "time-operator",
+                "value": ">",
+              },
+              "rhs": Object {
+                "loc": 574,
+                "type": "identifier",
+                "value": "BASELINE",
+              },
+              "type": "time-expression",
+            },
           },
           "type": "key-value-pair",
         },
       ],
-      "loc": 525,
+      "loc": 532,
       "name": Object {
-        "loc": 535,
+        "loc": 542,
         "type": "identifier",
         "value": "EARLY_TERM",
       },

@@ -1,20 +1,38 @@
 import {
+  BothWindow,
+  DayExpression,
   Document,
   Expression,
   Identifier,
   KeyValuePair,
   MilestoneDefinition,
+  NegativeWindow,
+  PositiveWindow,
   String,
+  StudyDay,
   StudyDefinition,
+  Timeconf,
+  TimeExpression,
+  TimeOperator,
+  Window,
 } from "./astTypes";
 import {
   CloseBrToken,
   ColonToken,
+  DayToken,
+  GteToken,
+  GtToken,
   IdentifierToken,
+  LteToken,
+  LtToken,
   MilestoneToken,
+  MinusToken,
   OpenBrToken,
+  PlusToken,
   StringToken,
   StudyToken,
+  TimeconfendToken,
+  TimeconfToken,
 } from "./lexer";
 
 type WhiteSpace = null;
@@ -93,6 +111,99 @@ export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   type: "identifier",
   loc: token.offset,
   value: token.toString(),
+});
+
+export const timeconf = ([timeconf, , [value]]: [
+  TimeconfToken,
+  WhiteSpace,
+  [StudyDay | TimeExpression],
+  WhiteSpace,
+  TimeconfendToken
+]): Timeconf => ({ type: "timeconf", loc: timeconf.offset, value });
+
+export const studyDay = ([day, window]: [
+  DayExpression,
+  [WhiteSpace, Window] | null
+]): StudyDay => ({
+  type: "study-day",
+  loc: day.loc,
+  day,
+  window: window?.[1] ?? null,
+});
+
+export const window = ([windows]: [
+  [
+    | PositiveWindow
+    | NegativeWindow
+    | BothWindow
+    | [PositiveWindow, WhiteSpace, NegativeWindow]
+    | [NegativeWindow, WhiteSpace, PositiveWindow]
+  ]
+]): Window => {
+  const window = windows.flat().filter((window) => window != null);
+
+  return {
+    type: "window",
+    loc: window[0]!.loc,
+    window: window as Window["window"],
+  };
+};
+
+export const positiveWindow = ([plus, day]: [
+  PlusToken,
+  DayExpression
+]): PositiveWindow => ({
+  type: "positive-window",
+  operator: "+",
+  loc: plus.offset,
+  days: day,
+});
+
+export const negativeWindow = ([minus, day]: [
+  MinusToken,
+  DayExpression
+]): NegativeWindow => ({
+  type: "negative-window",
+  operator: "-",
+  loc: minus.offset,
+  days: day,
+});
+
+export const bothWindow = ([plus, , day]: [
+  PlusToken,
+  MinusToken,
+  DayExpression
+]): BothWindow => ({
+  type: "both-window",
+  operator: "+-",
+  loc: plus.offset,
+  days: day,
+});
+
+export const day = ([token]: [DayToken]): DayExpression => ({
+  type: "day-expression",
+  loc: token.offset,
+  unit: "day",
+  value: parseInt(token.toString().slice(1)),
+});
+
+export const timeExpression = ([operator, , rhs]: [
+  TimeOperator,
+  WhiteSpace,
+  Identifier
+]): TimeExpression => ({
+  type: "time-expression",
+  loc: operator.loc,
+  operator,
+  rhs,
+});
+
+export const timeOperator = ([[token]]: [
+  [GtToken | LtToken | GteToken | LteToken]
+]): TimeOperator => ({
+  type: "time-operator",
+  loc: token.offset,
+  value: token.value,
 });
 
 export const string = ([token]: [StringToken]): String => ({
