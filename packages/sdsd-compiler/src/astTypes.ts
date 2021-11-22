@@ -23,7 +23,7 @@ export interface KeyValuePair extends Node<"key-value-pair"> {
   rhs: String;
 }
 
-export type Value = String;
+export type Value = String | Timeconf;
 
 export interface Identifier extends Node<"identifier"> {
   value: string;
@@ -74,4 +74,24 @@ export interface Window extends Node<"window"> {
 export interface StudyDay extends Node<"study-day"> {
   day: DayExpression;
   window: Window | null;
+}
+
+export interface Args extends Node<"args"> {
+  args: Value[];
+}
+
+export interface Directive extends Node<"directive"> {
+  name: string;
+  args: Args | null;
+}
+
+export interface ColumnDefinition extends Node<"column-definition"> {
+  columnName: Identifier;
+  columnType: Identifier;
+  directives: Directive[];
+}
+
+export interface InterfaceDefinition extends Node<"interface-definition"> {
+  name: Identifier;
+  columns: ColumnDefinition[];
 }

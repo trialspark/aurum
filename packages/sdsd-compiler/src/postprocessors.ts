@@ -15,19 +15,28 @@ import {
   TimeExpression,
   TimeOperator,
   Window,
+  Args,
+  Directive,
+  ColumnDefinition,
+  InterfaceDefinition,
 } from "./astTypes";
 import {
   CloseBrToken,
+  CloseParenToken,
   ColonToken,
+  CommaToken,
   DayToken,
+  DirectiveToken,
   GteToken,
   GtToken,
   IdentifierToken,
+  InterfaceToken,
   LteToken,
   LtToken,
   MilestoneToken,
   MinusToken,
   OpenBrToken,
+  OpenParenToken,
   PlusToken,
   StringToken,
   StudyToken,
@@ -90,6 +99,25 @@ export const milestoneDefinition = ([
   children: keyValuePairs,
 });
 
+export const interfaceDefinition = ([, iface, , name, , , , columns]: [
+  WhiteSpace,
+  InterfaceToken,
+  WhiteSpace,
+  Identifier,
+  WhiteSpace,
+  OpenBrToken,
+  WhiteSpace,
+  ColumnDefinition[],
+  WhiteSpace,
+  CloseBrToken,
+  WhiteSpace
+]): InterfaceDefinition => ({
+  type: "interface-definition",
+  loc: iface.offset,
+  name,
+  columns,
+});
+
 export const keyValuePair = ([identifier, , , , string]: [
   Identifier,
   WhiteSpace,
@@ -104,6 +132,32 @@ export const keyValuePair = ([identifier, , , , string]: [
   rhs: string,
 });
 
+export const columnDefinition = ([columnName, , columnType, , directives]: [
+  Identifier,
+  WhiteSpace,
+  Identifier,
+  WhiteSpace,
+  Directive[]
+]): ColumnDefinition => ({
+  type: "column-definition",
+  loc: columnName.loc,
+  columnName: columnName,
+  columnType,
+  directives,
+});
+
+export const directive = ([, directive, optionalArgs]: [
+  WhiteSpace,
+  DirectiveToken,
+  [OpenParenToken, Args | null, CloseParenToken] | null,
+  WhiteSpace
+]): Directive => ({
+  type: "directive",
+  loc: directive.offset,
+  name: directive.value.slice(1),
+  args: optionalArgs?.[1] ?? null,
+});
+
 export const value = ([[expression]]: [Value][]): Value => expression;
 
 export const identifier = ([token]: [IdentifierToken]): Identifier => ({
@@ -111,6 +165,20 @@ export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   loc: token.offset,
   value: token.toString(),
 });
+
+export const args = ([, [nthArgs, lastArgValue]]: [
+  WhiteSpace,
+  [[Value, WhiteSpace, CommaToken][], Value, WhiteSpace, CommaToken | null],
+  WhiteSpace
+]): Args => {
+  const args = [...nthArgs.map(([value]) => value), lastArgValue];
+
+  return {
+    type: "args",
+    loc: args[0].loc,
+    args,
+  };
+};
 
 export const timeconf = ([timeconf, , [value]]: [
   TimeconfToken,

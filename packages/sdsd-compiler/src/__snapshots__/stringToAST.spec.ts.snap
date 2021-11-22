@@ -1,5 +1,306 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`stringToAST() converts interface definitions 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "columns": Array [
+        Object {
+          "columnName": Object {
+            "loc": 36,
+            "type": "identifier",
+            "value": "USUBJID",
+          },
+          "columnType": Object {
+            "loc": 44,
+            "type": "identifier",
+            "value": "String",
+          },
+          "directives": Array [
+            Object {
+              "args": null,
+              "loc": 53,
+              "name": "subject.uuid",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 101,
+                    "type": "string",
+                    "value": "Unique Subject Identifier",
+                  },
+                ],
+                "loc": 101,
+                "type": "args",
+              },
+              "loc": 94,
+              "name": "label",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 163,
+                    "type": "string",
+                    "value": "Identifier used to uniquely identify a subject across all studies.",
+                  },
+                ],
+                "loc": 163,
+                "type": "args",
+              },
+              "loc": 157,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 36,
+          "type": "column-definition",
+        },
+        Object {
+          "columnName": Object {
+            "loc": 252,
+            "type": "identifier",
+            "value": "SUBJID",
+          },
+          "columnType": Object {
+            "loc": 259,
+            "type": "identifier",
+            "value": "String",
+          },
+          "directives": Array [
+            Object {
+              "args": null,
+              "loc": 269,
+              "name": "subject.id",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 315,
+                    "type": "string",
+                    "value": "Subject Identifier for the Study",
+                  },
+                ],
+                "loc": 315,
+                "type": "args",
+              },
+              "loc": 308,
+              "name": "label",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 384,
+                    "type": "string",
+                    "value": "Subject identifier, which is unique within the study.",
+                  },
+                ],
+                "loc": 384,
+                "type": "args",
+              },
+              "loc": 378,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 252,
+          "type": "column-definition",
+        },
+      ],
+      "loc": 9,
+      "name": Object {
+        "loc": 19,
+        "type": "identifier",
+        "value": "base",
+      },
+      "type": "interface-definition",
+    },
+    Object {
+      "columns": Array [
+        Object {
+          "columnName": Object {
+            "loc": 501,
+            "type": "identifier",
+            "value": "VISITNUM",
+          },
+          "columnType": Object {
+            "loc": 510,
+            "type": "identifier",
+            "value": "Integer",
+          },
+          "directives": Array [
+            Object {
+              "args": null,
+              "loc": 518,
+              "name": "milestone.number",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 570,
+                    "type": "string",
+                    "value": "Visit Number",
+                  },
+                ],
+                "loc": 570,
+                "type": "args",
+              },
+              "loc": 563,
+              "name": "label",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 619,
+                    "type": "string",
+                    "value": "Clinical encounter number.",
+                  },
+                ],
+                "loc": 619,
+                "type": "args",
+              },
+              "loc": 613,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 501,
+          "type": "column-definition",
+        },
+        Object {
+          "columnName": Object {
+            "loc": 686,
+            "type": "identifier",
+            "value": "VISIT",
+          },
+          "columnType": Object {
+            "loc": 692,
+            "type": "identifier",
+            "value": "String",
+          },
+          "directives": Array [
+            Object {
+              "args": null,
+              "loc": 703,
+              "name": "milestone.id",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 751,
+                    "type": "string",
+                    "value": "Visit Name",
+                  },
+                ],
+                "loc": 751,
+                "type": "args",
+              },
+              "loc": 744,
+              "name": "label",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 798,
+                    "type": "string",
+                    "value": "Protocol-defined description of clinical encounter.",
+                  },
+                ],
+                "loc": 798,
+                "type": "args",
+              },
+              "loc": 792,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 686,
+          "type": "column-definition",
+        },
+        Object {
+          "columnName": Object {
+            "loc": 888,
+            "type": "identifier",
+            "value": "VISITDY",
+          },
+          "columnType": Object {
+            "loc": 896,
+            "type": "identifier",
+            "value": "Integer",
+          },
+          "directives": Array [
+            Object {
+              "args": null,
+              "loc": 905,
+              "name": "milestone.day",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 954,
+                    "type": "string",
+                    "value": "Planned Study Day of Visit",
+                  },
+                ],
+                "loc": 954,
+                "type": "args",
+              },
+              "loc": 947,
+              "name": "label",
+              "type": "directive",
+            },
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 1017,
+                    "type": "string",
+                    "value": "Planned study day of the visit based upon RFSTDTC in Demographics.",
+                  },
+                ],
+                "loc": 1017,
+                "type": "args",
+              },
+              "loc": 1011,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 888,
+          "type": "column-definition",
+        },
+      ],
+      "loc": 468,
+      "name": Object {
+        "loc": 478,
+        "type": "identifier",
+        "value": "visit_base",
+      },
+      "type": "interface-definition",
+    },
+  ],
+  "loc": 0,
+  "type": "document",
+}
+`;
+
 exports[`stringToAST() converts milestone definitions 1`] = `
 Object {
   "children": Array [

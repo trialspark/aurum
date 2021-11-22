@@ -1,32 +1,43 @@
 import moo, { Rules, Token } from "moo";
 
-export type StudyToken = Token;
-export type OpenBrToken = Token;
-export type CloseBrToken = Token;
-export type MilestoneToken = Token;
-export type ColonToken = Token;
-export type IdentifierToken = Token;
-export type StringToken = Token;
-export type TimeconfToken = Token;
-export type DayToken = Token;
-export type PlusToken = Token;
-export type MinusToken = Token;
+export type StudyToken = Token & { type: "study" };
+export type OpenBrToken = Token & { type: "openbr" };
+export type CloseBrToken = Token & { type: "closebr" };
+export type MilestoneToken = Token & { type: "milestone" };
+export type ColonToken = Token & { type: "colon" };
+export type IdentifierToken = Token & { type: "identifier" };
+export type StringToken = Token & { type: "string" };
+export type TimeconfToken = Token & { type: "timeconf" };
+export type DayToken = Token & { type: "day" };
+export type PlusToken = Token & { type: "plus" };
+export type MinusToken = Token & { type: "minus" };
 export type GtToken = Token & { type: "gt"; value: ">" };
 export type LtToken = Token & { type: "lt"; value: "<" };
 export type GteToken = Token & { type: "gte"; value: ">=" };
 export type LteToken = Token & { type: "lte"; value: "<=" };
-export type TimeconfendToken = Token;
+export type TimeconfendToken = Token & { type: "timeconfend" };
+export type InterfaceToken = Token & { type: "interface" };
+export type DirectiveToken = Token & { type: "directive" };
+export type DotToken = Token & { type: "dot" };
+export type OpenParenToken = Token & { type: "openparen" };
+export type CloseParenToken = Token & { type: "closeparen" };
+export type CommaToken = Token & { type: "comma" };
 
-const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_.]*/;
+const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_]*/;
 
 export const lexer = moo.states({
   main: {
     string: /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
+    directive: /@[a-zA-Z][a-zA-Z.]*/,
     timeconf: { match: 't"', push: "timeconf" },
     openbr: "{",
     closebr: "}",
+    openparen: "(",
+    closeparen: ")",
     colon: ":",
-    keyword: ["study", "milestone"],
+    dot: ".",
+    comma: ",",
+    keyword: ["study", "milestone", "interface"],
     identifier,
     ws: { match: /[ \t\n]+/, lineBreaks: true },
   },

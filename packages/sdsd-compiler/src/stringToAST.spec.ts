@@ -49,4 +49,34 @@ describe("stringToAST()", () => {
     `)
     ).toMatchSnapshot();
   });
+
+  it("converts interface definitions", () => {
+    expect(
+      stringToAST(`
+        interface base {
+          USUBJID String   @subject.uuid
+                           @label("Unique Subject Identifier")
+                           @desc("Identifier used to uniquely identify a subject across all studies.")
+        
+          SUBJID String    @subject.id
+                           @label("Subject Identifier for the Study")
+                           @desc("Subject identifier, which is unique within the study.")
+        }
+        
+        interface visit_base {
+          VISITNUM Integer @milestone.number
+                           @label("Visit Number")
+                           @desc("Clinical encounter number.")
+                          
+          VISIT String     @milestone.id
+                           @label("Visit Name")
+                           @desc("Protocol-defined description of clinical encounter.")
+                        
+          VISITDY Integer  @milestone.day
+                           @label("Planned Study Day of Visit")
+                           @desc("Planned study day of the visit based upon RFSTDTC in Demographics.")
+        }
+      `)
+    ).toMatchSnapshot();
+  });
 });
