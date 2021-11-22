@@ -34,7 +34,11 @@ export interface String extends Node<"string"> {
 }
 
 export interface Timeconf extends Node<"timeconf"> {
-  value: StudyDay | TimeExpression;
+  value: TimeList | TimeExpression;
+}
+
+export interface TimeList extends Node<"time-list"> {
+  items: TimeValue[];
 }
 
 export interface TimeOperator extends Node<"time-operator"> {
@@ -76,6 +80,11 @@ export interface StudyDay extends Node<"study-day"> {
   window: Window | null;
 }
 
+export interface TimeRange extends Node<"time-range"> {
+  start: TimeValue;
+  end: TimeValue;
+}
+
 export interface Args extends Node<"args"> {
   args: Value[];
 }
@@ -94,4 +103,25 @@ export interface ColumnDefinition extends Node<"column-definition"> {
 export interface InterfaceDefinition extends Node<"interface-definition"> {
   name: Identifier;
   columns: ColumnDefinition[];
+}
+
+export interface CodelistMember extends Node<"codelist-member"> {
+  name: String | Identifier;
+  directives: Directive[];
+}
+
+export interface CodelistDefinition extends Node<"codelist-definition"> {
+  name: Identifier;
+  members: CodelistMember[];
+}
+
+export type TimeValue = StudyDay | Identifier;
+
+export interface TypeExpressionMember extends Node<"type-expression-member"> {
+  value: Identifier;
+  optional: boolean;
+}
+
+export interface TypeExpression extends Node<"type-expression"> {
+  members: TypeExpressionMember[];
 }

@@ -22,6 +22,13 @@ export type DotToken = Token & { type: "dot" };
 export type OpenParenToken = Token & { type: "openparen" };
 export type CloseParenToken = Token & { type: "closeparen" };
 export type CommaToken = Token & { type: "comma" };
+export type CodelistToken = Token & { type: "codelist" };
+export type DomainToken = Token & { type: "domain" };
+export type DatasetToken = Token & { type: "dataset" };
+export type ImplementsToken = Token & { type: "implements" };
+export type QuestionToken = Token & { type: "question" };
+export type PipeToken = Token & { type: "pipe" };
+export type ThruToken = Token & { type: "thru" };
 
 const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_]*/;
 
@@ -37,13 +44,25 @@ export const lexer = moo.states({
     colon: ":",
     dot: ".",
     comma: ",",
-    keyword: ["study", "milestone", "interface"],
+    question: "?",
+    pipe: "|",
+    keyword: [
+      "study",
+      "milestone",
+      "interface",
+      "codelist",
+      "domain",
+      "dataset",
+      "implements",
+    ],
     identifier,
     ws: { match: /[ \t\n]+/, lineBreaks: true },
   },
   timeconf: {
     day: /d-?[0-9]+/,
     identifier,
+    thru: "->",
+    comma: ",",
     plus: "+",
     minus: "-",
     gt: ">",

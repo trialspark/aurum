@@ -1,5 +1,333 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`stringToAST() converts codelists 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "loc": 9,
+      "members": Array [
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 85,
+                    "type": "string",
+                    "value": "A person having origins in any of the original peoples of North and South America (including Central America), and who maintains tribal affiliation or community attachment.",
+                  },
+                ],
+                "loc": 85,
+                "type": "args",
+              },
+              "loc": 79,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 35,
+          "name": Object {
+            "loc": 35,
+            "type": "string",
+            "value": "AMERICAN INDIAN OR ALASKA NATIVE",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 443,
+                    "type": "string",
+                    "value": "A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.",
+                  },
+                ],
+                "loc": 443,
+                "type": "args",
+              },
+              "loc": 437,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 393,
+          "name": Object {
+            "loc": 393,
+            "type": "identifier",
+            "value": "ASIAN",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 933,
+                    "type": "string",
+                    "value": "A person having origins in any of the black racial groups of Africa. Terms such as \\"Haitian\\" or \\"Negro\\" can be used in addition to \\"Black or African American.\\"",
+                  },
+                ],
+                "loc": 933,
+                "type": "args",
+              },
+              "loc": 927,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 883,
+          "name": Object {
+            "loc": 883,
+            "type": "string",
+            "value": "BLACK OR AFRICAN AMERICAN",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 1223,
+                    "type": "string",
+                    "value": "Denotes a person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands. The term covers particularly people who identify themselves as part-Hawaiian, Native Hawaiian, Guamanian or Chamorro, Carolinian, Samoan, Chuu.",
+                  },
+                ],
+                "loc": 1223,
+                "type": "args",
+              },
+              "loc": 1217,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 1173,
+          "name": Object {
+            "loc": 1173,
+            "type": "string",
+            "value": "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 1726,
+                    "type": "string",
+                    "value": "Not provided or available.",
+                  },
+                ],
+                "loc": 1726,
+                "type": "args",
+              },
+              "loc": 1720,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 1676,
+          "name": Object {
+            "loc": 1676,
+            "type": "string",
+            "value": "NOT REPORTED",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 1816,
+                    "type": "string",
+                    "value": "Not known, not observed, not recorded, or refused.",
+                  },
+                ],
+                "loc": 1816,
+                "type": "args",
+              },
+              "loc": 1810,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 1766,
+          "name": Object {
+            "loc": 1766,
+            "type": "identifier",
+            "value": "UNKNOWN",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 1930,
+                    "type": "string",
+                    "value": "Denotes a person with European, Middle Eastern, or North African ancestral origin who identifies, or is identified, as White.",
+                  },
+                ],
+                "loc": 1930,
+                "type": "args",
+              },
+              "loc": 1924,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 1880,
+          "name": Object {
+            "loc": 1880,
+            "type": "identifier",
+            "value": "WHITE",
+          },
+          "type": "codelist-member",
+        },
+      ],
+      "name": Object {
+        "loc": 18,
+        "type": "identifier",
+        "value": "Race",
+      },
+      "type": "codelist-definition",
+    },
+    Object {
+      "loc": 2147,
+      "members": Array [
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 2209,
+                    "type": "string",
+                    "value": "A person of Mexican, Puerto Rican, Cuban, Central or South American or other Spanish culture or origin, regardless of race.",
+                  },
+                ],
+                "loc": 2209,
+                "type": "args",
+              },
+              "loc": 2203,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 2178,
+          "name": Object {
+            "loc": 2178,
+            "type": "string",
+            "value": "HISPANIC OR LATINO",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 2419,
+                    "type": "string",
+                    "value": "A person not of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin, regardless of race.",
+                  },
+                ],
+                "loc": 2419,
+                "type": "args",
+              },
+              "loc": 2413,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 2388,
+          "name": Object {
+            "loc": 2388,
+            "type": "string",
+            "value": "NOT HISPANIC OR LATINO",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 2634,
+                    "type": "string",
+                    "value": "Not provided or available.",
+                  },
+                ],
+                "loc": 2634,
+                "type": "args",
+              },
+              "loc": 2628,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 2603,
+          "name": Object {
+            "loc": 2603,
+            "type": "string",
+            "value": "NOT REPORTED",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 2705,
+                    "type": "string",
+                    "value": "Not known, not observed, not recorded, or refused.",
+                  },
+                ],
+                "loc": 2705,
+                "type": "args",
+              },
+              "loc": 2699,
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": 2674,
+          "name": Object {
+            "loc": 2674,
+            "type": "identifier",
+            "value": "UNKNOWN",
+          },
+          "type": "codelist-member",
+        },
+      ],
+      "name": Object {
+        "loc": 2156,
+        "type": "identifier",
+        "value": "Ethnicity",
+      },
+      "type": "codelist-definition",
+    },
+  ],
+  "loc": 0,
+  "type": "document",
+}
+`;
+
 exports[`stringToAST() converts interface definitions 1`] = `
 Object {
   "children": Array [
@@ -13,8 +341,19 @@ Object {
           },
           "columnType": Object {
             "loc": 44,
-            "type": "identifier",
-            "value": "String",
+            "members": Array [
+              Object {
+                "loc": 44,
+                "optional": false,
+                "type": "type-expression-member",
+                "value": Object {
+                  "loc": 44,
+                  "type": "identifier",
+                  "value": "String",
+                },
+              },
+            ],
+            "type": "type-expression",
           },
           "directives": Array [
             Object {
@@ -67,8 +406,19 @@ Object {
           },
           "columnType": Object {
             "loc": 259,
-            "type": "identifier",
-            "value": "String",
+            "members": Array [
+              Object {
+                "loc": 259,
+                "optional": false,
+                "type": "type-expression-member",
+                "value": Object {
+                  "loc": 259,
+                  "type": "identifier",
+                  "value": "String",
+                },
+              },
+            ],
+            "type": "type-expression",
           },
           "directives": Array [
             Object {
@@ -132,8 +482,19 @@ Object {
           },
           "columnType": Object {
             "loc": 510,
-            "type": "identifier",
-            "value": "Integer",
+            "members": Array [
+              Object {
+                "loc": 510,
+                "optional": false,
+                "type": "type-expression-member",
+                "value": Object {
+                  "loc": 510,
+                  "type": "identifier",
+                  "value": "Integer",
+                },
+              },
+            ],
+            "type": "type-expression",
           },
           "directives": Array [
             Object {
@@ -186,8 +547,19 @@ Object {
           },
           "columnType": Object {
             "loc": 692,
-            "type": "identifier",
-            "value": "String",
+            "members": Array [
+              Object {
+                "loc": 692,
+                "optional": false,
+                "type": "type-expression-member",
+                "value": Object {
+                  "loc": 692,
+                  "type": "identifier",
+                  "value": "String",
+                },
+              },
+            ],
+            "type": "type-expression",
           },
           "directives": Array [
             Object {
@@ -240,8 +612,19 @@ Object {
           },
           "columnType": Object {
             "loc": 896,
-            "type": "identifier",
-            "value": "Integer",
+            "members": Array [
+              Object {
+                "loc": 896,
+                "optional": false,
+                "type": "type-expression-member",
+                "value": Object {
+                  "loc": 896,
+                  "type": "identifier",
+                  "value": "Integer",
+                },
+              },
+            ],
+            "type": "type-expression",
           },
           "directives": Array [
             Object {
@@ -317,42 +700,48 @@ Object {
             "loc": 45,
             "type": "timeconf",
             "value": Object {
-              "day": Object {
-                "loc": 47,
-                "type": "day-expression",
-                "unit": "day",
-                "value": -14,
-              },
-              "loc": 47,
-              "type": "study-day",
-              "window": Object {
-                "loc": 52,
-                "type": "window",
-                "window": Array [
-                  Object {
-                    "days": Object {
-                      "loc": 53,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 14,
-                    },
+              "items": Array [
+                Object {
+                  "day": Object {
+                    "loc": 47,
+                    "type": "day-expression",
+                    "unit": "day",
+                    "value": -14,
+                  },
+                  "loc": 47,
+                  "type": "study-day",
+                  "window": Object {
                     "loc": 52,
-                    "operator": "+",
-                    "type": "positive-window",
+                    "type": "window",
+                    "window": Array [
+                      Object {
+                        "days": Object {
+                          "loc": 53,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 14,
+                        },
+                        "loc": 52,
+                        "operator": "+",
+                        "type": "positive-window",
+                      },
+                      Object {
+                        "days": Object {
+                          "loc": 58,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 10,
+                        },
+                        "loc": 57,
+                        "operator": "-",
+                        "type": "negative-window",
+                      },
+                    ],
                   },
-                  Object {
-                    "days": Object {
-                      "loc": 58,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 10,
-                    },
-                    "loc": 57,
-                    "operator": "-",
-                    "type": "negative-window",
-                  },
-                ],
-              },
+                },
+              ],
+              "loc": 47,
+              "type": "time-list",
             },
           },
           "type": "key-value-pair",
@@ -379,15 +768,21 @@ Object {
             "loc": 125,
             "type": "timeconf",
             "value": Object {
-              "day": Object {
-                "loc": 127,
-                "type": "day-expression",
-                "unit": "day",
-                "value": 0,
-              },
+              "items": Array [
+                Object {
+                  "day": Object {
+                    "loc": 127,
+                    "type": "day-expression",
+                    "unit": "day",
+                    "value": 0,
+                  },
+                  "loc": 127,
+                  "type": "study-day",
+                  "window": null,
+                },
+              ],
               "loc": 127,
-              "type": "study-day",
-              "window": null,
+              "type": "time-list",
             },
           },
           "type": "key-value-pair",
@@ -414,31 +809,37 @@ Object {
             "loc": 193,
             "type": "timeconf",
             "value": Object {
-              "day": Object {
-                "loc": 195,
-                "type": "day-expression",
-                "unit": "day",
-                "value": 7,
-              },
-              "loc": 195,
-              "type": "study-day",
-              "window": Object {
-                "loc": 198,
-                "type": "window",
-                "window": Array [
-                  Object {
-                    "days": Object {
-                      "loc": 200,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 4,
-                    },
-                    "loc": 198,
-                    "operator": "+-",
-                    "type": "both-window",
+              "items": Array [
+                Object {
+                  "day": Object {
+                    "loc": 195,
+                    "type": "day-expression",
+                    "unit": "day",
+                    "value": 7,
                   },
-                ],
-              },
+                  "loc": 195,
+                  "type": "study-day",
+                  "window": Object {
+                    "loc": 198,
+                    "type": "window",
+                    "window": Array [
+                      Object {
+                        "days": Object {
+                          "loc": 200,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 4,
+                        },
+                        "loc": 198,
+                        "operator": "+-",
+                        "type": "both-window",
+                      },
+                    ],
+                  },
+                },
+              ],
+              "loc": 195,
+              "type": "time-list",
             },
           },
           "type": "key-value-pair",
@@ -465,31 +866,37 @@ Object {
             "loc": 266,
             "type": "timeconf",
             "value": Object {
-              "day": Object {
-                "loc": 268,
-                "type": "day-expression",
-                "unit": "day",
-                "value": 14,
-              },
-              "loc": 268,
-              "type": "study-day",
-              "window": Object {
-                "loc": 272,
-                "type": "window",
-                "window": Array [
-                  Object {
-                    "days": Object {
-                      "loc": 274,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 4,
-                    },
-                    "loc": 272,
-                    "operator": "+-",
-                    "type": "both-window",
+              "items": Array [
+                Object {
+                  "day": Object {
+                    "loc": 268,
+                    "type": "day-expression",
+                    "unit": "day",
+                    "value": 14,
                   },
-                ],
-              },
+                  "loc": 268,
+                  "type": "study-day",
+                  "window": Object {
+                    "loc": 272,
+                    "type": "window",
+                    "window": Array [
+                      Object {
+                        "days": Object {
+                          "loc": 274,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 4,
+                        },
+                        "loc": 272,
+                        "operator": "+-",
+                        "type": "both-window",
+                      },
+                    ],
+                  },
+                },
+              ],
+              "loc": 268,
+              "type": "time-list",
             },
           },
           "type": "key-value-pair",
@@ -516,31 +923,37 @@ Object {
             "loc": 340,
             "type": "timeconf",
             "value": Object {
-              "day": Object {
-                "loc": 342,
-                "type": "day-expression",
-                "unit": "day",
-                "value": 21,
-              },
-              "loc": 342,
-              "type": "study-day",
-              "window": Object {
-                "loc": 346,
-                "type": "window",
-                "window": Array [
-                  Object {
-                    "days": Object {
-                      "loc": 348,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 3,
-                    },
-                    "loc": 346,
-                    "operator": "+-",
-                    "type": "both-window",
+              "items": Array [
+                Object {
+                  "day": Object {
+                    "loc": 342,
+                    "type": "day-expression",
+                    "unit": "day",
+                    "value": 21,
                   },
-                ],
-              },
+                  "loc": 342,
+                  "type": "study-day",
+                  "window": Object {
+                    "loc": 346,
+                    "type": "window",
+                    "window": Array [
+                      Object {
+                        "days": Object {
+                          "loc": 348,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 3,
+                        },
+                        "loc": 346,
+                        "operator": "+-",
+                        "type": "both-window",
+                      },
+                    ],
+                  },
+                },
+              ],
+              "loc": 342,
+              "type": "time-list",
             },
           },
           "type": "key-value-pair",
@@ -567,31 +980,37 @@ Object {
             "loc": 415,
             "type": "timeconf",
             "value": Object {
-              "day": Object {
-                "loc": 417,
-                "type": "day-expression",
-                "unit": "day",
-                "value": 28,
-              },
-              "loc": 417,
-              "type": "study-day",
-              "window": Object {
-                "loc": 421,
-                "type": "window",
-                "window": Array [
-                  Object {
-                    "days": Object {
-                      "loc": 423,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 4,
-                    },
-                    "loc": 421,
-                    "operator": "+-",
-                    "type": "both-window",
+              "items": Array [
+                Object {
+                  "day": Object {
+                    "loc": 417,
+                    "type": "day-expression",
+                    "unit": "day",
+                    "value": 28,
                   },
-                ],
-              },
+                  "loc": 417,
+                  "type": "study-day",
+                  "window": Object {
+                    "loc": 421,
+                    "type": "window",
+                    "window": Array [
+                      Object {
+                        "days": Object {
+                          "loc": 423,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 4,
+                        },
+                        "loc": 421,
+                        "operator": "+-",
+                        "type": "both-window",
+                      },
+                    ],
+                  },
+                },
+              ],
+              "loc": 417,
+              "type": "time-list",
             },
           },
           "type": "key-value-pair",
@@ -618,42 +1037,48 @@ Object {
             "loc": 490,
             "type": "timeconf",
             "value": Object {
-              "day": Object {
-                "loc": 492,
-                "type": "day-expression",
-                "unit": "day",
-                "value": 35,
-              },
-              "loc": 492,
-              "type": "study-day",
-              "window": Object {
-                "loc": 496,
-                "type": "window",
-                "window": Array [
-                  Object {
-                    "days": Object {
-                      "loc": 497,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 2,
-                    },
+              "items": Array [
+                Object {
+                  "day": Object {
+                    "loc": 492,
+                    "type": "day-expression",
+                    "unit": "day",
+                    "value": 35,
+                  },
+                  "loc": 492,
+                  "type": "study-day",
+                  "window": Object {
                     "loc": 496,
-                    "operator": "+",
-                    "type": "positive-window",
+                    "type": "window",
+                    "window": Array [
+                      Object {
+                        "days": Object {
+                          "loc": 497,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 2,
+                        },
+                        "loc": 496,
+                        "operator": "+",
+                        "type": "positive-window",
+                      },
+                      Object {
+                        "days": Object {
+                          "loc": 501,
+                          "type": "day-expression",
+                          "unit": "day",
+                          "value": 4,
+                        },
+                        "loc": 500,
+                        "operator": "-",
+                        "type": "negative-window",
+                      },
+                    ],
                   },
-                  Object {
-                    "days": Object {
-                      "loc": 501,
-                      "type": "day-expression",
-                      "unit": "day",
-                      "value": 4,
-                    },
-                    "loc": 500,
-                    "operator": "-",
-                    "type": "negative-window",
-                  },
-                ],
-              },
+                },
+              ],
+              "loc": 492,
+              "type": "time-list",
             },
           },
           "type": "key-value-pair",

@@ -19,10 +19,17 @@ import {
   Directive,
   ColumnDefinition,
   InterfaceDefinition,
+  CodelistMember,
+  CodelistDefinition,
+  TimeValue,
+  TimeList,
+  TypeExpressionMember,
+  TypeExpression,
 } from "./astTypes";
 import {
   CloseBrToken,
   CloseParenToken,
+  CodelistToken,
   ColonToken,
   CommaToken,
   DayToken,
@@ -37,7 +44,9 @@ import {
   MinusToken,
   OpenBrToken,
   OpenParenToken,
+  PipeToken,
   PlusToken,
+  QuestionToken,
   StringToken,
   StudyToken,
   TimeconfendToken,
@@ -118,6 +127,25 @@ export const interfaceDefinition = ([, iface, , name, , , , columns]: [
   columns,
 });
 
+export const codelistDefinition = ([, codelist, , name, , , , members]: [
+  WhiteSpace,
+  CodelistToken,
+  WhiteSpace,
+  Identifier,
+  WhiteSpace,
+  OpenBrToken,
+  WhiteSpace,
+  CodelistMember[],
+  WhiteSpace,
+  CloseBrToken,
+  WhiteSpace
+]): CodelistDefinition => ({
+  type: "codelist-definition",
+  loc: codelist.offset,
+  name,
+  members: members,
+});
+
 export const keyValuePair = ([identifier, , , , string]: [
   Identifier,
   WhiteSpace,
@@ -146,6 +174,17 @@ export const columnDefinition = ([columnName, , columnType, , directives]: [
   directives,
 });
 
+export const codelistMember = ([[name], , directives]: [
+  [String | Identifier],
+  WhiteSpace,
+  Directive[]
+]): CodelistMember => ({
+  type: "codelist-member",
+  loc: name.loc,
+  name,
+  directives,
+});
+
 export const directive = ([, directive, optionalArgs]: [
   WhiteSpace,
   DirectiveToken,
@@ -158,6 +197,29 @@ export const directive = ([, directive, optionalArgs]: [
   args: optionalArgs?.[1] ?? null,
 });
 
+export const typeExpression = ([firstMembers, lastMember]: [
+  [TypeExpressionMember, WhiteSpace, PipeToken, WhiteSpace][],
+  TypeExpressionMember
+]): TypeExpression => {
+  const members = [...firstMembers.map(([member]) => member), lastMember];
+
+  return {
+    type: "type-expression",
+    loc: members[0].loc,
+    members,
+  };
+};
+
+export const typeExpressionMember = ([identifier, question]: [
+  Identifier,
+  QuestionToken | null
+]): TypeExpressionMember => ({
+  type: "type-expression-member",
+  loc: identifier.loc,
+  value: identifier,
+  optional: !!question,
+});
+
 export const value = ([[expression]]: [Value][]): Value => expression;
 
 export const identifier = ([token]: [IdentifierToken]): Identifier => ({
@@ -168,7 +230,12 @@ export const identifier = ([token]: [IdentifierToken]): Identifier => ({
 
 export const args = ([, [nthArgs, lastArgValue]]: [
   WhiteSpace,
-  [[Value, WhiteSpace, CommaToken][], Value, WhiteSpace, CommaToken | null],
+  [
+    [Value, WhiteSpace, CommaToken, WhiteSpace][],
+    Value,
+    WhiteSpace,
+    CommaToken | null
+  ],
   WhiteSpace
 ]): Args => {
   const args = [...nthArgs.map(([value]) => value), lastArgValue];
@@ -183,7 +250,7 @@ export const args = ([, [nthArgs, lastArgValue]]: [
 export const timeconf = ([timeconf, , [value]]: [
   TimeconfToken,
   WhiteSpace,
-  [StudyDay | TimeExpression],
+  [TimeList | TimeExpression],
   WhiteSpace,
   TimeconfendToken
 ]): Timeconf => ({ type: "timeconf", loc: timeconf.offset, value });
@@ -273,10 +340,32 @@ export const timeOperator = ([[token]]: [
   value: token.value,
 });
 
+export const timeList = ([firstArgs, lastArg]: [
+  [TimeValue, WhiteSpace, CommaToken, WhiteSpace][],
+  [TimeValue, WhiteSpace, CommaToken | null] | null
+]): TimeList => {
+  const items = [
+    ...firstArgs.map(([value]) => value),
+    ...(lastArg ? [lastArg[0]] : []),
+  ];
+
+  return {
+    type: "time-list",
+    loc: items[0]?.loc,
+    items,
+  };
+};
+
+export const timeValue = ([[value]]: [[StudyDay | Identifier]]): TimeValue =>
+  value;
+
 export const string = ([token]: [StringToken]): String => ({
   type: "string",
   loc: token.offset,
-  value: token.value.substring(1, token.value.length - 1),
+  value: token.value
+    .substring(1, token.value.length - 1)
+    .replace(/\\"/g, '"')
+    .replace(/\n\s*/g, " "),
 });
 
 export const _ = () => null;
