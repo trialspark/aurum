@@ -3,15 +3,18 @@
 @{%
 import { lexer } from './lexer';
 import {
-  _,
-  __,
   args,
   bothWindow,
   codelistDefinition,
   codelistMember,
   columnDefinition,
+  datasetDefinition,
   day as dayFn,
   directive as directiveFn,
+  domainChildren,
+  domainDefinition,
+  hour as hourFn,
+  hoursListMembers,
   identifier as identifierFn,
   identifierList,
   interfaceDefinition,
@@ -27,6 +30,8 @@ import {
   timeOperator,
   timeconf as timeconfFn,
   timeList,
+  timeListMembers,
+  timeRange,
   timeValue,
   typeExpression,
   typeExpressionMember,
@@ -43,49 +48,48 @@ main                 -> (studyDefinition |
                          codelistDefinition |
                          domainDefinition):* {% main %}
 
-studyDefinition      -> _ "study" _ %openbr _ keyValuePair:* _ %closebr _ {% studyDefinition %}
-milestoneDefinition  -> _ "milestone" __ identifier _ %openbr _ keyValuePair:* _ %closebr _ {% milestoneDefinition %}
-interfaceDefinition  -> _ "interface" __ identifier _ %openbr _ columnDefinition:* _ %closebr _ {% interfaceDefinition %}
-codelistDefinition   -> _ "codelist" __ identifier _ %openbr _ codelistMember:* _ %closebr _ {% codelistDefinition %}
-domainDefinition     -> _ "domain" ((_ string) | (__ identifier)) _ directive:* _ %openbr _ domainChildren _ %closebr
+studyDefinition      -> "study" %openbr keyValuePair:* %closebr {% studyDefinition %}
+milestoneDefinition  -> "milestone" identifier %openbr keyValuePair:* %closebr {% milestoneDefinition %}
+interfaceDefinition  -> "interface" identifier %openbr columnDefinition:* %closebr {% interfaceDefinition %}
+codelistDefinition   -> "codelist" identifier %openbr codelistMember:* %closebr {% codelistDefinition %}
+domainDefinition     -> "domain" (string | identifier) directive:* %openbr domainChildren %closebr {% domainDefinition %}
 
-domainChildren       -> (datasetDefinition):*
-datasetDefinition    -> _ "dataset" __ identifier (__ "implements" __ identifierList):? __ directive:* _ %openbr _ columnDefinition:* _ %closebr _
+domainChildren       -> (datasetDefinition):* {% domainChildren %}
+datasetDefinition    -> "dataset" identifier ("implements" identifierList):? directive:* %openbr columnDefinition:* %closebr {% datasetDefinition %}
 
-keyValuePair         -> identifier _ %colon _ value _ {% keyValuePair %}
-columnDefinition     -> identifier __ typeExpression __ directive:* {% columnDefinition %}
-codelistMember       -> (string | identifier) __ directive:* {% codelistMember %}
+keyValuePair         -> identifier %colon value {% keyValuePair %}
+columnDefinition     -> identifier typeExpression directive:* {% columnDefinition %}
+codelistMember       -> (string | identifier) directive:* {% codelistMember %}
 
-directive            -> _ %directive (%openparen args:? %closeparen):? _ {% directiveFn %}
-typeExpression       -> (typeExpressionMember _ %pipe _):* typeExpressionMember {% typeExpression %}
+directive            -> %directive (%openparen args:? %closeparen):? {% directiveFn %}
+typeExpression       -> (typeExpressionMember %pipe):* typeExpressionMember {% typeExpression %}
 typeExpressionMember -> identifier %question:? {% typeExpressionMember %}
 value                -> (string | timeconf) {% value %}
 identifier           -> %identifier {% identifierFn %}
 
-args                 -> _ ((value _ %comma _):* value _ %comma:?) _ {% args %}
-identifierList       -> _ ((identifier _ %comma _):* identifier _ %comma:?) _ {% identifierList %}
+args                 -> (value %comma):* value %comma:? {% args %}
+identifierList       -> (identifier %comma):* identifier %comma:? {% identifierList %}
 
-timeconf             -> %timeconf _ timeconfRoot _ %timeconfend {% timeconfFn %}
+timeconf             -> %timeconf timeconfRoot %timeconfend {% timeconfFn %}
 timeconfRoot         -> (timeExpression |
-                         timeRange |
                          timeList) {% id %}
-studyDay             -> day (__ window):? {% studyDay %}
+studyDay             -> day window:? {% studyDay %}
 window               -> (positiveWindow |
                          negativeWindow |
                          bothWindow |
-                         (positiveWindow __ negativeWindow) |
-                         (negativeWindow __ positiveWindow)) {% window %}
+                         (positiveWindow negativeWindow) |
+                         (negativeWindow positiveWindow)) {% window %}
 positiveWindow       -> %plus day {% positiveWindow %}
 negativeWindow       -> %minus day {% negativeWindow %}
 bothWindow           -> %plus %minus day {% bothWindow %}
 day                  -> %day {% dayFn %}
-timeExpression       -> timeOperator _ timeValue {% timeExpression %}
+hour                 -> %hour {% hourFn %}
+timeExpression       -> timeOperator timeValue {% timeExpression %}
 timeOperator         -> (%gt | %lt | %gte | %lte) {% timeOperator %}
-timeRange            -> timeValue _ %thru _ timeValue
-timeList             -> (timeValue _ %comma _):* (timeValue _ %comma:?):? {% timeList %}
-timeValue            -> (studyDay | identifier) {% timeValue %}
+timeRange            -> timeValue %thru timeValue {% timeRange %}
+timeList             -> timeListMembers ("at" hoursListMembers):? {% timeList %}
+timeListMembers      -> (timeValue %comma):* timeValue %comma:? {% timeListMembers %}
+hoursListMembers     -> (hour %comma):* hour %comma:? {% hoursListMembers %}
+timeValue            -> (studyDay | identifier | timeRange) {% timeValue %}
 
 string               -> %string {% stringFn %}
-
-__                   -> %ws {% __ %}
-_                    -> __:? {% _ %}

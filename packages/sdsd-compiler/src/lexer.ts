@@ -1,5 +1,7 @@
 import moo, { Rules, Token } from "moo";
 
+import { TokenSkippingLexer } from "./tokenSkippingLexer";
+
 export type StudyToken = Token & { type: "study" };
 export type OpenBrToken = Token & { type: "openbr" };
 export type CloseBrToken = Token & { type: "closebr" };
@@ -29,47 +31,54 @@ export type ImplementsToken = Token & { type: "implements" };
 export type QuestionToken = Token & { type: "question" };
 export type PipeToken = Token & { type: "pipe" };
 export type ThruToken = Token & { type: "thru" };
+export type AtToken = Token & { type: "at" };
+export type HourToken = Token & { type: "hour" };
 
 const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_]*/;
 
-export const lexer = moo.states({
-  main: {
-    string: /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
-    directive: /@[a-zA-Z][a-zA-Z.]*/,
-    timeconf: { match: 't"', push: "timeconf" },
-    openbr: "{",
-    closebr: "}",
-    openparen: "(",
-    closeparen: ")",
-    colon: ":",
-    dot: ".",
-    comma: ",",
-    question: "?",
-    pipe: "|",
-    keyword: [
-      "study",
-      "milestone",
-      "interface",
-      "codelist",
-      "domain",
-      "dataset",
-      "implements",
-    ],
-    identifier,
-    ws: { match: /[ \t\n]+/, lineBreaks: true },
-  },
-  timeconf: {
-    day: /d-?[0-9]+/,
-    identifier,
-    thru: "->",
-    comma: ",",
-    plus: "+",
-    minus: "-",
-    gt: ">",
-    lt: "<",
-    gte: ">=",
-    lte: "<=",
-    ws: /[ \t]+/,
-    timeconfend: { match: '"', pop: 1 },
-  },
-});
+export const lexer = new TokenSkippingLexer(
+  moo.states({
+    main: {
+      string: /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
+      directive: /@[a-zA-Z][a-zA-Z.]*/,
+      timeconf: { match: 't"', push: "timeconf" },
+      openbr: "{",
+      closebr: "}",
+      openparen: "(",
+      closeparen: ")",
+      colon: ":",
+      dot: ".",
+      comma: ",",
+      question: "?",
+      pipe: "|",
+      keyword: [
+        "study",
+        "milestone",
+        "interface",
+        "codelist",
+        "domain",
+        "dataset",
+        "implements",
+      ],
+      identifier,
+      ws: { match: /[ \t\n]+/, lineBreaks: true },
+    },
+    timeconf: {
+      keyword: ["at"],
+      day: /d-?[0-9]+/,
+      hour: /h[0-9]+/,
+      identifier,
+      thru: "->",
+      comma: ",",
+      plus: "+",
+      minus: "-",
+      gt: ">",
+      lt: "<",
+      gte: ">=",
+      lte: "<=",
+      ws: /[ \t]+/,
+      timeconfend: { match: '"', pop: 1 },
+    },
+  }),
+  ["ws"]
+);

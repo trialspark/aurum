@@ -1,5 +1,1561 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`stringToAST() converts a domain and datasets 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "columns": Array [
+            Object {
+              "columnName": Object {
+                "loc": 171,
+                "type": "identifier",
+                "value": "VSSEQ",
+              },
+              "columnType": Object {
+                "loc": 177,
+                "members": Array [
+                  Object {
+                    "loc": 177,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 177,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": null,
+                  "loc": 201,
+                  "name": "sequence",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 260,
+                        "type": "string",
+                        "value": "Sequence Number",
+                      },
+                    ],
+                    "loc": 260,
+                    "type": "args",
+                  },
+                  "loc": 253,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 327,
+                        "type": "string",
+                        "value": "Sequence number given to ensure uniqueness of subject records within a domain.",
+                      },
+                    ],
+                    "loc": 327,
+                    "type": "args",
+                  },
+                  "loc": 321,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 171,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 430,
+                "type": "identifier",
+                "value": "VSTESTCD",
+              },
+              "columnType": Object {
+                "loc": 439,
+                "members": Array [
+                  Object {
+                    "loc": 439,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 439,
+                      "type": "identifier",
+                      "value": "VSTestCode",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 467,
+                        "type": "string",
+                        "value": "Vital Signs Test Short Name",
+                      },
+                    ],
+                    "loc": 467,
+                    "type": "args",
+                  },
+                  "loc": 460,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 546,
+                        "type": "string",
+                        "value": "Short name of the measurement, test, or examination described in VSTEST.",
+                      },
+                    ],
+                    "loc": 546,
+                    "type": "args",
+                  },
+                  "loc": 540,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 430,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 667,
+                "type": "identifier",
+                "value": "VSPOS",
+              },
+              "columnType": Object {
+                "loc": 673,
+                "members": Array [
+                  Object {
+                    "loc": 673,
+                    "optional": true,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 673,
+                      "type": "identifier",
+                      "value": "VSPosition",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 704,
+                        "type": "string",
+                        "value": "Vital Signs Position of Subject",
+                      },
+                    ],
+                    "loc": 704,
+                    "type": "args",
+                  },
+                  "loc": 697,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 787,
+                        "type": "string",
+                        "value": "Position of the subject during a measurement or examination.",
+                      },
+                    ],
+                    "loc": 787,
+                    "type": "args",
+                  },
+                  "loc": 781,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 667,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 892,
+                "type": "identifier",
+                "value": "VSORRES",
+              },
+              "columnType": Object {
+                "loc": 900,
+                "members": Array [
+                  Object {
+                    "loc": 900,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 900,
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                  Object {
+                    "loc": 907,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 907,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                  Object {
+                    "loc": 915,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 915,
+                      "type": "identifier",
+                      "value": "Float",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 929,
+                        "type": "string",
+                        "value": "Result or Finding in Original Units",
+                      },
+                    ],
+                    "loc": 929,
+                    "type": "args",
+                  },
+                  "loc": 922,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 1016,
+                        "type": "string",
+                        "value": "Result of the vital signs measurement as originally received or collected.",
+                      },
+                    ],
+                    "loc": 1016,
+                    "type": "args",
+                  },
+                  "loc": 1010,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 892,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 1147,
+                "type": "identifier",
+                "value": "VSORRESU",
+              },
+              "columnType": Object {
+                "loc": 1156,
+                "members": Array [
+                  Object {
+                    "loc": 1156,
+                    "optional": true,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 1156,
+                      "type": "identifier",
+                      "value": "VSUnit",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 1184,
+                        "type": "string",
+                        "value": "Original Units",
+                      },
+                    ],
+                    "loc": 1184,
+                    "type": "args",
+                  },
+                  "loc": 1177,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 1250,
+                        "type": "string",
+                        "value": "Original units in which the data were collected. The unit for VSORRES.",
+                      },
+                    ],
+                    "loc": 1250,
+                    "type": "args",
+                  },
+                  "loc": 1244,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 1147,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 1365,
+                "type": "identifier",
+                "value": "VSSTRESC",
+              },
+              "columnType": Object {
+                "loc": 1374,
+                "members": Array [
+                  Object {
+                    "loc": 1374,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 1374,
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                  Object {
+                    "loc": 1381,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 1381,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                  Object {
+                    "loc": 1389,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 1389,
+                      "type": "identifier",
+                      "value": "Float",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 1402,
+                        "type": "string",
+                        "value": "Character Result/Finding in Std Format",
+                      },
+                    ],
+                    "loc": 1402,
+                    "type": "args",
+                  },
+                  "loc": 1395,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 1492,
+                        "type": "string",
+                        "value": "Contains the result value for all findings, copied or derived from VSORRES in a standard format or standard units.",
+                      },
+                    ],
+                    "loc": 1492,
+                    "type": "args",
+                  },
+                  "loc": 1486,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 1365,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 1720,
+                "type": "identifier",
+                "value": "VSSTRESN",
+              },
+              "columnType": Object {
+                "loc": 1729,
+                "members": Array [
+                  Object {
+                    "loc": 1729,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 1729,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                  Object {
+                    "loc": 1737,
+                    "optional": true,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 1737,
+                      "type": "identifier",
+                      "value": "Float",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 1757,
+                        "type": "string",
+                        "value": "Numeric Result/Finding in Standard Units",
+                      },
+                    ],
+                    "loc": 1757,
+                    "type": "args",
+                  },
+                  "loc": 1750,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 1849,
+                        "type": "string",
+                        "value": "Used for continuous or numeric results or findings in standard format",
+                      },
+                    ],
+                    "loc": 1849,
+                    "type": "args",
+                  },
+                  "loc": 1843,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 1720,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 1977,
+                "type": "identifier",
+                "value": "VSSTRESU",
+              },
+              "columnType": Object {
+                "loc": 1986,
+                "members": Array [
+                  Object {
+                    "loc": 1986,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 1986,
+                      "type": "identifier",
+                      "value": "VSUnit",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2014,
+                        "type": "string",
+                        "value": "Standard Units",
+                      },
+                    ],
+                    "loc": 2014,
+                    "type": "args",
+                  },
+                  "loc": 2007,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2080,
+                        "type": "string",
+                        "value": "Standardized unit used for VSSTRESC and VSSTRESN",
+                      },
+                    ],
+                    "loc": 2080,
+                    "type": "args",
+                  },
+                  "loc": 2074,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 1977,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 2173,
+                "type": "identifier",
+                "value": "VSSTAT",
+              },
+              "columnType": Object {
+                "loc": 2180,
+                "members": Array [
+                  Object {
+                    "loc": 2180,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 2180,
+                      "type": "identifier",
+                      "value": "Boolean",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2210,
+                        "type": "string",
+                        "value": "Completion Status",
+                      },
+                    ],
+                    "loc": 2210,
+                    "type": "args",
+                  },
+                  "loc": 2203,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2279,
+                        "type": "string",
+                        "value": "Used to indicate that a vital sign measurement was not done.",
+                      },
+                    ],
+                    "loc": 2279,
+                    "type": "args",
+                  },
+                  "loc": 2273,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 2173,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 2382,
+                "type": "identifier",
+                "value": "VSREASND",
+              },
+              "columnType": Object {
+                "loc": 2391,
+                "members": Array [
+                  Object {
+                    "loc": 2391,
+                    "optional": true,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 2391,
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2419,
+                        "type": "string",
+                        "value": "Reason Not Performed",
+                      },
+                    ],
+                    "loc": 2419,
+                    "type": "args",
+                  },
+                  "loc": 2412,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2491,
+                        "type": "string",
+                        "value": "Describes why a measurement or test was not performed.",
+                      },
+                    ],
+                    "loc": 2491,
+                    "type": "args",
+                  },
+                  "loc": 2485,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 2382,
+              "type": "column-definition",
+            },
+          ],
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 104,
+                    "type": "timeconf",
+                    "value": Object {
+                      "at": null,
+                      "items": Array [
+                        Object {
+                          "loc": 106,
+                          "type": "identifier",
+                          "value": "BASELINE",
+                        },
+                        Object {
+                          "loc": 116,
+                          "type": "identifier",
+                          "value": "CLINIC_1",
+                        },
+                        Object {
+                          "loc": 126,
+                          "type": "identifier",
+                          "value": "CLINIC_2",
+                        },
+                        Object {
+                          "loc": 136,
+                          "type": "identifier",
+                          "value": "CLINIC_3",
+                        },
+                        Object {
+                          "loc": 146,
+                          "type": "identifier",
+                          "value": "CLINIC_4",
+                        },
+                      ],
+                      "loc": 106,
+                      "type": "time-list",
+                    },
+                  },
+                ],
+                "loc": 104,
+                "type": "args",
+              },
+              "loc": 93,
+              "name": "milestone",
+              "type": "directive",
+            },
+          ],
+          "interfaces": Object {
+            "identifiers": Array [
+              Object {
+                "loc": 76,
+                "type": "identifier",
+                "value": "base",
+              },
+              Object {
+                "loc": 82,
+                "type": "identifier",
+                "value": "visit_base",
+              },
+            ],
+            "loc": 76,
+            "type": "identifier-list",
+          },
+          "loc": 54,
+          "name": Object {
+            "loc": 62,
+            "type": "identifier",
+            "value": "vs",
+          },
+          "type": "dataset-definition",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "columnName": Object {
+                "loc": 2678,
+                "type": "identifier",
+                "value": "VISITDY",
+              },
+              "columnType": Object {
+                "loc": 2686,
+                "members": Array [
+                  Object {
+                    "loc": 2686,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 2686,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": null,
+                  "loc": 2708,
+                  "name": "milestone.day",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2772,
+                        "type": "string",
+                        "value": "Study Day",
+                      },
+                    ],
+                    "loc": 2772,
+                    "type": "args",
+                  },
+                  "loc": 2765,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 2833,
+                        "type": "string",
+                        "value": "Study day based upon RFSTDTC in Demographics.",
+                      },
+                    ],
+                    "loc": 2833,
+                    "type": "args",
+                  },
+                  "loc": 2827,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 2678,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 2937,
+                "type": "identifier",
+                "value": "VISITHR",
+              },
+              "columnType": Object {
+                "loc": 2945,
+                "members": Array [
+                  Object {
+                    "loc": 2945,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 2945,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": null,
+                  "loc": 2967,
+                  "name": "milestone.hour",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3032,
+                        "type": "string",
+                        "value": "Hour of Day",
+                      },
+                    ],
+                    "loc": 3032,
+                    "type": "args",
+                  },
+                  "loc": 3025,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3095,
+                        "type": "string",
+                        "value": "Hour of study day",
+                      },
+                    ],
+                    "loc": 3095,
+                    "type": "args",
+                  },
+                  "loc": 3089,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 2937,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 3137,
+                "type": "identifier",
+                "value": "VSSEQ",
+              },
+              "columnType": Object {
+                "loc": 3143,
+                "members": Array [
+                  Object {
+                    "loc": 3143,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 3143,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": null,
+                  "loc": 3167,
+                  "name": "sequence",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3226,
+                        "type": "string",
+                        "value": "Sequence Number",
+                      },
+                    ],
+                    "loc": 3226,
+                    "type": "args",
+                  },
+                  "loc": 3219,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3293,
+                        "type": "string",
+                        "value": "Sequence number given to ensure uniqueness of subject records within a domain.",
+                      },
+                    ],
+                    "loc": 3293,
+                    "type": "args",
+                  },
+                  "loc": 3287,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 3137,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 3396,
+                "type": "identifier",
+                "value": "VSTESTCD",
+              },
+              "columnType": Object {
+                "loc": 3405,
+                "members": Array [
+                  Object {
+                    "loc": 3405,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 3405,
+                      "type": "identifier",
+                      "value": "VSTestCode",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3433,
+                        "type": "string",
+                        "value": "Vital Signs Test Short Name",
+                      },
+                    ],
+                    "loc": 3433,
+                    "type": "args",
+                  },
+                  "loc": 3426,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3512,
+                        "type": "string",
+                        "value": "Short name of the measurement, test, or examination described in VSTEST.",
+                      },
+                    ],
+                    "loc": 3512,
+                    "type": "args",
+                  },
+                  "loc": 3506,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 3396,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 3629,
+                "type": "identifier",
+                "value": "VSORRES",
+              },
+              "columnType": Object {
+                "loc": 3637,
+                "members": Array [
+                  Object {
+                    "loc": 3637,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 3637,
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                  Object {
+                    "loc": 3644,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 3644,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                  Object {
+                    "loc": 3652,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 3652,
+                      "type": "identifier",
+                      "value": "Float",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3666,
+                        "type": "string",
+                        "value": "Result or Finding in Original Units",
+                      },
+                    ],
+                    "loc": 3666,
+                    "type": "args",
+                  },
+                  "loc": 3659,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3753,
+                        "type": "string",
+                        "value": "Result of the vital signs measurement as originally received or collected.",
+                      },
+                    ],
+                    "loc": 3753,
+                    "type": "args",
+                  },
+                  "loc": 3747,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 3629,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 3884,
+                "type": "identifier",
+                "value": "VSORRESU",
+              },
+              "columnType": Object {
+                "loc": 3893,
+                "members": Array [
+                  Object {
+                    "loc": 3893,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 3893,
+                      "type": "identifier",
+                      "value": "VSUnit",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3921,
+                        "type": "string",
+                        "value": "Original Units",
+                      },
+                    ],
+                    "loc": 3921,
+                    "type": "args",
+                  },
+                  "loc": 3914,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 3987,
+                        "type": "string",
+                        "value": "Original units in which the data were collected. The unit for VSORRES.",
+                      },
+                    ],
+                    "loc": 3987,
+                    "type": "args",
+                  },
+                  "loc": 3981,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 3884,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 4102,
+                "type": "identifier",
+                "value": "VSSTRESC",
+              },
+              "columnType": Object {
+                "loc": 4111,
+                "members": Array [
+                  Object {
+                    "loc": 4111,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 4111,
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                  Object {
+                    "loc": 4118,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 4118,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                  Object {
+                    "loc": 4126,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 4126,
+                      "type": "identifier",
+                      "value": "Float",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 4139,
+                        "type": "string",
+                        "value": "Character Result/Finding in Std Format",
+                      },
+                    ],
+                    "loc": 4139,
+                    "type": "args",
+                  },
+                  "loc": 4132,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 4229,
+                        "type": "string",
+                        "value": "Contains the result value for all findings, copied or derived from VSORRES in a standard format or standard units.",
+                      },
+                    ],
+                    "loc": 4229,
+                    "type": "args",
+                  },
+                  "loc": 4223,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 4102,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 4457,
+                "type": "identifier",
+                "value": "VSSTRESN",
+              },
+              "columnType": Object {
+                "loc": 4466,
+                "members": Array [
+                  Object {
+                    "loc": 4466,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 4466,
+                      "type": "identifier",
+                      "value": "Integer",
+                    },
+                  },
+                  Object {
+                    "loc": 4474,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 4474,
+                      "type": "identifier",
+                      "value": "Float",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 4494,
+                        "type": "string",
+                        "value": "Numeric Result/Finding in Standard Units",
+                      },
+                    ],
+                    "loc": 4494,
+                    "type": "args",
+                  },
+                  "loc": 4487,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 4586,
+                        "type": "string",
+                        "value": "Used for continuous or numeric results or findings in standard format",
+                      },
+                    ],
+                    "loc": 4586,
+                    "type": "args",
+                  },
+                  "loc": 4580,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 4457,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 4714,
+                "type": "identifier",
+                "value": "VSSTRESU",
+              },
+              "columnType": Object {
+                "loc": 4723,
+                "members": Array [
+                  Object {
+                    "loc": 4723,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 4723,
+                      "type": "identifier",
+                      "value": "VSUnit",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 4751,
+                        "type": "string",
+                        "value": "Standard Units",
+                      },
+                    ],
+                    "loc": 4751,
+                    "type": "args",
+                  },
+                  "loc": 4744,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 4817,
+                        "type": "string",
+                        "value": "Standardized unit used for VSSTRESC and VSSTRESN",
+                      },
+                    ],
+                    "loc": 4817,
+                    "type": "args",
+                  },
+                  "loc": 4811,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 4714,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 4910,
+                "type": "identifier",
+                "value": "VSSTAT",
+              },
+              "columnType": Object {
+                "loc": 4917,
+                "members": Array [
+                  Object {
+                    "loc": 4917,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 4917,
+                      "type": "identifier",
+                      "value": "Boolean",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 4947,
+                        "type": "string",
+                        "value": "Completion Status",
+                      },
+                    ],
+                    "loc": 4947,
+                    "type": "args",
+                  },
+                  "loc": 4940,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 5016,
+                        "type": "string",
+                        "value": "Used to indicate that a vital sign measurement was not done.",
+                      },
+                    ],
+                    "loc": 5016,
+                    "type": "args",
+                  },
+                  "loc": 5010,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 4910,
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": 5119,
+                "type": "identifier",
+                "value": "VSREASND",
+              },
+              "columnType": Object {
+                "loc": 5128,
+                "members": Array [
+                  Object {
+                    "loc": 5128,
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": 5128,
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 5156,
+                        "type": "string",
+                        "value": "Reason Not Performed",
+                      },
+                    ],
+                    "loc": 5156,
+                    "type": "args",
+                  },
+                  "loc": 5149,
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": 5228,
+                        "type": "string",
+                        "value": "Describes why a measurement or test was not performed.",
+                      },
+                    ],
+                    "loc": 5228,
+                    "type": "args",
+                  },
+                  "loc": 5222,
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": 5119,
+              "type": "column-definition",
+            },
+          ],
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": 2623,
+                    "type": "timeconf",
+                    "value": Object {
+                      "at": Array [
+                        Object {
+                          "loc": 2649,
+                          "type": "study-hour",
+                          "unit": "hour",
+                          "value": 8,
+                        },
+                        Object {
+                          "loc": 2653,
+                          "type": "study-hour",
+                          "unit": "hour",
+                          "value": 15,
+                        },
+                        Object {
+                          "loc": 2658,
+                          "type": "study-hour",
+                          "unit": "hour",
+                          "value": 19,
+                        },
+                      ],
+                      "items": Array [
+                        Object {
+                          "end": Object {
+                            "loc": 2637,
+                            "type": "identifier",
+                            "value": "CLOSEOUT",
+                          },
+                          "loc": 2625,
+                          "start": Object {
+                            "loc": 2625,
+                            "type": "identifier",
+                            "value": "BASELINE",
+                          },
+                          "type": "time-range",
+                        },
+                      ],
+                      "loc": 2625,
+                      "type": "time-list",
+                    },
+                  },
+                ],
+                "loc": 2623,
+                "type": "args",
+              },
+              "loc": 2612,
+              "name": "milestone",
+              "type": "directive",
+            },
+          ],
+          "interfaces": Object {
+            "identifiers": Array [
+              Object {
+                "loc": 2607,
+                "type": "identifier",
+                "value": "base",
+              },
+            ],
+            "loc": 2607,
+            "type": "identifier-list",
+          },
+          "loc": 2582,
+          "name": Object {
+            "loc": 2590,
+            "type": "identifier",
+            "value": "vs_hr",
+          },
+          "type": "dataset-definition",
+        },
+      ],
+      "directives": Array [
+        Object {
+          "args": Object {
+            "args": Array [
+              Object {
+                "loc": 36,
+                "type": "string",
+                "value": "DM",
+              },
+            ],
+            "loc": 36,
+            "type": "args",
+          },
+          "loc": 30,
+          "name": "abbr",
+          "type": "directive",
+        },
+      ],
+      "loc": 9,
+      "name": Object {
+        "loc": 16,
+        "type": "string",
+        "value": "VITAL SIGNS",
+      },
+      "type": "domain-definition",
+    },
+  ],
+  "loc": 0,
+  "type": "document",
+}
+`;
+
 exports[`stringToAST() converts codelists 1`] = `
 Object {
   "children": Array [
@@ -700,6 +2256,7 @@ Object {
             "loc": 45,
             "type": "timeconf",
             "value": Object {
+              "at": null,
               "items": Array [
                 Object {
                   "day": Object {
@@ -768,6 +2325,7 @@ Object {
             "loc": 125,
             "type": "timeconf",
             "value": Object {
+              "at": null,
               "items": Array [
                 Object {
                   "day": Object {
@@ -809,6 +2367,7 @@ Object {
             "loc": 193,
             "type": "timeconf",
             "value": Object {
+              "at": null,
               "items": Array [
                 Object {
                   "day": Object {
@@ -866,6 +2425,7 @@ Object {
             "loc": 266,
             "type": "timeconf",
             "value": Object {
+              "at": null,
               "items": Array [
                 Object {
                   "day": Object {
@@ -923,6 +2483,7 @@ Object {
             "loc": 340,
             "type": "timeconf",
             "value": Object {
+              "at": null,
               "items": Array [
                 Object {
                   "day": Object {
@@ -980,6 +2541,7 @@ Object {
             "loc": 415,
             "type": "timeconf",
             "value": Object {
+              "at": null,
               "items": Array [
                 Object {
                   "day": Object {
@@ -1037,6 +2599,7 @@ Object {
             "loc": 490,
             "type": "timeconf",
             "value": Object {
+              "at": null,
               "items": Array [
                 Object {
                   "day": Object {

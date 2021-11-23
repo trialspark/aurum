@@ -25,18 +25,29 @@ import {
   TimeList,
   TypeExpressionMember,
   TypeExpression,
+  HourExpression,
+  TimeRange,
+  IdentifierList,
+  DatasetDefinition,
+  DomainChild,
+  DomainDefinition,
 } from "./astTypes";
 import {
+  AtToken,
   CloseBrToken,
   CloseParenToken,
   CodelistToken,
   ColonToken,
   CommaToken,
+  DatasetToken,
   DayToken,
   DirectiveToken,
+  DomainToken,
   GteToken,
   GtToken,
+  HourToken,
   IdentifierToken,
+  ImplementsToken,
   InterfaceToken,
   LteToken,
   LtToken,
@@ -49,11 +60,10 @@ import {
   QuestionToken,
   StringToken,
   StudyToken,
+  ThruToken,
   TimeconfendToken,
   TimeconfToken,
 } from "./lexer";
-
-type WhiteSpace = null;
 
 export const main = (
   [topLevelDefs]: [
@@ -69,43 +79,23 @@ export const main = (
   loc,
 });
 
-export const studyDefinition = ([, study, , , , KeyValuePairs]: [
-  WhiteSpace,
+export const studyDefinition = ([study, , KeyValuePairs]: [
   StudyToken,
-  WhiteSpace,
   OpenBrToken,
-  WhiteSpace,
   KeyValuePair[],
-  WhiteSpace,
-  CloseBrToken,
-  WhiteSpace
+  CloseBrToken
 ]): StudyDefinition => ({
   type: "study-definition",
   loc: study.offset,
   children: KeyValuePairs,
 });
 
-export const milestoneDefinition = ([
-  ,
-  milestone,
-  ,
-  name,
-  ,
-  ,
-  ,
-  keyValuePairs,
-]: [
-  WhiteSpace,
+export const milestoneDefinition = ([milestone, name, , keyValuePairs]: [
   MilestoneToken,
-  WhiteSpace,
   Identifier,
-  WhiteSpace,
   OpenBrToken,
-  WhiteSpace,
   KeyValuePair[],
-  WhiteSpace,
-  CloseBrToken,
-  WhiteSpace
+  CloseBrToken
 ]): MilestoneDefinition => ({
   type: "milestone-definition",
   loc: milestone.offset,
@@ -113,18 +103,12 @@ export const milestoneDefinition = ([
   children: keyValuePairs,
 });
 
-export const interfaceDefinition = ([, iface, , name, , , , columns]: [
-  WhiteSpace,
+export const interfaceDefinition = ([iface, name, , columns]: [
   InterfaceToken,
-  WhiteSpace,
   Identifier,
-  WhiteSpace,
   OpenBrToken,
-  WhiteSpace,
   ColumnDefinition[],
-  WhiteSpace,
-  CloseBrToken,
-  WhiteSpace
+  CloseBrToken
 ]): InterfaceDefinition => ({
   type: "interface-definition",
   loc: iface.offset,
@@ -132,18 +116,12 @@ export const interfaceDefinition = ([, iface, , name, , , , columns]: [
   columns,
 });
 
-export const codelistDefinition = ([, codelist, , name, , , , members]: [
-  WhiteSpace,
+export const codelistDefinition = ([codelist, name, , members]: [
   CodelistToken,
-  WhiteSpace,
   Identifier,
-  WhiteSpace,
   OpenBrToken,
-  WhiteSpace,
   CodelistMember[],
-  WhiteSpace,
-  CloseBrToken,
-  WhiteSpace
+  CloseBrToken
 ]): CodelistDefinition => ({
   type: "codelist-definition",
   loc: codelist.offset,
@@ -151,13 +129,53 @@ export const codelistDefinition = ([, codelist, , name, , , , members]: [
   members: members,
 });
 
-export const keyValuePair = ([identifier, , , , string]: [
+export const domainDefinition = ([domain, [name], directives, , children]: [
+  DomainToken,
+  [String | Identifier],
+  Directive[],
+  OpenBrToken,
+  DomainChild[],
+  CloseBrToken
+]): DomainDefinition => ({
+  type: "domain-definition",
+  loc: domain.offset,
+  name,
+  directives,
+  children,
+});
+
+export const domainChildren = ([children]: [
+  [DatasetDefinition][]
+]): DomainChild[] => children.flat();
+
+export const datasetDefinition = ([
+  dataset,
+  name,
+  interfaces,
+  directives,
+  ,
+  columns,
+]: [
+  DatasetToken,
   Identifier,
-  WhiteSpace,
+  [ImplementsToken, IdentifierList] | null,
+  Directive[],
+  OpenBrToken,
+  ColumnDefinition[],
+  CloseBrToken
+]): DatasetDefinition => ({
+  type: "dataset-definition",
+  loc: dataset.offset,
+  name,
+  interfaces: interfaces?.[1] ?? null,
+  directives,
+  columns,
+});
+
+export const keyValuePair = ([identifier, , string]: [
+  Identifier,
   ColonToken,
-  WhiteSpace,
-  String,
-  WhiteSpace
+  String
 ]): KeyValuePair => ({
   type: "key-value-pair",
   loc: identifier.loc,
@@ -165,11 +183,9 @@ export const keyValuePair = ([identifier, , , , string]: [
   rhs: string,
 });
 
-export const columnDefinition = ([columnName, , columnType, , directives]: [
+export const columnDefinition = ([columnName, columnType, directives]: [
   Identifier,
-  WhiteSpace,
   Identifier,
-  WhiteSpace,
   Directive[]
 ]): ColumnDefinition => ({
   type: "column-definition",
@@ -179,9 +195,8 @@ export const columnDefinition = ([columnName, , columnType, , directives]: [
   directives,
 });
 
-export const codelistMember = ([[name], , directives]: [
+export const codelistMember = ([[name], directives]: [
   [String | Identifier],
-  WhiteSpace,
   Directive[]
 ]): CodelistMember => ({
   type: "codelist-member",
@@ -190,11 +205,9 @@ export const codelistMember = ([[name], , directives]: [
   directives,
 });
 
-export const directive = ([, directive, optionalArgs]: [
-  WhiteSpace,
+export const directive = ([directive, optionalArgs]: [
   DirectiveToken,
-  [OpenParenToken, Args | null, CloseParenToken] | null,
-  WhiteSpace
+  [OpenParenToken, Args | null, CloseParenToken] | null
 ]): Directive => ({
   type: "directive",
   loc: directive.offset,
@@ -203,7 +216,7 @@ export const directive = ([, directive, optionalArgs]: [
 });
 
 export const typeExpression = ([firstMembers, lastMember]: [
-  [TypeExpressionMember, WhiteSpace, PipeToken, WhiteSpace][],
+  [TypeExpressionMember, PipeToken][],
   TypeExpressionMember
 ]): TypeExpression => {
   const members = [...firstMembers.map(([member]) => member), lastMember];
@@ -233,15 +246,10 @@ export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   value: token.toString(),
 });
 
-export const args = ([, [nthArgs, lastArgValue]]: [
-  WhiteSpace,
-  [
-    [Value, WhiteSpace, CommaToken, WhiteSpace][],
-    Value,
-    WhiteSpace,
-    CommaToken | null
-  ],
-  WhiteSpace
+export const args = ([nthArgs, lastArgValue]: [
+  [Value, CommaToken][],
+  Value,
+  CommaToken | null
 ]): Args => {
   const args = [...nthArgs.map(([value]) => value), lastArgValue];
 
@@ -252,22 +260,34 @@ export const args = ([, [nthArgs, lastArgValue]]: [
   };
 };
 
-export const timeconf = ([timeconf, , [value]]: [
+export const identifierList = ([args, last]: [
+  [Identifier, CommaToken][],
+  Identifier,
+  CommaToken | null
+]): IdentifierList => {
+  const identifiers = [...args.map(([value]) => value), last];
+
+  return {
+    type: "identifier-list",
+    loc: identifiers[0].loc,
+    identifiers,
+  };
+};
+
+export const timeconf = ([timeconf, [value]]: [
   TimeconfToken,
-  WhiteSpace,
   [TimeList | TimeExpression],
-  WhiteSpace,
   TimeconfendToken
 ]): Timeconf => ({ type: "timeconf", loc: timeconf.offset, value });
 
 export const studyDay = ([day, window]: [
   DayExpression,
-  [WhiteSpace, Window] | null
+  Window | null
 ]): StudyDay => ({
   type: "study-day",
   loc: day.loc,
   day,
-  window: window?.[1] ?? null,
+  window,
 });
 
 export const window = ([windows]: [
@@ -275,8 +295,8 @@ export const window = ([windows]: [
     | PositiveWindow
     | NegativeWindow
     | BothWindow
-    | [PositiveWindow, WhiteSpace, NegativeWindow]
-    | [NegativeWindow, WhiteSpace, PositiveWindow]
+    | [PositiveWindow, NegativeWindow]
+    | [NegativeWindow, PositiveWindow]
   ]
 ]): Window => {
   const window = windows.flat().filter((window) => window != null);
@@ -326,10 +346,16 @@ export const day = ([token]: [DayToken]): DayExpression => ({
   value: parseInt(token.toString().slice(1)),
 });
 
-export const timeExpression = ([operator, , rhs]: [
+export const hour = ([token]: [HourToken]): HourExpression => ({
+  type: "study-hour",
+  loc: token.offset,
+  unit: "hour",
+  value: parseInt(token.value.slice(1)),
+});
+
+export const timeExpression = ([operator, rhs]: [
   TimeOperator,
-  WhiteSpace,
-  Identifier
+  TimeValue
 ]): TimeExpression => ({
   type: "time-expression",
   loc: operator.loc,
@@ -345,21 +371,40 @@ export const timeOperator = ([[token]]: [
   value: token.value,
 });
 
-export const timeList = ([firstArgs, lastArg]: [
-  [TimeValue, WhiteSpace, CommaToken, WhiteSpace][],
-  [TimeValue, WhiteSpace, CommaToken | null] | null
-]): TimeList => {
-  const items = [
-    ...firstArgs.map(([value]) => value),
-    ...(lastArg ? [lastArg[0]] : []),
-  ];
+export const timeRange = ([start, , end]: [
+  TimeValue,
+  ThruToken,
+  TimeValue
+]): TimeRange => ({
+  type: "time-range",
+  loc: start.loc,
+  start,
+  end,
+});
 
-  return {
-    type: "time-list",
-    loc: items[0]?.loc,
-    items,
-  };
+export const timeList = ([items, at]: [
+  TimeList["items"],
+  [AtToken, HourExpression[]] | null
+]): TimeList => ({
+  type: "time-list",
+  loc: items[0]?.loc,
+  items,
+  at: at?.[1] ?? null,
+});
+
+export const timeListMembers = ([firstArgs, lastArg]: [
+  [TimeValue, CommaToken][],
+  TimeValue,
+  CommaToken | null
+]): TimeValue[] => {
+  return [...firstArgs.map(([value]) => value), lastArg];
 };
+
+export const hoursListMembers = ([args, lastArg]: [
+  [HourExpression, CommaToken][],
+  HourExpression,
+  CommaToken | null
+]): HourExpression[] => [...args.map(([value]) => value), lastArg];
 
 export const timeValue = ([[value]]: [[StudyDay | Identifier]]): TimeValue =>
   value;
@@ -372,7 +417,3 @@ export const string = ([token]: [StringToken]): String => ({
     .replace(/\\"/g, '"')
     .replace(/\n\s*/g, " "),
 });
-
-export const _ = () => null;
-
-export const __ = () => null;
