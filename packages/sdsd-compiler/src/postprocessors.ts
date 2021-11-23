@@ -56,7 +56,12 @@ import {
 type WhiteSpace = null;
 
 export const main = (
-  [topLevelDefs]: [MilestoneDefinition | StudyDefinition][],
+  [topLevelDefs]: [
+    | MilestoneDefinition
+    | StudyDefinition
+    | InterfaceDefinition
+    | CodelistDefinition
+  ][],
   loc: number
 ): Document => ({
   type: "document",

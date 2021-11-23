@@ -7,7 +7,11 @@ export interface Document extends Node<"document"> {
   children: DocumentChild[];
 }
 
-export type DocumentChild = StudyDefinition | MilestoneDefinition;
+export type DocumentChild =
+  | StudyDefinition
+  | MilestoneDefinition
+  | InterfaceDefinition
+  | CodelistDefinition;
 
 export interface StudyDefinition extends Node<"study-definition"> {
   children: KeyValuePair[];
