@@ -1,3 +1,5 @@
+import { last, min } from "lodash";
+import { Token } from "moo";
 import {
   BothWindow,
   DayExpression,
@@ -9,6 +11,7 @@ import {
   NegativeWindow,
   PositiveWindow,
   String,
+  Loc,
   StudyDay,
   StudyDefinition,
   Timeconf,
@@ -65,32 +68,62 @@ import {
   TimeconfToken,
 } from "./lexer";
 
-export const main = (
-  [topLevelDefs]: [
-    | MilestoneDefinition
-    | StudyDefinition
-    | InterfaceDefinition
-    | CodelistDefinition
-  ][],
-  loc: number
-): Document => ({
-  type: "document",
-  children: topLevelDefs.flat(),
-  loc,
+const tokenToLoc = (token: Token): Loc => ({
+  start: { line: token.line, col: token.col },
+  end: {
+    line: token.line + token.lineBreaks,
+    col: (() => {
+      if (token.lineBreaks > 0) {
+        // This token spans multiple lines so we want to only get the col at the end of the last line
+        const lastLine = token.value.match(/.*$/)![0];
+
+        return lastLine.length;
+      }
+
+      return token.col + token.value.length - 1;
+    })(),
+  },
 });
 
-export const studyDefinition = ([study, , KeyValuePairs]: [
+export const main = ([topLevelDefs]: [
+  | MilestoneDefinition
+  | StudyDefinition
+  | InterfaceDefinition
+  | CodelistDefinition
+][]): Document => {
+  const children = topLevelDefs.flat();
+
+  return {
+    type: "document",
+    children,
+    loc: {
+      start: children[0]?.loc.start ?? { col: 0, line: 0 },
+      end: last(children)?.loc.end ?? { col: 0, line: 0 },
+    },
+  };
+};
+
+export const studyDefinition = ([study, , KeyValuePairs, closebr]: [
   StudyToken,
   OpenBrToken,
   KeyValuePair[],
   CloseBrToken
 ]): StudyDefinition => ({
   type: "study-definition",
-  loc: study.offset,
+  loc: {
+    start: tokenToLoc(study).start,
+    end: tokenToLoc(closebr).end,
+  },
   children: KeyValuePairs,
 });
 
-export const milestoneDefinition = ([milestone, name, , keyValuePairs]: [
+export const milestoneDefinition = ([
+  milestone,
+  name,
+  ,
+  keyValuePairs,
+  closebr,
+]: [
   MilestoneToken,
   Identifier,
   OpenBrToken,
@@ -98,12 +131,15 @@ export const milestoneDefinition = ([milestone, name, , keyValuePairs]: [
   CloseBrToken
 ]): MilestoneDefinition => ({
   type: "milestone-definition",
-  loc: milestone.offset,
+  loc: {
+    start: tokenToLoc(milestone).start,
+    end: tokenToLoc(closebr).end,
+  },
   name,
   children: keyValuePairs,
 });
 
-export const interfaceDefinition = ([iface, name, , columns]: [
+export const interfaceDefinition = ([iface, name, , columns, closebr]: [
   InterfaceToken,
   Identifier,
   OpenBrToken,
@@ -111,12 +147,15 @@ export const interfaceDefinition = ([iface, name, , columns]: [
   CloseBrToken
 ]): InterfaceDefinition => ({
   type: "interface-definition",
-  loc: iface.offset,
+  loc: {
+    start: tokenToLoc(iface).start,
+    end: tokenToLoc(closebr).end,
+  },
   name,
   columns,
 });
 
-export const codelistDefinition = ([codelist, name, , members]: [
+export const codelistDefinition = ([codelist, name, , members, closebr]: [
   CodelistToken,
   Identifier,
   OpenBrToken,
@@ -124,12 +163,22 @@ export const codelistDefinition = ([codelist, name, , members]: [
   CloseBrToken
 ]): CodelistDefinition => ({
   type: "codelist-definition",
-  loc: codelist.offset,
+  loc: {
+    start: tokenToLoc(codelist).start,
+    end: tokenToLoc(closebr).end,
+  },
   name,
   members: members,
 });
 
-export const domainDefinition = ([domain, [name], directives, , children]: [
+export const domainDefinition = ([
+  domain,
+  [name],
+  directives,
+  ,
+  children,
+  closebr,
+]: [
   DomainToken,
   [String | Identifier],
   Directive[],
@@ -138,7 +187,10 @@ export const domainDefinition = ([domain, [name], directives, , children]: [
   CloseBrToken
 ]): DomainDefinition => ({
   type: "domain-definition",
-  loc: domain.offset,
+  loc: {
+    start: tokenToLoc(domain).start,
+    end: tokenToLoc(closebr).end,
+  },
   name,
   directives,
   children,
@@ -155,6 +207,7 @@ export const datasetDefinition = ([
   directives,
   ,
   columns,
+  closebr,
 ]: [
   DatasetToken,
   Identifier,
@@ -165,7 +218,7 @@ export const datasetDefinition = ([
   CloseBrToken
 ]): DatasetDefinition => ({
   type: "dataset-definition",
-  loc: dataset.offset,
+  loc: { start: tokenToLoc(dataset).start, end: tokenToLoc(closebr).end },
   name,
   interfaces: interfaces?.[1] ?? null,
   directives,
@@ -178,7 +231,7 @@ export const keyValuePair = ([identifier, , string]: [
   String
 ]): KeyValuePair => ({
   type: "key-value-pair",
-  loc: identifier.loc,
+  loc: { start: identifier.loc.start, end: string.loc.end },
   lhs: identifier,
   rhs: string,
 });
@@ -189,7 +242,10 @@ export const columnDefinition = ([columnName, columnType, directives]: [
   Directive[]
 ]): ColumnDefinition => ({
   type: "column-definition",
-  loc: columnName.loc,
+  loc: {
+    start: columnName.loc.start,
+    end: last(directives)?.loc.end ?? columnType.loc.end,
+  },
   columnName: columnName,
   columnType,
   directives,
@@ -200,7 +256,10 @@ export const codelistMember = ([[name], directives]: [
   Directive[]
 ]): CodelistMember => ({
   type: "codelist-member",
-  loc: name.loc,
+  loc: {
+    start: name.loc.start,
+    end: last(directives)?.loc.end ?? name.loc.end,
+  },
   name,
   directives,
 });
@@ -210,7 +269,10 @@ export const directive = ([directive, optionalArgs]: [
   [OpenParenToken, Args | null, CloseParenToken] | null
 ]): Directive => ({
   type: "directive",
-  loc: directive.offset,
+  loc: {
+    start: tokenToLoc(directive).start,
+    end: tokenToLoc(optionalArgs?.[2] ?? directive).end,
+  },
   name: directive.value.slice(1),
   args: optionalArgs?.[1] ?? null,
 });
@@ -223,7 +285,7 @@ export const typeExpression = ([firstMembers, lastMember]: [
 
   return {
     type: "type-expression",
-    loc: members[0].loc,
+    loc: { start: members[0].loc.start, end: last(members)!.loc.end },
     members,
   };
 };
@@ -233,7 +295,10 @@ export const typeExpressionMember = ([identifier, question]: [
   QuestionToken | null
 ]): TypeExpressionMember => ({
   type: "type-expression-member",
-  loc: identifier.loc,
+  loc: {
+    start: identifier.loc.start,
+    end: question ? tokenToLoc(question).end : identifier.loc.end,
+  },
   value: identifier,
   optional: !!question,
 });
@@ -242,11 +307,11 @@ export const value = ([[expression]]: [Value][]): Value => expression;
 
 export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   type: "identifier",
-  loc: token.offset,
+  loc: tokenToLoc(token),
   value: token.toString(),
 });
 
-export const args = ([nthArgs, lastArgValue]: [
+export const args = ([nthArgs, lastArgValue, trailingComma]: [
   [Value, CommaToken][],
   Value,
   CommaToken | null
@@ -255,37 +320,55 @@ export const args = ([nthArgs, lastArgValue]: [
 
   return {
     type: "args",
-    loc: args[0].loc,
+    loc: {
+      start: args[0].loc.start,
+      end: trailingComma ? tokenToLoc(trailingComma).end : last(args)!.loc.end,
+    },
     args,
   };
 };
 
-export const identifierList = ([args, last]: [
+export const identifierList = ([args, lastIdentifier, trailingComma]: [
   [Identifier, CommaToken][],
   Identifier,
   CommaToken | null
 ]): IdentifierList => {
-  const identifiers = [...args.map(([value]) => value), last];
+  const identifiers = [...args.map(([value]) => value), lastIdentifier];
 
   return {
     type: "identifier-list",
-    loc: identifiers[0].loc,
+    loc: {
+      start: identifiers[0].loc.start,
+      end: trailingComma
+        ? tokenToLoc(trailingComma).end
+        : last(identifiers)!.loc.end,
+    },
     identifiers,
   };
 };
 
-export const timeconf = ([timeconf, [value]]: [
+export const timeconf = ([timeconf, [value], end]: [
   TimeconfToken,
   [TimeList | TimeExpression],
   TimeconfendToken
-]): Timeconf => ({ type: "timeconf", loc: timeconf.offset, value });
+]): Timeconf => ({
+  type: "timeconf",
+  loc: {
+    start: tokenToLoc(timeconf).start,
+    end: tokenToLoc(end).end,
+  },
+  value,
+});
 
 export const studyDay = ([day, window]: [
   DayExpression,
   Window | null
 ]): StudyDay => ({
   type: "study-day",
-  loc: day.loc,
+  loc: {
+    start: day.loc.start,
+    end: window?.loc.end ?? day.loc.end,
+  },
   day,
   window,
 });
@@ -299,11 +382,14 @@ export const window = ([windows]: [
     | [NegativeWindow, PositiveWindow]
   ]
 ]): Window => {
-  const window = windows.flat().filter((window) => window != null);
+  const window = windows.flat();
 
   return {
     type: "window",
-    loc: window[0]!.loc,
+    loc: {
+      start: window[0].loc.start,
+      end: last(window)!.loc.end,
+    },
     window: window as Window["window"],
   };
 };
@@ -314,7 +400,10 @@ export const positiveWindow = ([plus, day]: [
 ]): PositiveWindow => ({
   type: "positive-window",
   operator: "+",
-  loc: plus.offset,
+  loc: {
+    start: tokenToLoc(plus).start,
+    end: day.loc.end,
+  },
   days: day,
 });
 
@@ -324,7 +413,10 @@ export const negativeWindow = ([minus, day]: [
 ]): NegativeWindow => ({
   type: "negative-window",
   operator: "-",
-  loc: minus.offset,
+  loc: {
+    start: tokenToLoc(minus).start,
+    end: day.loc.end,
+  },
   days: day,
 });
 
@@ -335,20 +427,23 @@ export const bothWindow = ([plus, , day]: [
 ]): BothWindow => ({
   type: "both-window",
   operator: "+-",
-  loc: plus.offset,
+  loc: {
+    start: tokenToLoc(plus).start,
+    end: day.loc.end,
+  },
   days: day,
 });
 
 export const day = ([token]: [DayToken]): DayExpression => ({
   type: "day-expression",
-  loc: token.offset,
+  loc: tokenToLoc(token),
   unit: "day",
   value: parseInt(token.toString().slice(1)),
 });
 
 export const hour = ([token]: [HourToken]): HourExpression => ({
   type: "study-hour",
-  loc: token.offset,
+  loc: tokenToLoc(token),
   unit: "hour",
   value: parseInt(token.value.slice(1)),
 });
@@ -358,7 +453,10 @@ export const timeExpression = ([operator, rhs]: [
   TimeValue
 ]): TimeExpression => ({
   type: "time-expression",
-  loc: operator.loc,
+  loc: {
+    start: operator.loc.start,
+    end: rhs.loc.end,
+  },
   operator,
   rhs,
 });
@@ -367,7 +465,7 @@ export const timeOperator = ([[token]]: [
   [GtToken | LtToken | GteToken | LteToken]
 ]): TimeOperator => ({
   type: "time-operator",
-  loc: token.offset,
+  loc: tokenToLoc(token),
   value: token.value,
 });
 
@@ -377,17 +475,20 @@ export const timeRange = ([start, , end]: [
   TimeValue
 ]): TimeRange => ({
   type: "time-range",
-  loc: start.loc,
+  loc: { start: start.loc.start, end: end.loc.end },
   start,
   end,
 });
 
 export const timeList = ([items, at]: [
-  TimeList["items"],
+  TimeValue[],
   [AtToken, HourExpression[]] | null
 ]): TimeList => ({
   type: "time-list",
-  loc: items[0]?.loc,
+  loc: {
+    start: items[0].loc.start,
+    end: at?.[1] ? last(at?.[1])!.loc.end : last(items)!.loc.end,
+  },
   items,
   at: at?.[1] ?? null,
 });
@@ -411,7 +512,7 @@ export const timeValue = ([[value]]: [[StudyDay | Identifier]]): TimeValue =>
 
 export const string = ([token]: [StringToken]): String => ({
   type: "string",
-  loc: token.offset,
+  loc: tokenToLoc(token),
   value: token.value
     .substring(1, token.value.length - 1)
     .replace(/\\"/g, '"')

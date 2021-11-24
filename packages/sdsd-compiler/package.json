@@ -25,11 +25,13 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
+    "@types/lodash": "^4.14.177",
     "@types/moo": "^0.5.5",
     "@types/nearley": "^2.11.2",
     "jest-transform-nearley": "^2.0.0"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "moo": "^0.5.1",
     "nearley": "^2.20.1"
   }

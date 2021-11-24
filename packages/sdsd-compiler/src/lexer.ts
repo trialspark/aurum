@@ -39,7 +39,10 @@ const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_]*/;
 export const lexer = new TokenSkippingLexer(
   moo.states({
     main: {
-      string: /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
+      string: {
+        match: /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
+        lineBreaks: true,
+      },
       directive: /@[a-zA-Z][a-zA-Z.]*/,
       timeconf: { match: 't"', push: "timeconf" },
       openbr: "{",

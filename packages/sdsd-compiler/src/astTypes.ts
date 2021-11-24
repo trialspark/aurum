@@ -1,6 +1,16 @@
 interface Node<T extends string> {
   type: T;
-  loc: number;
+  loc: Loc;
+}
+
+export interface DocumentPosition {
+  line: number;
+  col: number;
+}
+
+export interface Loc {
+  start: DocumentPosition;
+  end: DocumentPosition;
 }
 
 export interface Document extends Node<"document"> {
