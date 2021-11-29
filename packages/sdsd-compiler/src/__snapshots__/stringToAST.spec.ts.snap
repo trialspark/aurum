@@ -8659,3 +8659,3107 @@ Object {
   "type": "document",
 }
 `;
+
+exports[`stringToAST() supports mapping 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "columns": Array [
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 3,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 3,
+              },
+            },
+            "type": "identifier",
+            "value": "VSTESTCD",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 5,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 3,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            \\"{{VSTESTCD}}\\"
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 5,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 3,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 5,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 3,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 3,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 3,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 15,
+                "line": 7,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 7,
+              },
+            },
+            "type": "identifier",
+            "value": "VSPOS",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 9,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 7,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            {{MILESTONE.NAME}}.VS.{{VSTESTCD}}POS
+          ",
+                "language": "path",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 9,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 7,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 9,
+                },
+                "start": Object {
+                  "col": 17,
+                  "line": 7,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 7,
+                  },
+                  "start": Object {
+                    "col": 22,
+                    "line": 7,
+                  },
+                },
+                "type": "identifier",
+                "value": "esource",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 17,
+                "line": 11,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 11,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRES",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 13,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 11,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            {{MILESTONE.NAME}}.VS.{{VSTESTCD}}ORRES
+          ",
+                "language": "path",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 13,
+                  },
+                  "start": Object {
+                    "col": 32,
+                    "line": 11,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 13,
+                },
+                "start": Object {
+                  "col": 19,
+                  "line": 11,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 30,
+                    "line": 11,
+                  },
+                  "start": Object {
+                    "col": 24,
+                    "line": 11,
+                  },
+                },
+                "type": "identifier",
+                "value": "esource",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 15,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 15,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 17,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 15,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            {{MILESTONE.NAME}}.VS{{VSTESTCD}}ORRESU
+          ",
+                "language": "path",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 17,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 15,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 17,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 15,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 15,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 15,
+                  },
+                },
+                "type": "identifier",
+                "value": "esource",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 19,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 19,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESC",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 26,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 19,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT
+              CASE
+                WHEN vs.VSORRESU = \\"lbs\\" THEN vs.VSORRES / 2.2046
+                WHEN vs.VSORRESU = \\"F\\" THEN (cs.VSORRES - 32) * .5556
+                ELSE vs.VSORRES
+            FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 26,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 19,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 26,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 19,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 19,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 19,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 28,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 28,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESN",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 31,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 28,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT vs.VSORRES
+            FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\" AND pg_typeof(vs.VSORRES) = \\"integer\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 31,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 28,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 31,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 28,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 28,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 28,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 33,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 33,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 40,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 33,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT
+              CASE
+                WHEN vs.VSORRESU = \\"lbs\\" THEN \\"kg\\"
+                WHEN vs.VSORRESU = \\"F\\" THEN \\"C\\"
+                ELSE vs.VSORRESU
+            FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 40,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 33,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 40,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 33,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 33,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 33,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 16,
+                "line": 42,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 42,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTAT",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 45,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 42,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT CAST(vs.VSORRES as BOOLEAN)
+            FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 45,
+                  },
+                  "start": Object {
+                    "col": 28,
+                    "line": 42,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 45,
+                },
+                "start": Object {
+                  "col": 18,
+                  "line": 42,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 26,
+                    "line": 42,
+                  },
+                  "start": Object {
+                    "col": 23,
+                    "line": 42,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 47,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 47,
+              },
+            },
+            "type": "identifier",
+            "value": "VSREASND",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 49,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 47,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            {{MILESTONE.NAME}}.VS.{{VSTESTCD}}REASND
+          ",
+                "language": "path",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 49,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 47,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 49,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 47,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 47,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 47,
+                  },
+                },
+                "type": "identifier",
+                "value": "esource",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+      ],
+      "dataset": Object {
+        "loc": Object {
+          "end": Object {
+            "col": 22,
+            "line": 2,
+          },
+          "start": Object {
+            "col": 21,
+            "line": 2,
+          },
+        },
+        "parts": Array [
+          Object {
+            "loc": Object {
+              "end": Object {
+                "col": 22,
+                "line": 2,
+              },
+              "start": Object {
+                "col": 21,
+                "line": 2,
+              },
+            },
+            "type": "identifier",
+            "value": "vs",
+          },
+        ],
+        "type": "path",
+        "value": "vs",
+      },
+      "loc": Object {
+        "end": Object {
+          "col": 9,
+          "line": 50,
+        },
+        "start": Object {
+          "col": 9,
+          "line": 2,
+        },
+      },
+      "type": "dataset-mapping",
+      "variables": Array [
+        Object {
+          "loc": Object {
+            "end": Object {
+              "col": 74,
+              "line": 2,
+            },
+            "start": Object {
+              "col": 29,
+              "line": 2,
+            },
+          },
+          "type": "variable-mapping",
+          "values": Object {
+            "args": Array [
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 49,
+                    "line": 2,
+                  },
+                  "start": Object {
+                    "col": 42,
+                    "line": 2,
+                  },
+                },
+                "type": "string",
+                "value": "HEIGHT",
+              },
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 55,
+                    "line": 2,
+                  },
+                  "start": Object {
+                    "col": 52,
+                    "line": 2,
+                  },
+                },
+                "type": "string",
+                "value": "HR",
+              },
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 63,
+                    "line": 2,
+                  },
+                  "start": Object {
+                    "col": 58,
+                    "line": 2,
+                  },
+                },
+                "type": "string",
+                "value": "TEMP",
+              },
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 73,
+                    "line": 2,
+                  },
+                  "start": Object {
+                    "col": 66,
+                    "line": 2,
+                  },
+                },
+                "type": "string",
+                "value": "WEIGHT",
+              },
+            ],
+            "loc": Object {
+              "end": Object {
+                "col": 73,
+                "line": 2,
+              },
+              "start": Object {
+                "col": 42,
+                "line": 2,
+              },
+            },
+            "type": "args",
+          },
+          "variable": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 36,
+                "line": 2,
+              },
+              "start": Object {
+                "col": 29,
+                "line": 2,
+              },
+            },
+            "type": "identifier",
+            "value": "VSTESTCD",
+          },
+        },
+      ],
+    },
+    Object {
+      "columns": Array [
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 53,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 53,
+              },
+            },
+            "type": "identifier",
+            "value": "VSTESTCD",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 55,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 53,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            \\"BMI\\"
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 55,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 53,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 55,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 53,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 53,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 53,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 15,
+                "line": 57,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 57,
+              },
+            },
+            "type": "identifier",
+            "value": "VSPOS",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 59,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 57,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            null
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 59,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 57,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 59,
+                },
+                "start": Object {
+                  "col": 17,
+                  "line": 57,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 57,
+                  },
+                  "start": Object {
+                    "col": 22,
+                    "line": 57,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 17,
+                "line": 61,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 61,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRES",
+          },
+          "computation": Object {
+            "code": "
+            return (WEIGHT / HEIGHT / HEIGHT) * 10000
+          ",
+            "language": "python",
+            "loc": Object {
+              "end": Object {
+                "col": 13,
+                "line": 67,
+              },
+              "start": Object {
+                "col": 18,
+                "line": 65,
+              },
+            },
+            "type": "source-code",
+          },
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 67,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 61,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT vs.VSSTRESC FROM vs WHERE VSTESTCD = \\"HEIGHT\\";
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 63,
+                  },
+                  "start": Object {
+                    "col": 39,
+                    "line": 61,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 63,
+                },
+                "start": Object {
+                  "col": 19,
+                  "line": 61,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 27,
+                    "line": 61,
+                  },
+                  "start": Object {
+                    "col": 24,
+                    "line": 61,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 37,
+                    "line": 61,
+                  },
+                  "start": Object {
+                    "col": 32,
+                    "line": 61,
+                  },
+                },
+                "type": "identifier",
+                "value": "HEIGHT",
+              },
+            },
+            Object {
+              "code": Object {
+                "code": "
+            SELECT vs.VSSTRESC FROM vs WHERE VSTESTCD = \\"WEIGHT\\";
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 65,
+                  },
+                  "start": Object {
+                    "col": 35,
+                    "line": 63,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 65,
+                },
+                "start": Object {
+                  "col": 15,
+                  "line": 63,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 23,
+                    "line": 63,
+                  },
+                  "start": Object {
+                    "col": 20,
+                    "line": 63,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 33,
+                    "line": 63,
+                  },
+                  "start": Object {
+                    "col": 28,
+                    "line": 63,
+                  },
+                },
+                "type": "identifier",
+                "value": "WEIGHT",
+              },
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 69,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 69,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 71,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 69,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            null
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 71,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 69,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 71,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 69,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 69,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 69,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 73,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 73,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESC",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 75,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 73,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSORRES FROM vs WHERE VSTESTCD = \\"BMI\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 75,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 73,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 75,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 73,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 73,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 73,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 77,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 77,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESN",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 79,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 77,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSSTRESC FROM vs WHERE VSTESTCD = \\"BMI\\" 
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 79,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 77,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 79,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 77,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 77,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 77,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 81,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 81,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 83,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 81,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            NULL
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 83,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 81,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 83,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 81,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 81,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 81,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 16,
+                "line": 85,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 85,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTAT",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 87,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 85,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT CAST(VSORRES as BOOLEAN) FROM vs WHERE VSTESTCD = \\"BMI\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 87,
+                  },
+                  "start": Object {
+                    "col": 28,
+                    "line": 85,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 87,
+                },
+                "start": Object {
+                  "col": 18,
+                  "line": 85,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 26,
+                    "line": 85,
+                  },
+                  "start": Object {
+                    "col": 23,
+                    "line": 85,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 89,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 89,
+              },
+            },
+            "type": "identifier",
+            "value": "VSREASND",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 91,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 89,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            null
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 91,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 89,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 91,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 89,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 89,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 89,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+      ],
+      "dataset": Object {
+        "loc": Object {
+          "end": Object {
+            "col": 22,
+            "line": 52,
+          },
+          "start": Object {
+            "col": 21,
+            "line": 52,
+          },
+        },
+        "parts": Array [
+          Object {
+            "loc": Object {
+              "end": Object {
+                "col": 22,
+                "line": 52,
+              },
+              "start": Object {
+                "col": 21,
+                "line": 52,
+              },
+            },
+            "type": "identifier",
+            "value": "vs",
+          },
+        ],
+        "type": "path",
+        "value": "vs",
+      },
+      "loc": Object {
+        "end": Object {
+          "col": 9,
+          "line": 92,
+        },
+        "start": Object {
+          "col": 9,
+          "line": 52,
+        },
+      },
+      "type": "dataset-mapping",
+      "variables": Array [],
+    },
+    Object {
+      "columns": Array [
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 95,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 95,
+              },
+            },
+            "type": "identifier",
+            "value": "VSTESTCD",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 97,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 95,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            \\"{{VSTESTCD}}\\"
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 97,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 95,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 97,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 95,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 95,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 95,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 15,
+                "line": 99,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 99,
+              },
+            },
+            "type": "identifier",
+            "value": "VSPOS",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 101,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 99,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            {{MILESTONE.NAME}}.VS.BPPOS
+          ",
+                "language": "path",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 101,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 99,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 101,
+                },
+                "start": Object {
+                  "col": 17,
+                  "line": 99,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 99,
+                  },
+                  "start": Object {
+                    "col": 22,
+                    "line": 99,
+                  },
+                },
+                "type": "identifier",
+                "value": "esource",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 17,
+                "line": 103,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 103,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRES",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 105,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 103,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            {{MILESTONE.NAME}}.VS.BPORRES.{{VSTESTCD}}
+          ",
+                "language": "path",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 105,
+                  },
+                  "start": Object {
+                    "col": 32,
+                    "line": 103,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 105,
+                },
+                "start": Object {
+                  "col": 19,
+                  "line": 103,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 30,
+                    "line": 103,
+                  },
+                  "start": Object {
+                    "col": 24,
+                    "line": 103,
+                  },
+                },
+                "type": "identifier",
+                "value": "esource",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 107,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 107,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 109,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 107,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            \\"mmHg\\"
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 109,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 107,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 109,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 107,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 107,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 107,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 111,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 111,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESC",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 113,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 111,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSORRES FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 113,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 111,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 113,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 111,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 111,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 111,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 115,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 115,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESN",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 117,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 115,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSSTRESC FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 117,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 115,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 117,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 115,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 115,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 115,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 119,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 119,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 121,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 119,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSORRESU FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 121,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 119,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 121,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 119,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 119,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 119,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 16,
+                "line": 123,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 123,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTAT",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 125,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 123,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT CAST(VSORRES as BOOLEAN) FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 125,
+                  },
+                  "start": Object {
+                    "col": 28,
+                    "line": 123,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 125,
+                },
+                "start": Object {
+                  "col": 18,
+                  "line": 123,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 26,
+                    "line": 123,
+                  },
+                  "start": Object {
+                    "col": 23,
+                    "line": 123,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 127,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 127,
+              },
+            },
+            "type": "identifier",
+            "value": "VSREASND",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 129,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 127,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            {{MILESTONE.NAME}}.VS.BPREASND
+          ",
+                "language": "path",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 129,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 127,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 129,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 127,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 127,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 127,
+                  },
+                },
+                "type": "identifier",
+                "value": "esource",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+      ],
+      "dataset": Object {
+        "loc": Object {
+          "end": Object {
+            "col": 22,
+            "line": 94,
+          },
+          "start": Object {
+            "col": 21,
+            "line": 94,
+          },
+        },
+        "parts": Array [
+          Object {
+            "loc": Object {
+              "end": Object {
+                "col": 22,
+                "line": 94,
+              },
+              "start": Object {
+                "col": 21,
+                "line": 94,
+              },
+            },
+            "type": "identifier",
+            "value": "vs",
+          },
+        ],
+        "type": "path",
+        "value": "vs",
+      },
+      "loc": Object {
+        "end": Object {
+          "col": 9,
+          "line": 130,
+        },
+        "start": Object {
+          "col": 9,
+          "line": 94,
+        },
+      },
+      "type": "dataset-mapping",
+      "variables": Array [
+        Object {
+          "loc": Object {
+            "end": Object {
+              "col": 58,
+              "line": 94,
+            },
+            "start": Object {
+              "col": 29,
+              "line": 94,
+            },
+          },
+          "type": "variable-mapping",
+          "values": Object {
+            "args": Array [
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 48,
+                    "line": 94,
+                  },
+                  "start": Object {
+                    "col": 42,
+                    "line": 94,
+                  },
+                },
+                "type": "string",
+                "value": "DIABP",
+              },
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 57,
+                    "line": 94,
+                  },
+                  "start": Object {
+                    "col": 51,
+                    "line": 94,
+                  },
+                },
+                "type": "string",
+                "value": "SYSBP",
+              },
+            ],
+            "loc": Object {
+              "end": Object {
+                "col": 57,
+                "line": 94,
+              },
+              "start": Object {
+                "col": 42,
+                "line": 94,
+              },
+            },
+            "type": "args",
+          },
+          "variable": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 36,
+                "line": 94,
+              },
+              "start": Object {
+                "col": 29,
+                "line": 94,
+              },
+            },
+            "type": "identifier",
+            "value": "VSTESTCD",
+          },
+        },
+      ],
+    },
+    Object {
+      "columns": Array [
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 133,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 133,
+              },
+            },
+            "type": "identifier",
+            "value": "VSTESTCD",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 135,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 133,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            \\"HR\\"
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 135,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 133,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 135,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 133,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 133,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 133,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 17,
+                "line": 137,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 137,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRES",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 144,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 137,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT AVG(bpm)
+            FROM hr
+            WHERE
+              study_day = {{MILESTONE.STUDY_DAY}}
+              AND hour > {{MILESTONE.HOUR}} - 2
+              AND hour < {{MILESTONE.HOUR}} + 2;
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 144,
+                  },
+                  "start": Object {
+                    "col": 36,
+                    "line": 137,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 144,
+                },
+                "start": Object {
+                  "col": 19,
+                  "line": 137,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 34,
+                    "line": 137,
+                  },
+                  "start": Object {
+                    "col": 24,
+                    "line": 137,
+                  },
+                },
+                "type": "identifier",
+                "value": "apple_watch",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 146,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 146,
+              },
+            },
+            "type": "identifier",
+            "value": "VSORRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 148,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 146,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            \\"BPM\\"
+          ",
+                "language": "json",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 148,
+                  },
+                  "start": Object {
+                    "col": 33,
+                    "line": 146,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 148,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 146,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 31,
+                    "line": 146,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 146,
+                  },
+                },
+                "type": "identifier",
+                "value": "literal",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 150,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 150,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESC",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 152,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 150,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSORRES FROM vs_hr
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 152,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 150,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 152,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 150,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 150,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 150,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 154,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 154,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESC",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 156,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 154,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSORRES FROM vs_hr 
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 156,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 154,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 156,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 154,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 154,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 154,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 158,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 158,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTRESU",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 160,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 158,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT VSORRESU FROM vs_hr   
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 160,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 158,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 160,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 158,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 158,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 158,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 16,
+                "line": 162,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 162,
+              },
+            },
+            "type": "identifier",
+            "value": "VSSTAT",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 164,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 162,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT CAST(VSORRES as BOOLEAN) FROM vs_hr
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 164,
+                  },
+                  "start": Object {
+                    "col": 28,
+                    "line": 162,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 164,
+                },
+                "start": Object {
+                  "col": 18,
+                  "line": 162,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 26,
+                    "line": 162,
+                  },
+                  "start": Object {
+                    "col": 23,
+                    "line": 162,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+        Object {
+          "column": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 18,
+                "line": 166,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 166,
+              },
+            },
+            "type": "identifier",
+            "value": "VSREASND",
+          },
+          "computation": null,
+          "loc": Object {
+            "end": Object {
+              "col": 13,
+              "line": 171,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 166,
+            },
+          },
+          "sources": Array [
+            Object {
+              "code": Object {
+                "code": "
+            SELECT CASE WHEN VSSTAT IS FALSE THEN \\"No data collected during time period.\\"
+                  ELSE NULL
+                  END
+            FROM vs_hr;
+          ",
+                "language": "sql",
+                "loc": Object {
+                  "end": Object {
+                    "col": 13,
+                    "line": 171,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 166,
+                  },
+                },
+                "type": "source-code",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 13,
+                  "line": 171,
+                },
+                "start": Object {
+                  "col": 20,
+                  "line": 166,
+                },
+              },
+              "source": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 28,
+                    "line": 166,
+                  },
+                  "start": Object {
+                    "col": 25,
+                    "line": 166,
+                  },
+                },
+                "type": "identifier",
+                "value": "self",
+              },
+              "type": "column-mapping-source",
+              "variable": null,
+            },
+          ],
+          "type": "column-mapping",
+        },
+      ],
+      "dataset": Object {
+        "loc": Object {
+          "end": Object {
+            "col": 25,
+            "line": 132,
+          },
+          "start": Object {
+            "col": 21,
+            "line": 132,
+          },
+        },
+        "parts": Array [
+          Object {
+            "loc": Object {
+              "end": Object {
+                "col": 25,
+                "line": 132,
+              },
+              "start": Object {
+                "col": 21,
+                "line": 132,
+              },
+            },
+            "type": "identifier",
+            "value": "vs_hr",
+          },
+        ],
+        "type": "path",
+        "value": "vs_hr",
+      },
+      "loc": Object {
+        "end": Object {
+          "col": 9,
+          "line": 172,
+        },
+        "start": Object {
+          "col": 9,
+          "line": 132,
+        },
+      },
+      "type": "dataset-mapping",
+      "variables": Array [],
+    },
+  ],
+  "loc": Object {
+    "end": Object {
+      "col": 9,
+      "line": 172,
+    },
+    "start": Object {
+      "col": 9,
+      "line": 2,
+    },
+  },
+  "type": "document",
+}
+`;

@@ -9,8 +9,11 @@ import {
   codelistExtension,
   codelistMember,
   columnDefinition,
+  columnMapping,
+  columnMappingSource,
   datasetDefinition,
   datasetExtension,
+  datasetMapping,
   day as dayFn,
   directive as directiveFn,
   domainChildren,
@@ -29,6 +32,7 @@ import {
   path,
   pathList,
   positiveWindow,
+  sourceCode,
   string as stringFn,
   studyDay,
   studyDefinition,
@@ -42,6 +46,7 @@ import {
   typeExpression,
   typeExpressionMember,
   value,
+  variableMapping,
   window,
 } from './postprocessors';
 %}
@@ -54,7 +59,8 @@ main                    -> (studyDefinition |
                             codelistDefinition |
                             codelistExtension |
                             domainDefinition |
-                            domainExtension):* {% main %}
+                            domainExtension |
+                            datasetMapping):* {% main %}
 
 studyDefinition         -> "study" %openbr keyValuePair:* %closebr {% studyDefinition %}
 milestoneDefinition     -> "milestone" identifier %openbr keyValuePair:* %closebr {% milestoneDefinition %}
@@ -63,6 +69,7 @@ codelistDefinition      -> "codelist" identifier %openbr codelistMember:* %close
 codelistExtension       -> "extend" "codelist" path %openbr codelistMember:* %closebr {% codelistExtension %}
 domainDefinition        -> "domain" (string | identifier) directive:* %openbr domainChildren %closebr {% domainDefinition %}
 domainExtension         -> "extend" "domain" (string | identifier) directive:* %openbr domainExtensionChildren %closebr {% domainExtension %}
+datasetMapping          -> "map" "dataset" path ("with" variableMapping:+):? %openbr columnMapping:* %closebr {% datasetMapping %}
 
 domainChildren          -> (datasetDefinition):* {% domainChildren %}
 domainExtensionChildren -> (datasetDefinition | datasetExtension):* {% domainExtensionChildren %}
@@ -72,6 +79,9 @@ datasetExtension        -> "extend" datasetDefinition {% datasetExtension %}
 keyValuePair            -> identifier %colon value {% keyValuePair %}
 columnDefinition        -> identifier typeExpression directive:* {% columnDefinition %}
 codelistMember          -> (string | identifier) directive:* {% codelistMember %}
+variableMapping         -> identifier "as" %openparen args %closeparen {% variableMapping %}
+columnMapping           -> identifier columnMappingSource:+ (%arrow sourceCode):? {% columnMapping %}
+columnMappingSource     -> "from" identifier ("as" identifier):? sourceCode {% columnMappingSource %}
 
 directive               -> %directive (%openparen args:? %closeparen):? {% directiveFn %}
 typeExpression          -> (typeExpressionMember %pipe):* typeExpressionMember {% typeExpression %}
@@ -79,6 +89,7 @@ typeExpressionMember    -> identifier %question:? {% typeExpressionMember %}
 value                   -> (string | timeconf) {% value %}
 identifier              -> %identifier {% identifierFn %}
 path                    -> identifier (%dot identifier):* {% path %}
+sourceCode              -> %codeblock %sourcecode:? %endcodeblock {% sourceCode %}
 
 args                    -> (value %comma):* value %comma:? {% args %}
 identifierList          -> (identifier %comma):* identifier %comma:? {% identifierList %}

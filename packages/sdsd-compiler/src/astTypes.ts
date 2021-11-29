@@ -196,3 +196,31 @@ export interface DatasetExtension extends Node<"dataset-extension"> {
   directives: Directive[];
   columns: ColumnDefinition[];
 }
+
+export interface DatasetMapping extends Node<"dataset-mapping"> {
+  dataset: Path;
+  variables: VariableMapping[];
+  columns: ColumnMapping[];
+}
+
+export interface VariableMapping extends Node<"variable-mapping"> {
+  variable: Identifier;
+  values: Args;
+}
+
+export interface ColumnMapping extends Node<"column-mapping"> {
+  column: Identifier;
+  sources: ColumnMappingSource[];
+  computation: SourceCode | null;
+}
+
+export interface ColumnMappingSource extends Node<"column-mapping-source"> {
+  source: Identifier;
+  variable: Identifier | null;
+  code: SourceCode;
+}
+
+export interface SourceCode extends Node<"source-code"> {
+  language: string;
+  code: string;
+}

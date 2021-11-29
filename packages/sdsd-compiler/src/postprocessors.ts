@@ -40,11 +40,19 @@ import {
   DomainExtension,
   DatasetExtension,
   DomainExtensionChild,
+  DatasetMapping,
+  SourceCode,
+  ColumnMappingSource,
+  ColumnMapping,
+  VariableMapping,
 } from "./astTypes";
 import {
+  ArrowToken,
+  AsToken,
   AtToken,
   CloseBrToken,
   CloseParenToken,
+  CodeblockToken,
   CodelistToken,
   ColonToken,
   CommaToken,
@@ -53,7 +61,9 @@ import {
   DirectiveToken,
   DomainToken,
   DotToken,
+  EndcodeblockToken,
   ExtendToken,
+  FromToken,
   GteToken,
   GtToken,
   HourToken,
@@ -62,6 +72,7 @@ import {
   InterfaceToken,
   LteToken,
   LtToken,
+  MapToken,
   MilestoneToken,
   MinusToken,
   OpenBrToken,
@@ -69,11 +80,13 @@ import {
   PipeToken,
   PlusToken,
   QuestionToken,
+  SourcecodeToken,
   StringToken,
   StudyToken,
   ThruToken,
   TimeconfendToken,
   TimeconfToken,
+  WithToken,
 } from "./lexer";
 
 const tokenToLoc = (token: Token): Loc => ({
@@ -245,6 +258,30 @@ export const domainExtension = ([
   children,
 });
 
+export const datasetMapping = ([
+  map,
+  ,
+  dataset,
+  variables,
+  ,
+  columns,
+  closebr,
+]: [
+  MapToken,
+  DatasetToken,
+  Path,
+  [WithToken, VariableMapping[]] | null,
+  OpenBrToken,
+  ColumnMapping[],
+  CloseBrToken
+]): DatasetMapping => ({
+  type: "dataset-mapping",
+  loc: { start: tokenToLoc(map).start, end: tokenToLoc(closebr).end },
+  dataset,
+  columns,
+  variables: variables?.[1] ?? [],
+});
+
 export const domainChildren = ([children]: [
   [DatasetDefinition][]
 ]): DomainChild[] => children.flat();
@@ -329,6 +366,47 @@ export const codelistMember = ([[name], directives]: [
   directives,
 });
 
+export const variableMapping = ([name, , , args, closeparen]: [
+  Identifier,
+  AsToken,
+  OpenParenToken,
+  Args,
+  CloseParenToken
+]): VariableMapping => ({
+  type: "variable-mapping",
+  loc: { start: name.loc.start, end: tokenToLoc(closeparen).end },
+  variable: name,
+  values: args,
+});
+
+export const columnMapping = ([column, sources, computation]: [
+  Identifier,
+  ColumnMappingSource[],
+  [ArrowToken, SourceCode] | null
+]): ColumnMapping => ({
+  type: "column-mapping",
+  loc: {
+    start: column.loc.start,
+    end: computation?.[1].loc.end ?? last(sources)!.loc.end,
+  },
+  column,
+  sources,
+  computation: computation?.[1] ?? null,
+});
+
+export const columnMappingSource = ([from, source, variable, code]: [
+  FromToken,
+  Identifier,
+  [AsToken, Identifier] | null,
+  SourceCode
+]): ColumnMappingSource => ({
+  type: "column-mapping-source",
+  loc: { start: tokenToLoc(from).start, end: code.loc.end },
+  source,
+  variable: variable?.[1] ?? null,
+  code,
+});
+
 export const directive = ([directive, optionalArgs]: [
   DirectiveToken,
   [OpenParenToken, Args | null, CloseParenToken] | null
@@ -389,6 +467,17 @@ export const path = ([first, rest]: [
     parts: identifiers,
   };
 };
+
+export const sourceCode = ([start, code, end]: [
+  CodeblockToken,
+  SourcecodeToken | null,
+  EndcodeblockToken
+]): SourceCode => ({
+  type: "source-code",
+  loc: { start: tokenToLoc(start).start, end: tokenToLoc(end).end },
+  language: start.value.slice(3),
+  code: code?.value ?? "",
+});
 
 export const args = ([nthArgs, lastArgValue, trailingComma]: [
   [Value, CommaToken][],

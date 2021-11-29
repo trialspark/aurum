@@ -34,6 +34,14 @@ export type ThruToken = Token & { type: "thru" };
 export type AtToken = Token & { type: "at" };
 export type HourToken = Token & { type: "hour" };
 export type ExtendToken = Token & { type: "extend" };
+export type MapToken = Token & { type: "map" };
+export type WithToken = Token & { type: "with" };
+export type AsToken = Token & { type: "as" };
+export type CodeblockToken = Token & { type: "codeblock" };
+export type FromToken = Token & { type: "from" };
+export type EndcodeblockToken = Token & { type: "endcodeblock" };
+export type SourcecodeToken = Token & { type: "sourcecode" };
+export type ArrowToken = Token & { type: "arrow" };
 
 const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_]*/;
 
@@ -46,6 +54,7 @@ export const lexer = new TokenSkippingLexer(
       },
       directive: /@[a-zA-Z][a-zA-Z.]*/,
       timeconf: { match: 't"', push: "timeconf" },
+      codeblock: { match: /```\w*/, push: "codeblock" },
       openbr: "{",
       closebr: "}",
       openparen: "(",
@@ -55,6 +64,7 @@ export const lexer = new TokenSkippingLexer(
       comma: ",",
       question: "?",
       pipe: "|",
+      arrow: "=>",
       keyword: [
         "study",
         "milestone",
@@ -64,6 +74,10 @@ export const lexer = new TokenSkippingLexer(
         "dataset",
         "implements",
         "extend",
+        "map",
+        "with",
+        "as",
+        "from",
       ],
       identifier,
       ws: { match: /[ \t\n]+/, lineBreaks: true },
@@ -83,6 +97,10 @@ export const lexer = new TokenSkippingLexer(
       lte: "<=",
       ws: /[ \t]+/,
       timeconfend: { match: '"', pop: 1 },
+    },
+    codeblock: {
+      endcodeblock: { match: "```", pop: 1 },
+      sourcecode: { match: /[^```]+/, lineBreaks: true },
     },
   }),
   ["ws"]
