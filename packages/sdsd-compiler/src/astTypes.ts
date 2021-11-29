@@ -22,9 +22,13 @@ export type DocumentChild =
   | MilestoneDefinition
   | InterfaceDefinition
   | CodelistDefinition
-  | DomainDefinition;
+  | CodelistExtension
+  | DomainDefinition
+  | DomainExtension;
 
 export type DomainChild = DatasetDefinition;
+
+export type DomainExtensionChild = DatasetDefinition | DatasetExtension;
 
 export interface StudyDefinition extends Node<"study-definition"> {
   children: KeyValuePair[];
@@ -173,4 +177,22 @@ export interface Path extends Node<"path"> {
 
 export interface PathList extends Node<"path-list"> {
   paths: Path[];
+}
+
+export interface CodelistExtension extends Node<"codelist-extension"> {
+  extends: Path;
+  members: CodelistMember[];
+}
+
+export interface DomainExtension extends Node<"domain-extension"> {
+  extends: Identifier | String;
+  directives: Directive[];
+  children: DomainExtensionChild[];
+}
+
+export interface DatasetExtension extends Node<"dataset-extension"> {
+  extends: Identifier;
+  interfaces: PathList | null;
+  directives: Directive[];
+  columns: ColumnDefinition[];
 }

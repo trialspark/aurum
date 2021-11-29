@@ -36,6 +36,10 @@ import {
   DomainDefinition,
   Path,
   PathList,
+  CodelistExtension,
+  DomainExtension,
+  DatasetExtension,
+  DomainExtensionChild,
 } from "./astTypes";
 import {
   AtToken,
@@ -49,6 +53,7 @@ import {
   DirectiveToken,
   DomainToken,
   DotToken,
+  ExtendToken,
   GteToken,
   GtToken,
   HourToken,
@@ -93,6 +98,9 @@ export const main = ([topLevelDefs]: [
   | StudyDefinition
   | InterfaceDefinition
   | CodelistDefinition
+  | CodelistExtension
+  | DomainDefinition
+  | DomainExtension
 ][]): Document => {
   const children = topLevelDefs.flat();
 
@@ -174,6 +182,20 @@ export const codelistDefinition = ([codelist, name, , members, closebr]: [
   members: members,
 });
 
+export const codelistExtension = ([extend, , path, , members, closebr]: [
+  ExtendToken,
+  CodelistToken,
+  Path,
+  OpenBrToken,
+  CodelistMember[],
+  CloseBrToken
+]): CodelistExtension => ({
+  type: "codelist-extension",
+  loc: { start: tokenToLoc(extend).start, end: tokenToLoc(closebr).end },
+  extends: path,
+  members,
+});
+
 export const domainDefinition = ([
   domain,
   [name],
@@ -199,9 +221,37 @@ export const domainDefinition = ([
   children,
 });
 
+export const domainExtension = ([
+  extend,
+  ,
+  [name],
+  directives,
+  ,
+  children,
+  closebr,
+]: [
+  ExtendToken,
+  DomainToken,
+  [String | Identifier],
+  Directive[],
+  OpenBrToken,
+  DomainExtensionChild[],
+  CloseBrToken
+]): DomainExtension => ({
+  type: "domain-extension",
+  loc: { start: tokenToLoc(extend).start, end: tokenToLoc(closebr).end },
+  extends: name,
+  directives,
+  children,
+});
+
 export const domainChildren = ([children]: [
   [DatasetDefinition][]
 ]): DomainChild[] => children.flat();
+
+export const domainExtensionChildren = ([children]: [
+  [DatasetDefinition | DatasetExtension][]
+]): DomainExtensionChild[] => children.flat();
 
 export const datasetDefinition = ([
   dataset,
@@ -226,6 +276,18 @@ export const datasetDefinition = ([
   interfaces: interfaces?.[1] ?? null,
   directives,
   columns,
+});
+
+export const datasetExtension = ([extend, dataset]: [
+  ExtendToken,
+  DatasetDefinition
+]): DatasetExtension => ({
+  type: "dataset-extension",
+  loc: { start: tokenToLoc(extend).start, end: dataset.loc.end },
+  extends: dataset.name,
+  interfaces: dataset.interfaces,
+  directives: dataset.directives,
+  columns: dataset.columns,
 });
 
 export const keyValuePair = ([identifier, , string]: [

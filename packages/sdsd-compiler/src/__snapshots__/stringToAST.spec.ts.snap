@@ -7371,6 +7371,1145 @@ Object {
 }
 `;
 
+exports[`stringToAST() supports extending a codelist 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "extends": Object {
+        "loc": Object {
+          "end": Object {
+            "col": 36,
+            "line": 2,
+          },
+          "start": Object {
+            "col": 25,
+            "line": 2,
+          },
+        },
+        "parts": Array [
+          Object {
+            "loc": Object {
+              "end": Object {
+                "col": 28,
+                "line": 2,
+              },
+              "start": Object {
+                "col": 25,
+                "line": 2,
+              },
+            },
+            "type": "identifier",
+            "value": "sdtm",
+          },
+          Object {
+            "loc": Object {
+              "end": Object {
+                "col": 31,
+                "line": 2,
+              },
+              "start": Object {
+                "col": 30,
+                "line": 2,
+              },
+            },
+            "type": "identifier",
+            "value": "vs",
+          },
+          Object {
+            "loc": Object {
+              "end": Object {
+                "col": 36,
+                "line": 2,
+              },
+              "start": Object {
+                "col": 33,
+                "line": 2,
+              },
+            },
+            "type": "identifier",
+            "value": "Race",
+          },
+        ],
+        "type": "path",
+        "value": "sdtm.vs.Race",
+      },
+      "loc": Object {
+        "end": Object {
+          "col": 9,
+          "line": 5,
+        },
+        "start": Object {
+          "col": 9,
+          "line": 2,
+        },
+      },
+      "members": Array [
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 48,
+                        "line": 3,
+                      },
+                      "start": Object {
+                        "col": 30,
+                        "line": 3,
+                      },
+                    },
+                    "type": "string",
+                    "value": "Extend with alpha",
+                  },
+                ],
+                "loc": Object {
+                  "end": Object {
+                    "col": 48,
+                    "line": 3,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 3,
+                  },
+                },
+                "type": "args",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 49,
+                  "line": 3,
+                },
+                "start": Object {
+                  "col": 24,
+                  "line": 3,
+                },
+              },
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": Object {
+            "end": Object {
+              "col": 49,
+              "line": 3,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 3,
+            },
+          },
+          "name": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 15,
+                "line": 3,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 3,
+              },
+            },
+            "type": "identifier",
+            "value": "ALPHA",
+          },
+          "type": "codelist-member",
+        },
+        Object {
+          "directives": Array [
+            Object {
+              "args": Object {
+                "args": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 48,
+                        "line": 4,
+                      },
+                      "start": Object {
+                        "col": 30,
+                        "line": 4,
+                      },
+                    },
+                    "type": "string",
+                    "value": "Extend with bravo",
+                  },
+                ],
+                "loc": Object {
+                  "end": Object {
+                    "col": 48,
+                    "line": 4,
+                  },
+                  "start": Object {
+                    "col": 30,
+                    "line": 4,
+                  },
+                },
+                "type": "args",
+              },
+              "loc": Object {
+                "end": Object {
+                  "col": 49,
+                  "line": 4,
+                },
+                "start": Object {
+                  "col": 24,
+                  "line": 4,
+                },
+              },
+              "name": "desc",
+              "type": "directive",
+            },
+          ],
+          "loc": Object {
+            "end": Object {
+              "col": 49,
+              "line": 4,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 4,
+            },
+          },
+          "name": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 15,
+                "line": 4,
+              },
+              "start": Object {
+                "col": 11,
+                "line": 4,
+              },
+            },
+            "type": "identifier",
+            "value": "BRAVO",
+          },
+          "type": "codelist-member",
+        },
+      ],
+      "type": "codelist-extension",
+    },
+  ],
+  "loc": Object {
+    "end": Object {
+      "col": 9,
+      "line": 5,
+    },
+    "start": Object {
+      "col": 9,
+      "line": 2,
+    },
+  },
+  "type": "document",
+}
+`;
+
+exports[`stringToAST() supports extending a domain/dataset 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "columns": Array [
+            Object {
+              "columnName": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 18,
+                    "line": 4,
+                  },
+                  "start": Object {
+                    "col": 13,
+                    "line": 4,
+                  },
+                },
+                "type": "identifier",
+                "value": "NEWCOL",
+              },
+              "columnType": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 25,
+                    "line": 4,
+                  },
+                  "start": Object {
+                    "col": 20,
+                    "line": 4,
+                  },
+                },
+                "members": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 25,
+                        "line": 4,
+                      },
+                      "start": Object {
+                        "col": 20,
+                        "line": 4,
+                      },
+                    },
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": Object {
+                        "end": Object {
+                          "col": 25,
+                          "line": 4,
+                        },
+                        "start": Object {
+                          "col": 20,
+                          "line": 4,
+                        },
+                      },
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 48,
+                            "line": 4,
+                          },
+                          "start": Object {
+                            "col": 37,
+                            "line": 4,
+                          },
+                        },
+                        "type": "string",
+                        "value": "New column",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 48,
+                        "line": 4,
+                      },
+                      "start": Object {
+                        "col": 37,
+                        "line": 4,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 49,
+                      "line": 4,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 4,
+                    },
+                  },
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 59,
+                            "line": 5,
+                          },
+                          "start": Object {
+                            "col": 36,
+                            "line": 5,
+                          },
+                        },
+                        "type": "string",
+                        "value": "New column description",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 59,
+                        "line": 5,
+                      },
+                      "start": Object {
+                        "col": 36,
+                        "line": 5,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 60,
+                      "line": 5,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 5,
+                    },
+                  },
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": Object {
+                "end": Object {
+                  "col": 60,
+                  "line": 5,
+                },
+                "start": Object {
+                  "col": 13,
+                  "line": 4,
+                },
+              },
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 19,
+                    "line": 7,
+                  },
+                  "start": Object {
+                    "col": 13,
+                    "line": 7,
+                  },
+                },
+                "type": "identifier",
+                "value": "NEWCOL2",
+              },
+              "columnType": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 26,
+                    "line": 7,
+                  },
+                  "start": Object {
+                    "col": 21,
+                    "line": 7,
+                  },
+                },
+                "members": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 26,
+                        "line": 7,
+                      },
+                      "start": Object {
+                        "col": 21,
+                        "line": 7,
+                      },
+                    },
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": Object {
+                        "end": Object {
+                          "col": 26,
+                          "line": 7,
+                        },
+                        "start": Object {
+                          "col": 21,
+                          "line": 7,
+                        },
+                      },
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 55,
+                            "line": 7,
+                          },
+                          "start": Object {
+                            "col": 37,
+                            "line": 7,
+                          },
+                        },
+                        "type": "string",
+                        "value": "Second new column",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 55,
+                        "line": 7,
+                      },
+                      "start": Object {
+                        "col": 37,
+                        "line": 7,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 56,
+                      "line": 7,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 7,
+                    },
+                  },
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 66,
+                            "line": 8,
+                          },
+                          "start": Object {
+                            "col": 36,
+                            "line": 8,
+                          },
+                        },
+                        "type": "string",
+                        "value": "Second new column description",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 66,
+                        "line": 8,
+                      },
+                      "start": Object {
+                        "col": 36,
+                        "line": 8,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 67,
+                      "line": 8,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 8,
+                    },
+                  },
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": Object {
+                "end": Object {
+                  "col": 67,
+                  "line": 8,
+                },
+                "start": Object {
+                  "col": 13,
+                  "line": 7,
+                },
+              },
+              "type": "column-definition",
+            },
+          ],
+          "directives": Array [],
+          "extends": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 27,
+                "line": 3,
+              },
+              "start": Object {
+                "col": 26,
+                "line": 3,
+              },
+            },
+            "type": "identifier",
+            "value": "vs",
+          },
+          "interfaces": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 43,
+                "line": 3,
+              },
+              "start": Object {
+                "col": 40,
+                "line": 3,
+              },
+            },
+            "paths": Array [
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 43,
+                    "line": 3,
+                  },
+                  "start": Object {
+                    "col": 40,
+                    "line": 3,
+                  },
+                },
+                "parts": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 43,
+                        "line": 3,
+                      },
+                      "start": Object {
+                        "col": 40,
+                        "line": 3,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "base",
+                  },
+                ],
+                "type": "path",
+                "value": "base",
+              },
+            ],
+            "type": "path-list",
+          },
+          "loc": Object {
+            "end": Object {
+              "col": 11,
+              "line": 9,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 3,
+            },
+          },
+          "type": "dataset-extension",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "columnName": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 18,
+                    "line": 12,
+                  },
+                  "start": Object {
+                    "col": 13,
+                    "line": 12,
+                  },
+                },
+                "type": "identifier",
+                "value": "NEWCOL",
+              },
+              "columnType": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 25,
+                    "line": 12,
+                  },
+                  "start": Object {
+                    "col": 20,
+                    "line": 12,
+                  },
+                },
+                "members": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 25,
+                        "line": 12,
+                      },
+                      "start": Object {
+                        "col": 20,
+                        "line": 12,
+                      },
+                    },
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": Object {
+                        "end": Object {
+                          "col": 25,
+                          "line": 12,
+                        },
+                        "start": Object {
+                          "col": 20,
+                          "line": 12,
+                        },
+                      },
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 48,
+                            "line": 12,
+                          },
+                          "start": Object {
+                            "col": 37,
+                            "line": 12,
+                          },
+                        },
+                        "type": "string",
+                        "value": "New column",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 48,
+                        "line": 12,
+                      },
+                      "start": Object {
+                        "col": 37,
+                        "line": 12,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 49,
+                      "line": 12,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 12,
+                    },
+                  },
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 59,
+                            "line": 13,
+                          },
+                          "start": Object {
+                            "col": 36,
+                            "line": 13,
+                          },
+                        },
+                        "type": "string",
+                        "value": "New column description",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 59,
+                        "line": 13,
+                      },
+                      "start": Object {
+                        "col": 36,
+                        "line": 13,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 60,
+                      "line": 13,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 13,
+                    },
+                  },
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": Object {
+                "end": Object {
+                  "col": 60,
+                  "line": 13,
+                },
+                "start": Object {
+                  "col": 13,
+                  "line": 12,
+                },
+              },
+              "type": "column-definition",
+            },
+            Object {
+              "columnName": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 19,
+                    "line": 15,
+                  },
+                  "start": Object {
+                    "col": 13,
+                    "line": 15,
+                  },
+                },
+                "type": "identifier",
+                "value": "NEWCOL2",
+              },
+              "columnType": Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 26,
+                    "line": 15,
+                  },
+                  "start": Object {
+                    "col": 21,
+                    "line": 15,
+                  },
+                },
+                "members": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 26,
+                        "line": 15,
+                      },
+                      "start": Object {
+                        "col": 21,
+                        "line": 15,
+                      },
+                    },
+                    "optional": false,
+                    "type": "type-expression-member",
+                    "value": Object {
+                      "loc": Object {
+                        "end": Object {
+                          "col": 26,
+                          "line": 15,
+                        },
+                        "start": Object {
+                          "col": 21,
+                          "line": 15,
+                        },
+                      },
+                      "type": "identifier",
+                      "value": "String",
+                    },
+                  },
+                ],
+                "type": "type-expression",
+              },
+              "directives": Array [
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 55,
+                            "line": 15,
+                          },
+                          "start": Object {
+                            "col": 37,
+                            "line": 15,
+                          },
+                        },
+                        "type": "string",
+                        "value": "Second new column",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 55,
+                        "line": 15,
+                      },
+                      "start": Object {
+                        "col": 37,
+                        "line": 15,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 56,
+                      "line": 15,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 15,
+                    },
+                  },
+                  "name": "label",
+                  "type": "directive",
+                },
+                Object {
+                  "args": Object {
+                    "args": Array [
+                      Object {
+                        "loc": Object {
+                          "end": Object {
+                            "col": 66,
+                            "line": 16,
+                          },
+                          "start": Object {
+                            "col": 36,
+                            "line": 16,
+                          },
+                        },
+                        "type": "string",
+                        "value": "Second new column description",
+                      },
+                    ],
+                    "loc": Object {
+                      "end": Object {
+                        "col": 66,
+                        "line": 16,
+                      },
+                      "start": Object {
+                        "col": 36,
+                        "line": 16,
+                      },
+                    },
+                    "type": "args",
+                  },
+                  "loc": Object {
+                    "end": Object {
+                      "col": 67,
+                      "line": 16,
+                    },
+                    "start": Object {
+                      "col": 30,
+                      "line": 16,
+                    },
+                  },
+                  "name": "desc",
+                  "type": "directive",
+                },
+              ],
+              "loc": Object {
+                "end": Object {
+                  "col": 67,
+                  "line": 16,
+                },
+                "start": Object {
+                  "col": 13,
+                  "line": 15,
+                },
+              },
+              "type": "column-definition",
+            },
+          ],
+          "directives": Array [],
+          "interfaces": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 52,
+                "line": 11,
+              },
+              "start": Object {
+                "col": 37,
+                "line": 11,
+              },
+            },
+            "paths": Array [
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 40,
+                    "line": 11,
+                  },
+                  "start": Object {
+                    "col": 37,
+                    "line": 11,
+                  },
+                },
+                "parts": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 40,
+                        "line": 11,
+                      },
+                      "start": Object {
+                        "col": 37,
+                        "line": 11,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "base",
+                  },
+                ],
+                "type": "path",
+                "value": "base",
+              },
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 52,
+                    "line": 11,
+                  },
+                  "start": Object {
+                    "col": 43,
+                    "line": 11,
+                  },
+                },
+                "parts": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 52,
+                        "line": 11,
+                      },
+                      "start": Object {
+                        "col": 43,
+                        "line": 11,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "visit_base",
+                  },
+                ],
+                "type": "path",
+                "value": "visit_base",
+              },
+            ],
+            "type": "path-list",
+          },
+          "loc": Object {
+            "end": Object {
+              "col": 11,
+              "line": 17,
+            },
+            "start": Object {
+              "col": 11,
+              "line": 11,
+            },
+          },
+          "name": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 24,
+                "line": 11,
+              },
+              "start": Object {
+                "col": 19,
+                "line": 11,
+              },
+            },
+            "type": "identifier",
+            "value": "new_vs",
+          },
+          "type": "dataset-definition",
+        },
+      ],
+      "directives": Array [
+        Object {
+          "args": Object {
+            "args": Array [
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 46,
+                    "line": 2,
+                  },
+                  "start": Object {
+                    "col": 43,
+                    "line": 2,
+                  },
+                },
+                "type": "string",
+                "value": "VS",
+              },
+            ],
+            "loc": Object {
+              "end": Object {
+                "col": 46,
+                "line": 2,
+              },
+              "start": Object {
+                "col": 43,
+                "line": 2,
+              },
+            },
+            "type": "args",
+          },
+          "loc": Object {
+            "end": Object {
+              "col": 47,
+              "line": 2,
+            },
+            "start": Object {
+              "col": 37,
+              "line": 2,
+            },
+          },
+          "name": "abbr",
+          "type": "directive",
+        },
+      ],
+      "extends": Object {
+        "loc": Object {
+          "end": Object {
+            "col": 35,
+            "line": 2,
+          },
+          "start": Object {
+            "col": 23,
+            "line": 2,
+          },
+        },
+        "type": "string",
+        "value": "VITAL SIGNS",
+      },
+      "loc": Object {
+        "end": Object {
+          "col": 9,
+          "line": 18,
+        },
+        "start": Object {
+          "col": 9,
+          "line": 2,
+        },
+      },
+      "type": "domain-extension",
+    },
+  ],
+  "loc": Object {
+    "end": Object {
+      "col": 9,
+      "line": 18,
+    },
+    "start": Object {
+      "col": 9,
+      "line": 2,
+    },
+  },
+  "type": "document",
+}
+`;
+
 exports[`stringToAST() supports implementing datasets via a path 1`] = `
 Object {
   "children": Array [

@@ -201,4 +201,39 @@ describe("stringToAST()", () => {
       stringToAST(`domain VS { dataset vs implements sdtm.vs.vs {} }`)
     ).toMatchSnapshot();
   });
+
+  it("supports extending a codelist", () => {
+    expect(
+      stringToAST(`
+        extend codelist sdtm.vs.Race {
+          ALPHA        @desc("Extend with alpha")
+          BRAVO        @desc("Extend with bravo")
+        }
+      `)
+    ).toMatchSnapshot();
+  });
+
+  it("supports extending a domain/dataset", () => {
+    expect(
+      stringToAST(`
+        extend domain "VITAL SIGNS" @abbr("VS") {
+          extend dataset vs implements base {
+            NEWCOL String    @label("New column")
+                             @desc("New column description")
+
+            NEWCOL2 String   @label("Second new column")
+                             @desc("Second new column description")
+          }
+
+          dataset new_vs implements base, visit_base {
+            NEWCOL String    @label("New column")
+                             @desc("New column description")
+
+            NEWCOL2 String   @label("Second new column")
+                             @desc("Second new column description")
+          }
+        }
+      `)
+    ).toMatchSnapshot();
+  });
 });

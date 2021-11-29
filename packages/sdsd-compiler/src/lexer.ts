@@ -33,6 +33,7 @@ export type PipeToken = Token & { type: "pipe" };
 export type ThruToken = Token & { type: "thru" };
 export type AtToken = Token & { type: "at" };
 export type HourToken = Token & { type: "hour" };
+export type ExtendToken = Token & { type: "extend" };
 
 const identifier: Rules[string] = /[a-zA-Z$_][a-zA-Z0-9$_]*/;
 
@@ -62,6 +63,7 @@ export const lexer = new TokenSkippingLexer(
         "domain",
         "dataset",
         "implements",
+        "extend",
       ],
       identifier,
       ws: { match: /[ \t\n]+/, lineBreaks: true },
