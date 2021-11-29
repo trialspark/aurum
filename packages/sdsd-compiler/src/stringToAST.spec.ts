@@ -414,4 +414,38 @@ describe("stringToAST()", () => {
       `)
     ).toMatchSnapshot();
   });
+
+  it("throws parsing errors", () => {
+    expect(() => {
+      stringToAST(`
+        domain "VITAL SIGNS" @abbr("VS") {
+          dataset vs {
+            foo
+          }
+        }
+      `);
+    }).toThrowErrorMatchingInlineSnapshot(`
+"Syntax error on line 5 col 11:
+
+          }
+          ^
+
+Unexpected token: \\"}\\"."
+`);
+  });
+
+  it("throw lexing errors", () => {
+    expect(() => {
+  stringToAST(`
+        domain *** @abbr("***") {}
+      `);
+}).toThrowErrorMatchingInlineSnapshot(`
+"Syntax error on line 2 col 16:
+
+        domain *** @abbr(\\"***\\") {}
+               ^
+
+Unexpected token: \\"*\\"."
+`);
+  });
 });
