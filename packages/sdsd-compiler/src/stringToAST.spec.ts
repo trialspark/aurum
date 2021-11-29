@@ -195,4 +195,10 @@ describe("stringToAST()", () => {
       `)
     ).toMatchSnapshot();
   });
+
+  it("supports implementing datasets via a path", () => {
+    expect(
+      stringToAST(`domain VS { dataset vs implements sdtm.vs.vs {} }`)
+    ).toMatchSnapshot();
+  });
 });

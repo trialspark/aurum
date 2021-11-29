@@ -155,7 +155,7 @@ export interface IdentifierList extends Node<"identifier-list"> {
 
 export interface DatasetDefinition extends Node<"dataset-definition"> {
   name: Identifier;
-  interfaces: IdentifierList | null;
+  interfaces: PathList | null;
   directives: Directive[];
   columns: ColumnDefinition[];
 }
@@ -164,4 +164,13 @@ export interface DomainDefinition extends Node<"domain-definition"> {
   name: Identifier | String;
   directives: Directive[];
   children: DomainChild[];
+}
+
+export interface Path extends Node<"path"> {
+  value: string;
+  parts: Identifier[];
+}
+
+export interface PathList extends Node<"path-list"> {
+  paths: Path[];
 }

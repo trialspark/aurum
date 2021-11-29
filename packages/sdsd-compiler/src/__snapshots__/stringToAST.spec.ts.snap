@@ -1874,7 +1874,17 @@ Object {
             },
           ],
           "interfaces": Object {
-            "identifiers": Array [
+            "loc": Object {
+              "end": Object {
+                "col": 48,
+                "line": 3,
+              },
+              "start": Object {
+                "col": 33,
+                "line": 3,
+              },
+            },
+            "paths": Array [
               Object {
                 "loc": Object {
                   "end": Object {
@@ -1886,7 +1896,23 @@ Object {
                     "line": 3,
                   },
                 },
-                "type": "identifier",
+                "parts": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 36,
+                        "line": 3,
+                      },
+                      "start": Object {
+                        "col": 33,
+                        "line": 3,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "base",
+                  },
+                ],
+                "type": "path",
                 "value": "base",
               },
               Object {
@@ -1900,21 +1926,27 @@ Object {
                     "line": 3,
                   },
                 },
-                "type": "identifier",
+                "parts": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 48,
+                        "line": 3,
+                      },
+                      "start": Object {
+                        "col": 39,
+                        "line": 3,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "visit_base",
+                  },
+                ],
+                "type": "path",
                 "value": "visit_base",
               },
             ],
-            "loc": Object {
-              "end": Object {
-                "col": 48,
-                "line": 3,
-              },
-              "start": Object {
-                "col": 33,
-                "line": 3,
-              },
-            },
-            "type": "identifier-list",
+            "type": "path-list",
           },
           "loc": Object {
             "end": Object {
@@ -4016,7 +4048,17 @@ Object {
             },
           ],
           "interfaces": Object {
-            "identifiers": Array [
+            "loc": Object {
+              "end": Object {
+                "col": 39,
+                "line": 37,
+              },
+              "start": Object {
+                "col": 36,
+                "line": 37,
+              },
+            },
+            "paths": Array [
               Object {
                 "loc": Object {
                   "end": Object {
@@ -4028,21 +4070,27 @@ Object {
                     "line": 37,
                   },
                 },
-                "type": "identifier",
+                "parts": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 39,
+                        "line": 37,
+                      },
+                      "start": Object {
+                        "col": 36,
+                        "line": 37,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "base",
+                  },
+                ],
+                "type": "path",
                 "value": "base",
               },
             ],
-            "loc": Object {
-              "end": Object {
-                "col": 39,
-                "line": 37,
-              },
-              "start": Object {
-                "col": 36,
-                "line": 37,
-              },
-            },
-            "type": "identifier-list",
+            "type": "path-list",
           },
           "loc": Object {
             "end": Object {
@@ -7317,6 +7365,156 @@ Object {
     "start": Object {
       "col": 9,
       "line": 2,
+    },
+  },
+  "type": "document",
+}
+`;
+
+exports[`stringToAST() supports implementing datasets via a path 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "columns": Array [],
+          "directives": Array [],
+          "interfaces": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 44,
+                "line": 1,
+              },
+              "start": Object {
+                "col": 35,
+                "line": 1,
+              },
+            },
+            "paths": Array [
+              Object {
+                "loc": Object {
+                  "end": Object {
+                    "col": 44,
+                    "line": 1,
+                  },
+                  "start": Object {
+                    "col": 35,
+                    "line": 1,
+                  },
+                },
+                "parts": Array [
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 38,
+                        "line": 1,
+                      },
+                      "start": Object {
+                        "col": 35,
+                        "line": 1,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "sdtm",
+                  },
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 41,
+                        "line": 1,
+                      },
+                      "start": Object {
+                        "col": 40,
+                        "line": 1,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "vs",
+                  },
+                  Object {
+                    "loc": Object {
+                      "end": Object {
+                        "col": 44,
+                        "line": 1,
+                      },
+                      "start": Object {
+                        "col": 43,
+                        "line": 1,
+                      },
+                    },
+                    "type": "identifier",
+                    "value": "vs",
+                  },
+                ],
+                "type": "path",
+                "value": "sdtm.vs.vs",
+              },
+            ],
+            "type": "path-list",
+          },
+          "loc": Object {
+            "end": Object {
+              "col": 47,
+              "line": 1,
+            },
+            "start": Object {
+              "col": 13,
+              "line": 1,
+            },
+          },
+          "name": Object {
+            "loc": Object {
+              "end": Object {
+                "col": 22,
+                "line": 1,
+              },
+              "start": Object {
+                "col": 21,
+                "line": 1,
+              },
+            },
+            "type": "identifier",
+            "value": "vs",
+          },
+          "type": "dataset-definition",
+        },
+      ],
+      "directives": Array [],
+      "loc": Object {
+        "end": Object {
+          "col": 49,
+          "line": 1,
+        },
+        "start": Object {
+          "col": 1,
+          "line": 1,
+        },
+      },
+      "name": Object {
+        "loc": Object {
+          "end": Object {
+            "col": 9,
+            "line": 1,
+          },
+          "start": Object {
+            "col": 8,
+            "line": 1,
+          },
+        },
+        "type": "identifier",
+        "value": "VS",
+      },
+      "type": "domain-definition",
+    },
+  ],
+  "loc": Object {
+    "end": Object {
+      "col": 49,
+      "line": 1,
+    },
+    "start": Object {
+      "col": 1,
+      "line": 1,
     },
   },
   "type": "document",

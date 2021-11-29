@@ -22,6 +22,8 @@ import {
   main,
   milestoneDefinition,
   negativeWindow,
+  path,
+  pathList,
   positiveWindow,
   string as stringFn,
   studyDay,
@@ -55,7 +57,7 @@ codelistDefinition   -> "codelist" identifier %openbr codelistMember:* %closebr 
 domainDefinition     -> "domain" (string | identifier) directive:* %openbr domainChildren %closebr {% domainDefinition %}
 
 domainChildren       -> (datasetDefinition):* {% domainChildren %}
-datasetDefinition    -> "dataset" identifier ("implements" identifierList):? directive:* %openbr columnDefinition:* %closebr {% datasetDefinition %}
+datasetDefinition    -> "dataset" identifier ("implements" pathList):? directive:* %openbr columnDefinition:* %closebr {% datasetDefinition %}
 
 keyValuePair         -> identifier %colon value {% keyValuePair %}
 columnDefinition     -> identifier typeExpression directive:* {% columnDefinition %}
@@ -66,9 +68,11 @@ typeExpression       -> (typeExpressionMember %pipe):* typeExpressionMember {% t
 typeExpressionMember -> identifier %question:? {% typeExpressionMember %}
 value                -> (string | timeconf) {% value %}
 identifier           -> %identifier {% identifierFn %}
+path                 -> identifier (%dot identifier):* {% path %}
 
 args                 -> (value %comma):* value %comma:? {% args %}
 identifierList       -> (identifier %comma):* identifier %comma:? {% identifierList %}
+pathList             -> (path %comma):* path %comma:? {% pathList %}
 
 timeconf             -> %timeconf timeconfRoot %timeconfend {% timeconfFn %}
 timeconfRoot         -> (timeExpression |

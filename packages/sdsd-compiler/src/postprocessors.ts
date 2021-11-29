@@ -34,6 +34,8 @@ import {
   DatasetDefinition,
   DomainChild,
   DomainDefinition,
+  Path,
+  PathList,
 } from "./astTypes";
 import {
   AtToken,
@@ -46,6 +48,7 @@ import {
   DayToken,
   DirectiveToken,
   DomainToken,
+  DotToken,
   GteToken,
   GtToken,
   HourToken,
@@ -211,7 +214,7 @@ export const datasetDefinition = ([
 ]: [
   DatasetToken,
   Identifier,
-  [ImplementsToken, IdentifierList] | null,
+  [ImplementsToken, PathList] | null,
   Directive[],
   OpenBrToken,
   ColumnDefinition[],
@@ -311,6 +314,20 @@ export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   value: token.toString(),
 });
 
+export const path = ([first, rest]: [
+  Identifier,
+  [DotToken, Identifier][]
+]): Path => {
+  const identifiers = [first, ...rest.map(([, identifier]) => identifier)];
+
+  return {
+    type: "path",
+    loc: { start: identifiers[0].loc.start, end: last(identifiers)!.loc.end },
+    value: identifiers.map((identifier) => identifier.value).join("."),
+    parts: identifiers,
+  };
+};
+
 export const args = ([nthArgs, lastArgValue, trailingComma]: [
   [Value, CommaToken][],
   Value,
@@ -344,6 +361,23 @@ export const identifierList = ([args, lastIdentifier, trailingComma]: [
         : last(identifiers)!.loc.end,
     },
     identifiers,
+  };
+};
+
+export const pathList = ([first, lastPath, trailingComma]: [
+  [Path, CommaToken][],
+  Path,
+  CommaToken | null
+]): PathList => {
+  const paths = [...first.map(([path]) => path), lastPath];
+
+  return {
+    type: "path-list",
+    loc: {
+      start: paths[0].loc.start,
+      end: trailingComma ? tokenToLoc(trailingComma).end : last(paths)!.loc.end,
+    },
+    paths,
   };
 };
 
