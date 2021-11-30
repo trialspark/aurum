@@ -313,7 +313,7 @@ export const datasetExtension = ([extend, dataset]: [
 export const keyValuePair = ([identifier, , string]: [
   Identifier,
   ColonToken,
-  String
+  Value
 ]): KeyValuePair => ({
   type: "key-value-pair",
   loc: { start: identifier.loc.start, end: string.loc.end },
@@ -610,7 +610,7 @@ export const day = ([token]: [DayToken]): DayExpression => ({
 });
 
 export const hour = ([token]: [HourToken]): HourExpression => ({
-  type: "study-hour",
+  type: "hour-expression",
   loc: tokenToLoc(token),
   unit: "hour",
   value: parseInt(token.value.slice(1)),

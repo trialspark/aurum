@@ -1,0 +1,610 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Compiler requires a study definition initially 1`] = `
+Array [
+  Object {
+    "code": "missing_study_def",
+    "loc": null,
+    "message": "Missing study definition, e.g.:
+
+study {
+  id: \\"STUDY-ID\\"
+  name: \\"Longer name for my study\\"
+}",
+    "scope": "global",
+  },
+]
+`;
+
+exports[`Compiler when a study definition is added and some milestones are added and some interfaces are added and some codelists are added and a domain is added compiles without error 1`] = `
+Object {
+  "codelists": Object {
+    "VSPosition": Object {
+      "items": Array [
+        Object {
+          "description": "An anterior recumbent body position whereby the person lies on its stomach and faces downward.",
+          "value": "PRONE",
+        },
+        Object {
+          "description": "The state or act of one who sits; the posture of one who occupies a seat.",
+          "value": "SITTING",
+        },
+        Object {
+          "description": "The act of assuming or maintaining an erect upright position.",
+          "value": "STANDING",
+        },
+        Object {
+          "description": "A posterior recumbent body position whereby the person lies on its back and faces upward.",
+          "value": "SUPINE",
+        },
+      ],
+      "name": "VSPosition",
+    },
+    "VSTestCode": Object {
+      "items": Array [
+        Object {
+          "description": "A general indicator of the body fat an individual is carrying based upon the ratio of weight to height.",
+          "value": "BMI",
+        },
+        Object {
+          "description": "The minimum blood pressure in the systemic arterial circulation during the cardiac cycle.",
+          "value": "DIABP",
+        },
+        Object {
+          "description": "The vertical measurement or distance from the base to the top of an object; the vertical dimension of extension.",
+          "value": "HEIGHT",
+        },
+        Object {
+          "description": "The number of heartbeats per unit of time, usually expressed as beats per minute.",
+          "value": "HR",
+        },
+        Object {
+          "description": "The maximum blood pressure in the systemic arterial circulation during the cardiac cycle.",
+          "value": "SYSBP",
+        },
+        Object {
+          "description": "A measurement of the temperature of the body.",
+          "value": "TEMP",
+        },
+        Object {
+          "description": "The vertical force exerted by a mass as a result of gravity.",
+          "value": "WEIGHT",
+        },
+      ],
+      "name": "VSTestCode",
+    },
+    "VSUnit": Object {
+      "items": Array [
+        Object {
+          "description": "One hundred times the quotient of one quantity divided by another, with the same units of measurement.",
+          "value": "%",
+        },
+        Object {
+          "description": "The number of heartbeats measured per minute time.",
+          "value": "beats/min",
+        },
+        Object {
+          "description": "A unit of temperature of the temperature scale designed so that the freezing point of water is 0 degrees and the boiling point is 100 degrees at standard atmospheric pressure.",
+          "value": "C",
+        },
+      ],
+      "name": "VSUnit",
+    },
+  },
+  "domains": Object {
+    "VITAL SIGNS": Object {
+      "abbr": "VS",
+      "datasets": Object {
+        "vs": Object {
+          "columns": Array [
+            Object {
+              "description": "Sequence number given to ensure uniqueness of subject records within a domain.",
+              "label": "Sequence Number",
+              "name": "VSSEQ",
+            },
+            Object {
+              "description": "Short name of the measurement, test, or examination described in VSTEST.",
+              "label": "Vital Signs Test Short Name",
+              "name": "VSTESTCD",
+            },
+            Object {
+              "description": "Position of the subject during a measurement or examination.",
+              "label": "Vital Signs Position of Subject",
+              "name": "VSPOS",
+            },
+            Object {
+              "description": "Result of the vital signs measurement as originally received or collected.",
+              "label": "Result or Finding in Original Units",
+              "name": "VSORRES",
+            },
+            Object {
+              "description": "Original units in which the data were collected. The unit for VSORRES.",
+              "label": "Original Units",
+              "name": "VSORRESU",
+            },
+            Object {
+              "description": "Contains the result value for all findings, copied or derived from VSORRES in a standard format or standard units.",
+              "label": "Character Result/Finding in Std Format",
+              "name": "VSSTRESC",
+            },
+            Object {
+              "description": "Used for continuous or numeric results or findings in standard format",
+              "label": "Numeric Result/Finding in Standard Units",
+              "name": "VSSTRESN",
+            },
+            Object {
+              "description": "Standardized unit used for VSSTRESC and VSSTRESN",
+              "label": "Standard Units",
+              "name": "VSSTRESU",
+            },
+            Object {
+              "description": "Used to indicate that a vital sign measurement was not done.",
+              "label": "Completion Status",
+              "name": "VSSTAT",
+            },
+            Object {
+              "description": "Describes why a measurement or test was not performed.",
+              "label": "Reason Not Performed",
+              "name": "VSREASND",
+            },
+          ],
+          "name": "vs",
+        },
+        "vs_hr": Object {
+          "columns": Array [
+            Object {
+              "description": "Study day based upon RFSTDTC in Demographics.",
+              "label": "Study Day",
+              "name": "VISITDY",
+            },
+            Object {
+              "description": "Hour of study day",
+              "label": "Hour of Day",
+              "name": "VISITHR",
+            },
+            Object {
+              "description": "Sequence number given to ensure uniqueness of subject records within a domain.",
+              "label": "Sequence Number",
+              "name": "VSSEQ",
+            },
+            Object {
+              "description": "Short name of the measurement, test, or examination described in VSTEST.",
+              "label": "Vital Signs Test Short Name",
+              "name": "VSTESTCD",
+            },
+            Object {
+              "description": "Result of the vital signs measurement as originally received or collected.",
+              "label": "Result or Finding in Original Units",
+              "name": "VSORRES",
+            },
+            Object {
+              "description": "Original units in which the data were collected. The unit for VSORRES.",
+              "label": "Original Units",
+              "name": "VSORRESU",
+            },
+            Object {
+              "description": "Contains the result value for all findings, copied or derived from VSORRES in a standard format or standard units.",
+              "label": "Character Result/Finding in Std Format",
+              "name": "VSSTRESC",
+            },
+            Object {
+              "description": "Used for continuous or numeric results or findings in standard format",
+              "label": "Numeric Result/Finding in Standard Units",
+              "name": "VSSTRESN",
+            },
+            Object {
+              "description": "Standardized unit used for VSSTRESC and VSSTRESN",
+              "label": "Standard Units",
+              "name": "VSSTRESU",
+            },
+            Object {
+              "description": "Used to indicate that a vital sign measurement was not done.",
+              "label": "Completion Status",
+              "name": "VSSTAT",
+            },
+            Object {
+              "description": "Describes why a measurement or test was not performed.",
+              "label": "Reason Not Performed",
+              "name": "VSREASND",
+            },
+          ],
+          "name": "vs_hr",
+        },
+      },
+      "name": "VITAL SIGNS",
+    },
+  },
+  "milestones": Object {
+    "BASELINE": Object {
+      "day": 0,
+      "name": "BASELINE",
+      "type": "absolute",
+      "window": Object {
+        "after": 0,
+        "before": 0,
+      },
+    },
+    "CLINIC_1": Object {
+      "day": 7,
+      "name": "CLINIC_1",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_2": Object {
+      "day": 14,
+      "name": "CLINIC_2",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_3": Object {
+      "day": 21,
+      "name": "CLINIC_3",
+      "type": "absolute",
+      "window": Object {
+        "after": 3,
+        "before": -3,
+      },
+    },
+    "EARLY_TERM": Object {
+      "name": "EARLY_TERM",
+      "position": "after",
+      "relativeTo": Object {
+        "name": "BASELINE",
+        "type": "reference",
+      },
+      "type": "relative",
+    },
+    "SCREENING": Object {
+      "day": -14,
+      "name": "SCREENING",
+      "type": "absolute",
+      "window": Object {
+        "after": 14,
+        "before": -10,
+      },
+    },
+  },
+  "study": Object {
+    "id": "MY-STUDY",
+    "name": "Longer version of my study",
+  },
+}
+`;
+
+exports[`Compiler when a study definition is added and some milestones are added and some interfaces are added and some codelists are added compiles without error 1`] = `
+Object {
+  "codelists": Object {
+    "VSPosition": Object {
+      "items": Array [
+        Object {
+          "description": "An anterior recumbent body position whereby the person lies on its stomach and faces downward.",
+          "value": "PRONE",
+        },
+        Object {
+          "description": "The state or act of one who sits; the posture of one who occupies a seat.",
+          "value": "SITTING",
+        },
+        Object {
+          "description": "The act of assuming or maintaining an erect upright position.",
+          "value": "STANDING",
+        },
+        Object {
+          "description": "A posterior recumbent body position whereby the person lies on its back and faces upward.",
+          "value": "SUPINE",
+        },
+      ],
+      "name": "VSPosition",
+    },
+    "VSTestCode": Object {
+      "items": Array [
+        Object {
+          "description": "A general indicator of the body fat an individual is carrying based upon the ratio of weight to height.",
+          "value": "BMI",
+        },
+        Object {
+          "description": "The minimum blood pressure in the systemic arterial circulation during the cardiac cycle.",
+          "value": "DIABP",
+        },
+        Object {
+          "description": "The vertical measurement or distance from the base to the top of an object; the vertical dimension of extension.",
+          "value": "HEIGHT",
+        },
+        Object {
+          "description": "The number of heartbeats per unit of time, usually expressed as beats per minute.",
+          "value": "HR",
+        },
+        Object {
+          "description": "The maximum blood pressure in the systemic arterial circulation during the cardiac cycle.",
+          "value": "SYSBP",
+        },
+        Object {
+          "description": "A measurement of the temperature of the body.",
+          "value": "TEMP",
+        },
+        Object {
+          "description": "The vertical force exerted by a mass as a result of gravity.",
+          "value": "WEIGHT",
+        },
+      ],
+      "name": "VSTestCode",
+    },
+    "VSUnit": Object {
+      "items": Array [
+        Object {
+          "description": "One hundred times the quotient of one quantity divided by another, with the same units of measurement.",
+          "value": "%",
+        },
+        Object {
+          "description": "The number of heartbeats measured per minute time.",
+          "value": "beats/min",
+        },
+        Object {
+          "description": "A unit of temperature of the temperature scale designed so that the freezing point of water is 0 degrees and the boiling point is 100 degrees at standard atmospheric pressure.",
+          "value": "C",
+        },
+      ],
+      "name": "VSUnit",
+    },
+  },
+  "domains": Object {},
+  "milestones": Object {
+    "BASELINE": Object {
+      "day": 0,
+      "name": "BASELINE",
+      "type": "absolute",
+      "window": Object {
+        "after": 0,
+        "before": 0,
+      },
+    },
+    "CLINIC_1": Object {
+      "day": 7,
+      "name": "CLINIC_1",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_2": Object {
+      "day": 14,
+      "name": "CLINIC_2",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_3": Object {
+      "day": 21,
+      "name": "CLINIC_3",
+      "type": "absolute",
+      "window": Object {
+        "after": 3,
+        "before": -3,
+      },
+    },
+    "EARLY_TERM": Object {
+      "name": "EARLY_TERM",
+      "position": "after",
+      "relativeTo": Object {
+        "name": "BASELINE",
+        "type": "reference",
+      },
+      "type": "relative",
+    },
+    "SCREENING": Object {
+      "day": -14,
+      "name": "SCREENING",
+      "type": "absolute",
+      "window": Object {
+        "after": 14,
+        "before": -10,
+      },
+    },
+  },
+  "study": Object {
+    "id": "MY-STUDY",
+    "name": "Longer version of my study",
+  },
+}
+`;
+
+exports[`Compiler when a study definition is added and some milestones are added can add milestones in a separate file 1`] = `
+Object {
+  "codelists": Object {},
+  "domains": Object {},
+  "milestones": Object {
+    "BASELINE": Object {
+      "day": 0,
+      "name": "BASELINE",
+      "type": "absolute",
+      "window": Object {
+        "after": 0,
+        "before": 0,
+      },
+    },
+    "CLINIC_1": Object {
+      "day": 7,
+      "name": "CLINIC_1",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_2": Object {
+      "day": 14,
+      "name": "CLINIC_2",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_3": Object {
+      "day": 21,
+      "name": "CLINIC_3",
+      "type": "absolute",
+      "window": Object {
+        "after": 3,
+        "before": -3,
+      },
+    },
+    "CLOSEOUT": Object {
+      "day": 28,
+      "name": "CLOSEOUT",
+      "type": "absolute",
+      "window": Object {
+        "after": 0,
+        "before": 0,
+      },
+    },
+    "EARLY_TERM": Object {
+      "name": "EARLY_TERM",
+      "position": "after",
+      "relativeTo": Object {
+        "name": "BASELINE",
+        "type": "reference",
+      },
+      "type": "relative",
+    },
+    "SCREENING": Object {
+      "day": -14,
+      "name": "SCREENING",
+      "type": "absolute",
+      "window": Object {
+        "after": 14,
+        "before": -10,
+      },
+    },
+  },
+  "study": Object {
+    "id": "MY-STUDY",
+    "name": "Longer version of my study",
+  },
+}
+`;
+
+exports[`Compiler when a study definition is added and some milestones are added can remove milestones 1`] = `
+Object {
+  "codelists": Object {},
+  "domains": Object {},
+  "milestones": Object {
+    "CLOSEOUT": Object {
+      "day": 28,
+      "name": "CLOSEOUT",
+      "type": "absolute",
+      "window": Object {
+        "after": 0,
+        "before": 0,
+      },
+    },
+  },
+  "study": Object {
+    "id": "MY-STUDY",
+    "name": "Longer version of my study",
+  },
+}
+`;
+
+exports[`Compiler when a study definition is added and some milestones are added compiles without error 1`] = `
+Object {
+  "codelists": Object {},
+  "domains": Object {},
+  "milestones": Object {
+    "BASELINE": Object {
+      "day": 0,
+      "name": "BASELINE",
+      "type": "absolute",
+      "window": Object {
+        "after": 0,
+        "before": 0,
+      },
+    },
+    "CLINIC_1": Object {
+      "day": 7,
+      "name": "CLINIC_1",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_2": Object {
+      "day": 14,
+      "name": "CLINIC_2",
+      "type": "absolute",
+      "window": Object {
+        "after": 4,
+        "before": -4,
+      },
+    },
+    "CLINIC_3": Object {
+      "day": 21,
+      "name": "CLINIC_3",
+      "type": "absolute",
+      "window": Object {
+        "after": 3,
+        "before": -3,
+      },
+    },
+    "EARLY_TERM": Object {
+      "name": "EARLY_TERM",
+      "position": "after",
+      "relativeTo": Object {
+        "name": "BASELINE",
+        "type": "reference",
+      },
+      "type": "relative",
+    },
+    "SCREENING": Object {
+      "day": -14,
+      "name": "SCREENING",
+      "type": "absolute",
+      "window": Object {
+        "after": 14,
+        "before": -10,
+      },
+    },
+  },
+  "study": Object {
+    "id": "MY-STUDY",
+    "name": "Longer version of my study",
+  },
+}
+`;
+
+exports[`Compiler when a study definition is added compiles without error 1`] = `
+Object {
+  "codelists": Object {},
+  "domains": Object {},
+  "milestones": Object {},
+  "study": Object {
+    "id": "MY-STUDY",
+    "name": "Longer version of my study",
+  },
+}
+`;
+
+exports[`Compiler when a study definition is added errors when the study definition is removed 1`] = `
+Array [
+  Object {
+    "code": "missing_study_def",
+    "loc": null,
+    "message": "Missing study definition, e.g.:
+
+study {
+  id: \\"STUDY-ID\\"
+  name: \\"Longer name for my study\\"
+}",
+    "scope": "global",
+  },
+]
+`;
