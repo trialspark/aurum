@@ -15,6 +15,7 @@ import {
   DatasetDefinition,
   Directive,
   DomainDefinition,
+  Identifier,
   InterfaceDefinition,
   KeyValuePair,
   MilestoneDefinition,
@@ -24,7 +25,7 @@ import {
   Value,
 } from "../astTypes";
 import { File } from "./defBuilder";
-import { DocumentVisitor } from "./visitor";
+import { accept, DocumentVisitor } from "./visitor";
 
 interface DocumentScope {
   type: "document";
@@ -103,6 +104,18 @@ interface KeyValueScope {
   parent: StudyScope | MilestoneScope;
 }
 
+interface KeyScope {
+  type: "key";
+  parent: KeyValueScope;
+  key: string;
+}
+
+interface ValueScope {
+  type: "value";
+  parent: KeyValueScope;
+  value: ParsedValue;
+}
+
 type KeyValuePairs = { [key: string]: ParsedValue };
 type DirectiveMap = { [name: string]: ParsedDirective };
 type ParsedValue = string;
@@ -119,7 +132,9 @@ type Scope =
   | ColumnScope
   | DirectiveScope
   | ArgsScope
-  | KeyValueScope;
+  | KeyValueScope
+  | KeyScope
+  | ValueScope;
 
 class KeyValuePairAccessor {
   private valuesByKey: { [key: string]: Value };
@@ -178,10 +193,10 @@ export class ConfigBuilder extends DocumentVisitor {
     super();
   }
 
-  private inScope<S extends Scope>(scope: S, fn: (scope: S) => void) {
+  private inScope<S extends Scope, R>(scope: S, fn: (scope: S) => R): R {
     try {
       this.scope = scope;
-      fn(scope);
+      return fn(scope);
     } finally {
       this.scope = scope.parent ?? { type: "document", parent: null };
     }
@@ -378,10 +393,21 @@ export class ConfigBuilder extends DocumentVisitor {
   visitKeyValuePair(node: KeyValuePair) {
     assert("kv" in this.scope);
     this.inScope({ type: "key-value", parent: this.scope }, (scope) => {
-      super.visitKeyValuePair(node);
-      if (node.rhs.type === "string") {
-        scope.parent.kv[node.lhs.value] = node.rhs.value;
-      }
+      const key = this.inScope(
+        { type: "key", parent: scope, key: "" },
+        (scope) => {
+          accept(node.lhs, this);
+          return scope.key;
+        }
+      );
+      const value = this.inScope(
+        { type: "value", parent: scope, value: "" },
+        (scope) => {
+          accept(node.rhs, this);
+          return scope.value;
+        }
+      );
+      scope.parent.kv[key] = value;
     });
   }
 
@@ -390,6 +416,17 @@ export class ConfigBuilder extends DocumentVisitor {
 
     if (this.scope.type === "args") {
       this.scope.args.push(node.value);
+    }
+    if (this.scope.type === "value") {
+      this.scope.value = node.value;
+    }
+  }
+
+  visitIdentifier(node: Identifier) {
+    super.visitIdentifier(node);
+
+    if (this.scope.type === "key") {
+      this.scope.key = node.value;
     }
   }
 

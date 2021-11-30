@@ -41,7 +41,7 @@ import {
   Window,
 } from "../astTypes";
 
-const accept = (node: Node, visitor: DocumentVisitor) => {
+export const accept = (node: Node, visitor: DocumentVisitor) => {
   switch (node.type) {
     case "args":
       return visitor.visitArgs(node);
