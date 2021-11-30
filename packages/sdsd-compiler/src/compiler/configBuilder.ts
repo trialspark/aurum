@@ -15,7 +15,6 @@ import {
   DatasetDefinition,
   Directive,
   DomainDefinition,
-  Identifier,
   InterfaceDefinition,
   KeyValuePair,
   MilestoneDefinition,
@@ -102,8 +101,6 @@ interface ArgsScope {
 interface KeyValueScope {
   type: "key-value";
   parent: StudyScope | MilestoneScope;
-  key: string;
-  value: ParsedValue;
 }
 
 type KeyValuePairs = { [key: string]: ParsedValue };
@@ -380,13 +377,12 @@ export class ConfigBuilder extends DocumentVisitor {
 
   visitKeyValuePair(node: KeyValuePair) {
     assert("kv" in this.scope);
-    this.inScope(
-      { type: "key-value", parent: this.scope, key: "", value: "" },
-      (scope) => {
-        super.visitKeyValuePair(node);
-        scope.parent.kv[scope.key] = scope.value;
+    this.inScope({ type: "key-value", parent: this.scope }, (scope) => {
+      super.visitKeyValuePair(node);
+      if (node.rhs.type === "string") {
+        scope.parent.kv[node.lhs.value] = node.rhs.value;
       }
-    );
+    });
   }
 
   visitString(node: String) {
@@ -394,16 +390,6 @@ export class ConfigBuilder extends DocumentVisitor {
 
     if (this.scope.type === "args") {
       this.scope.args.push(node.value);
-    }
-    if (this.scope.type === "key-value") {
-      this.scope.value = node.value;
-    }
-  }
-
-  visitIdentifier(node: Identifier) {
-    super.visitIdentifier(node);
-    if (this.scope.type === "key-value") {
-      this.scope.key = node.value;
     }
   }
 
