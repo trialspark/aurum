@@ -10,7 +10,13 @@ import {
   StudyDefinition,
 } from "../astTypes";
 import { ConfigBuilder } from "./configBuilder";
-import { DefBuilder, File, StudyDef } from "./defBuilder";
+import {
+  CodelistDef,
+  DefBuilder,
+  File,
+  NamedDefMap,
+  StudyDef,
+} from "./defBuilder";
 import { CompilerError, CompilerErrorCode, CompilerErrorScope } from "./errors";
 
 export interface CompilerOptions {}
@@ -37,6 +43,13 @@ export class Compiler {
     return Object.values(this.files)
       .map((file) => file.studyDefs)
       .flat();
+  }
+  private get codelistDefs(): NamedDefMap<CodelistDef> {
+    return Object.fromEntries(
+      Object.values(this.files)
+        .map((file) => Object.entries(file.codelistDefs))
+        .flat()
+    );
   }
 
   constructor(public options: CompilerOptions) {
@@ -105,7 +118,8 @@ export class Compiler {
           codelistDefs: {},
           interfaceDefs: {},
           domainDefs: {},
-        }).getFile()
+        }).getFile(),
+        { getCodelistDefs: () => this.codelistDefs }
       ).getFile();
     } else {
       delete this.files[filename];

@@ -38,7 +38,7 @@ export interface DomainDef {
   file: File;
 }
 
-type NamedDefMap<Def> = { [name: string]: Def };
+export type NamedDefMap<Def> = { [name: string]: Def };
 
 export interface File {
   name: string;
@@ -65,7 +65,13 @@ export class DefBuilder extends DocumentVisitor {
 
   onVisitArgs() {}
 
-  onVisitCodelistDefinition() {}
+  onVisitCodelistDefinition(node: CodelistDefinition) {
+    this.file.codelistDefs[node.name.value] = {
+      name: node.name.value,
+      ast: node,
+      file: this.file,
+    };
+  }
 
   onVisitCodelistMember() {}
 

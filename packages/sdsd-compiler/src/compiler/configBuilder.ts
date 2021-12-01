@@ -20,9 +20,11 @@ import {
   String,
   StudyDay,
   StudyDefinition,
+  TypeExpression,
+  TypeExpressionMember,
   Value,
 } from "../astTypes";
-import { File } from "./defBuilder";
+import { CodelistDef, File, NamedDefMap } from "./defBuilder";
 import {
   ArgsScope,
   CodelistMemberScope,
@@ -34,6 +36,8 @@ import {
   KeyValueScope,
   StringScope,
   StudyScope,
+  TypeExpressionMemberScope,
+  TypeExpressionScope,
 } from "./scope";
 import { DocumentVisitor } from "./visitor";
 
@@ -88,11 +92,14 @@ const milestoneFromStudyDay = (
 };
 
 export class ConfigBuilder extends DocumentVisitor {
-  constructor(private file: File) {
+  constructor(
+    private file: File,
+    private accessors: { getCodelistDefs: () => NamedDefMap<CodelistDef> }
+  ) {
     super();
   }
 
-  onVisitStudyDefinition(node: StudyDefinition, scope: StudyScope) {
+  onVisitStudyDefinition(_: StudyDefinition, scope: StudyScope) {
     this.file.result.study = {
       id: scope.kv.id,
       name: scope.kv.name,
@@ -188,6 +195,7 @@ export class ConfigBuilder extends DocumentVisitor {
       name: node.columnName.value,
       label: scope.directives.label.args[0],
       description: scope.directives.desc.args[0],
+      type: scope.types,
     });
   }
 
@@ -198,7 +206,7 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
-  onVisitArgs(args: Args, scope: ArgsScope) {
+  onVisitArgs(_: Args, scope: ArgsScope) {
     scope.parent.args = scope.args;
   }
 
@@ -262,9 +270,26 @@ export class ConfigBuilder extends DocumentVisitor {
 
   onVisitTimeconf() {}
 
-  onVisitTypeExpression() {}
+  onVisitTypeExpression(_: TypeExpression, scope: TypeExpressionScope) {
+    scope.parent.types = scope.types;
+  }
 
-  onVisitTypeExpressionMember() {}
+  onVisitTypeExpressionMember(
+    node: TypeExpressionMember,
+    scope: TypeExpressionMemberScope
+  ) {
+    const codelists = this.accessors.getCodelistDefs();
+    const name = node.value.value;
+
+    if (name in codelists) {
+      scope.parent.types.push({ type: "codelist", value: name });
+    } else {
+      scope.parent.types.push({ type: "scalar", value: name });
+    }
+    if (node.optional) {
+      scope.parent.types.push({ type: "scalar", value: "Null" });
+    }
+  }
 
   onVisitVariableMapping() {}
 

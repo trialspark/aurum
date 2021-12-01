@@ -187,7 +187,7 @@ export abstract class DocumentVisitor {
   visitColumnDefinition(node: ColumnDefinition) {
     assert(isParentOf("column", this.scope));
     this.inScope(
-      { type: "column", parent: this.scope, directives: {} },
+      { type: "column", parent: this.scope, directives: {}, types: [] },
       (scope) => {
         node.columnName.accept(this);
         node.columnType.accept(this);
@@ -662,12 +662,15 @@ export abstract class DocumentVisitor {
 
   visitTypeExpression(node: TypeExpression) {
     assert(isParentOf("type-expression", this.scope));
-    this.inScope({ type: "type-expression", parent: this.scope }, (scope) => {
-      for (const member of node.members) {
-        member.accept(this);
+    this.inScope(
+      { type: "type-expression", parent: this.scope, types: [] },
+      (scope) => {
+        for (const member of node.members) {
+          member.accept(this);
+        }
+        this.onVisitTypeExpression(node, scope);
       }
-      this.onVisitTypeExpression(node, scope);
-    });
+    );
   }
 
   protected abstract onVisitTypeExpressionMember(

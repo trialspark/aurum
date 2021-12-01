@@ -51,7 +51,7 @@ export interface DatasetColumn {
   name: string;
   label: string;
   description: string;
-  type: (Scalar | CodelistRef)[];
+  type: ColumnType[];
 }
 
 export interface Scalar {
@@ -63,6 +63,8 @@ export interface CodelistRef {
   type: "codelist";
   value: string;
 }
+
+export type ColumnType = Scalar | CodelistRef;
 
 export interface CompilationResult {
   study: StudyInfo;

@@ -101,51 +101,147 @@ Object {
               "description": "Sequence number given to ensure uniqueness of subject records within a domain.",
               "label": "Sequence Number",
               "name": "VSSEQ",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+              ],
             },
             Object {
               "description": "Short name of the measurement, test, or examination described in VSTEST.",
               "label": "Vital Signs Test Short Name",
               "name": "VSTESTCD",
+              "type": Array [
+                Object {
+                  "type": "codelist",
+                  "value": "VSTestCode",
+                },
+              ],
             },
             Object {
               "description": "Position of the subject during a measurement or examination.",
               "label": "Vital Signs Position of Subject",
               "name": "VSPOS",
+              "type": Array [
+                Object {
+                  "type": "codelist",
+                  "value": "VSPosition",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Null",
+                },
+              ],
             },
             Object {
               "description": "Result of the vital signs measurement as originally received or collected.",
               "label": "Result or Finding in Original Units",
               "name": "VSORRES",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Float",
+                },
+              ],
             },
             Object {
               "description": "Original units in which the data were collected. The unit for VSORRES.",
               "label": "Original Units",
               "name": "VSORRESU",
+              "type": Array [
+                Object {
+                  "type": "codelist",
+                  "value": "VSUnit",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Null",
+                },
+              ],
             },
             Object {
               "description": "Contains the result value for all findings, copied or derived from VSORRES in a standard format or standard units.",
               "label": "Character Result/Finding in Std Format",
               "name": "VSSTRESC",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Float",
+                },
+              ],
             },
             Object {
               "description": "Used for continuous or numeric results or findings in standard format",
               "label": "Numeric Result/Finding in Standard Units",
               "name": "VSSTRESN",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Float",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Null",
+                },
+              ],
             },
             Object {
               "description": "Standardized unit used for VSSTRESC and VSSTRESN",
               "label": "Standard Units",
               "name": "VSSTRESU",
+              "type": Array [
+                Object {
+                  "type": "codelist",
+                  "value": "VSUnit",
+                },
+              ],
             },
             Object {
               "description": "Used to indicate that a vital sign measurement was not done.",
               "label": "Completion Status",
               "name": "VSSTAT",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Boolean",
+                },
+              ],
             },
             Object {
               "description": "Describes why a measurement or test was not performed.",
               "label": "Reason Not Performed",
               "name": "VSREASND",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Null",
+                },
+              ],
             },
           ],
           "name": "vs",
@@ -156,56 +252,142 @@ Object {
               "description": "Study day based upon RFSTDTC in Demographics.",
               "label": "Study Day",
               "name": "VISITDY",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+              ],
             },
             Object {
               "description": "Hour of study day",
               "label": "Hour of Day",
               "name": "VISITHR",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+              ],
             },
             Object {
               "description": "Sequence number given to ensure uniqueness of subject records within a domain.",
               "label": "Sequence Number",
               "name": "VSSEQ",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+              ],
             },
             Object {
               "description": "Short name of the measurement, test, or examination described in VSTEST.",
               "label": "Vital Signs Test Short Name",
               "name": "VSTESTCD",
+              "type": Array [
+                Object {
+                  "type": "codelist",
+                  "value": "VSTestCode",
+                },
+              ],
             },
             Object {
               "description": "Result of the vital signs measurement as originally received or collected.",
               "label": "Result or Finding in Original Units",
               "name": "VSORRES",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Float",
+                },
+              ],
             },
             Object {
               "description": "Original units in which the data were collected. The unit for VSORRES.",
               "label": "Original Units",
               "name": "VSORRESU",
+              "type": Array [
+                Object {
+                  "type": "codelist",
+                  "value": "VSUnit",
+                },
+              ],
             },
             Object {
               "description": "Contains the result value for all findings, copied or derived from VSORRES in a standard format or standard units.",
               "label": "Character Result/Finding in Std Format",
               "name": "VSSTRESC",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Float",
+                },
+              ],
             },
             Object {
               "description": "Used for continuous or numeric results or findings in standard format",
               "label": "Numeric Result/Finding in Standard Units",
               "name": "VSSTRESN",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+                Object {
+                  "type": "scalar",
+                  "value": "Float",
+                },
+              ],
             },
             Object {
               "description": "Standardized unit used for VSSTRESC and VSSTRESN",
               "label": "Standard Units",
               "name": "VSSTRESU",
+              "type": Array [
+                Object {
+                  "type": "codelist",
+                  "value": "VSUnit",
+                },
+              ],
             },
             Object {
               "description": "Used to indicate that a vital sign measurement was not done.",
               "label": "Completion Status",
               "name": "VSSTAT",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Boolean",
+                },
+              ],
             },
             Object {
               "description": "Describes why a measurement or test was not performed.",
               "label": "Reason Not Performed",
               "name": "VSREASND",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+              ],
             },
           ],
           "name": "vs_hr",

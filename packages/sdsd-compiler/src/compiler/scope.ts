@@ -1,4 +1,5 @@
 import { CodelistItem, Dataset, DatasetColumn } from ".";
+import { ColumnType } from "..";
 
 interface BaseScope<Type extends string, Parent extends Scope | null> {
   type: Type;
@@ -66,7 +67,9 @@ export interface ColumnScope
       "column",
       DatasetScope | InterfaceScope | DatasetExtensionScope
     >,
-    WithDirectives {}
+    WithDirectives {
+  types: ColumnType[];
+}
 
 export interface DirectiveScope
   extends BaseScope<
@@ -219,7 +222,9 @@ export interface TimeOperatorScope
   extends BaseScope<"time-operator", TimeExpressionScope> {}
 
 export interface TypeExpressionScope
-  extends BaseScope<"type-expression", ColumnScope> {}
+  extends BaseScope<"type-expression", ColumnScope> {
+  types: ColumnType[];
+}
 
 export interface TypeExpressionMemberScope
   extends BaseScope<"type-expression-member", TypeExpressionScope> {}
