@@ -655,11 +655,19 @@ export abstract class DocumentVisitor {
 
   visitTimeRange(node: TimeRange) {
     assert(isParentOf("time-range", this.scope));
-    this.inScope({ type: "time-range", parent: this.scope }, (scope) => {
-      node.start.accept(this);
-      node.end.accept(this);
-      this.onVisitTimeRange(node, scope);
-    });
+    this.inScope(
+      {
+        type: "time-range",
+        parent: this.scope,
+        start: null,
+        end: null,
+      },
+      (scope) => {
+        node.start.accept(this);
+        node.end.accept(this);
+        this.onVisitTimeRange(node, scope);
+      }
+    );
   }
 
   protected abstract onVisitTimeconf(

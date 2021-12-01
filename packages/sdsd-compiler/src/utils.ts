@@ -17,3 +17,18 @@ export const tokenToLoc = (token: Token): Loc => ({
     })(),
   },
 });
+
+export const unreachable = (value: never) => true;
+
+export const setFirst = <O extends object, K extends keyof O, V extends O[K]>(
+  object: O,
+  keys: K[],
+  value: V
+) => {
+  for (const key of keys) {
+    if (object[key] == null) {
+      object[key] = value;
+      return;
+    }
+  }
+};

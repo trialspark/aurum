@@ -1,5 +1,6 @@
 import assert from "assert";
 import { Milestone } from ".";
+import { RelativeMilestone } from "..";
 import {
   Args,
   BothWindow,
@@ -20,11 +21,13 @@ import {
   Timeconf,
   TimeExpression,
   TimeList,
+  TimeRange,
   TypeExpression,
   TypeExpressionMember,
   Value,
   Window,
 } from "../astTypes";
+import { setFirst, unreachable } from "../utils";
 import { CodelistDef, File, NamedDefMap } from "./defBuilder";
 import {
   ArgsScope,
@@ -46,6 +49,7 @@ import {
   TimeconfScope,
   TimeExpressionScope,
   TimeListScope,
+  TimeRangeScope,
   TypeExpressionMemberScope,
   TypeExpressionScope,
   WindowScope,
@@ -55,7 +59,10 @@ import { DocumentVisitor } from "./visitor";
 export class ConfigBuilder extends DocumentVisitor {
   constructor(
     private file: File,
-    private accessors: { getCodelistDefs: () => NamedDefMap<CodelistDef> }
+    private accessors: {
+      getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getMilestones: () => NamedDefMap<Milestone>;
+    }
   ) {
     super();
   }
@@ -157,9 +164,42 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   onVisitDatasetDefinition(node: DatasetDefinition, scope: DatasetScope) {
+    const milestones = this.accessors.getMilestones();
+    const datasetMilestones = scope.directives.milestone.args[0];
+    assert(
+      typeof datasetMilestones !== "string" &&
+        datasetMilestones.type === "time-list" // Can this actually be a range...?
+    );
     scope.parent.datasets[node.name.value] = {
       name: node.name.value,
       columns: scope.columns,
+      milestones: datasetMilestones.members.flatMap((member) => {
+        switch (member.type) {
+          case "milestone-identifier": {
+            const milestone = milestones[member.value] as Milestone | undefined;
+            return [
+              {
+                name: milestone?.name ?? null,
+                day: milestone?.type === "absolute" ? milestone.day : null,
+                hour: null,
+              },
+            ];
+          }
+          case "study-day": {
+            return [
+              {
+                name: null,
+                day: member.day,
+                hour: null,
+              },
+            ];
+          }
+
+          case "time-range": {
+            return [];
+          }
+        }
+      }),
     };
   }
 
@@ -190,21 +230,44 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   onVisitString(node: String, scope: StringScope) {
-    if (scope.parent.type === "args") {
-      scope.parent.args.push(node.value);
+    switch (scope.parent.type) {
+      case "args": {
+        scope.parent.args.push(node.value);
+        return;
+      }
+      case "key-value": {
+        scope.parent.value = node.value;
+        return;
+      }
     }
-    if (scope.parent.type === "key-value") {
-      scope.parent.value = node.value;
-    }
+    assert(unreachable(scope.parent));
   }
 
   onVisitIdentifier(node: Identifier, scope: IdentifierScope) {
-    if (scope.parent.type === "key-value") {
-      scope.parent.key = node.value;
+    switch (scope.parent.type) {
+      case "key-value": {
+        scope.parent.key = node.value;
+        return;
+      }
+      case "time-expression": {
+        scope.parent.rhs = { type: "milestone-identifier", value: node.value };
+        return;
+      }
+      case "time-range": {
+        setFirst(scope.parent, ["start", "end"], {
+          type: "milestone-identifier",
+          value: node.value,
+        });
+        return;
+      }
+      case "time-list": {
+        scope.parent.members.push({
+          type: "milestone-identifier",
+          value: node.value,
+        });
+      }
     }
-    if (scope.parent.type === "time-expression") {
-      scope.parent.rhs = { type: "milestone-identifier", value: node.value };
-    }
+    assert(unreachable(scope.parent));
   }
 
   onVisitInterfaceDefinition() {}
@@ -248,14 +311,19 @@ export class ConfigBuilder extends DocumentVisitor {
 
   onVisitSourceCode() {}
 
-  onVisitStudyDay(node: StudyDay, scope: StudyDayScope) {
-    if (scope.parent.type === "time-list") {
-      scope.parent.members.push({
-        type: "study-day",
-        day: node.day.value,
-        window: scope.window,
-      });
+  onVisitStudyDay(node: StudyDay, scope: StudyDayScope): void {
+    switch (scope.parent.type) {
+      case "time-list": {
+        scope.parent.members.push({
+          type: "study-day",
+          day: node.day.value,
+          window: scope.window,
+        });
+        return;
+      }
     }
+
+    assert(unreachable(scope.parent));
   }
 
   onVisitTimeExpression(node: TimeExpression, scope: TimeExpressionScope) {
@@ -272,12 +340,42 @@ export class ConfigBuilder extends DocumentVisitor {
 
   onVisitTimeOperator() {}
 
-  onVisitTimeRange() {}
+  onVisitTimeRange(node: TimeRange, scope: TimeRangeScope) {
+    switch (scope.parent.type) {
+      case "time-list": {
+        assert(
+          scope.start?.type === "milestone-identifier" ||
+            scope.start?.type === "study-day"
+        );
+        assert(
+          scope.end?.type === "milestone-identifier" ||
+            scope.end?.type === "study-day"
+        );
+        scope.parent.members.push({
+          type: "time-range",
+          start: scope.start,
+          end: scope.end!,
+        });
+      }
+    }
+    assert(unreachable(scope.parent));
+  }
 
   onVisitTimeconf(_: Timeconf, scope: TimeconfScope) {
-    if (scope.parent.type === "key-value") {
-      scope.parent.value = scope.result ?? { type: "time-list", members: [] };
+    switch (scope.parent.type) {
+      case "key-value": {
+        scope.parent.value = scope.result ?? { type: "time-list", members: [] };
+        return;
+      }
+      case "args": {
+        if (scope.result) {
+          scope.parent.args.push(scope.result);
+        }
+        return;
+      }
     }
+
+    assert(unreachable(scope.parent));
   }
 
   onVisitTypeExpression(_: TypeExpression, scope: TypeExpressionScope) {

@@ -132,7 +132,16 @@ export interface ParsedMilestoneIdentifier {
   value: string;
 }
 
-export type ParsedTimeListMember = ParsedStudyDay | ParsedMilestoneIdentifier;
+export interface ParsedTimeRange {
+  type: "time-range";
+  start: ParsedStudyDay | ParsedMilestoneIdentifier;
+  end: ParsedStudyDay | ParsedMilestoneIdentifier;
+}
+
+export type ParsedTimeListMember =
+  | ParsedStudyDay
+  | ParsedMilestoneIdentifier
+  | ParsedTimeRange;
 
 export interface TimeListScope extends BaseScope<"time-list", TimeconfScope> {
   members: ParsedTimeListMember[];
@@ -142,7 +151,10 @@ export interface TimeRangeScope
   extends BaseScope<
     "time-range",
     TimeExpressionScope | TimeRangeScope | TimeListScope
-  > {}
+  > {
+  start: ParsedTimeListMember | null;
+  end: ParsedTimeListMember | null;
+}
 
 export interface TimeExpressionScope
   extends BaseScope<"time-expression", TimeconfScope> {

@@ -42,8 +42,15 @@ export interface Domain {
   datasets: { [name: string]: Dataset };
 }
 
+export interface DatasetMilestone {
+  name: string | null;
+  day: number | null;
+  hour: number | number;
+}
+
 export interface Dataset {
   name: string;
+  milestones: DatasetMilestone[];
   columns: DatasetColumn[];
 }
 

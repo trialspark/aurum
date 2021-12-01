@@ -119,7 +119,10 @@ export class Compiler {
           interfaceDefs: {},
           domainDefs: {},
         }).getFile(),
-        { getCodelistDefs: () => this.codelistDefs }
+        {
+          getCodelistDefs: () => this.codelistDefs,
+          getMilestones: () => this.result.milestones,
+        }
       ).getFile();
     } else {
       delete this.files[filename];
