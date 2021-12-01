@@ -2,13 +2,18 @@
 
 exports[`stringToAST() converts a domain and datasets 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "columns": Array [
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 17,
@@ -23,6 +28,7 @@ Object {
                 "value": "VSSEQ",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 25,
@@ -35,6 +41,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 25,
@@ -48,6 +55,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 25,
@@ -67,6 +75,7 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": null,
                   "loc": Object {
                     "end": Object {
@@ -82,9 +91,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 66,
@@ -125,9 +137,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 128,
@@ -181,7 +196,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -196,6 +213,7 @@ Object {
                 "value": "VSTESTCD",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -208,6 +226,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 31,
@@ -221,6 +240,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 31,
@@ -240,9 +260,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 78,
@@ -283,9 +306,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 122,
@@ -339,7 +365,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 17,
@@ -354,6 +382,7 @@ Object {
                 "value": "VSPOS",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 29,
@@ -366,6 +395,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 29,
@@ -379,6 +409,7 @@ Object {
                     "optional": true,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 28,
@@ -398,9 +429,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 82,
@@ -441,9 +475,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 110,
@@ -497,7 +534,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 19,
@@ -512,6 +551,7 @@ Object {
                 "value": "VSORRES",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 40,
@@ -524,6 +564,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 26,
@@ -537,6 +578,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 26,
@@ -552,6 +594,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 34,
@@ -565,6 +608,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 34,
@@ -580,6 +624,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 40,
@@ -593,6 +638,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 40,
@@ -612,9 +658,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 86,
@@ -655,9 +704,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 124,
@@ -711,7 +763,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -726,6 +780,7 @@ Object {
                 "value": "VSORRESU",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -738,6 +793,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 28,
@@ -751,6 +807,7 @@ Object {
                     "optional": true,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -770,9 +827,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 65,
@@ -813,9 +873,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 120,
@@ -869,7 +932,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -884,6 +949,7 @@ Object {
                 "value": "VSSTRESC",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 41,
@@ -896,6 +962,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -909,6 +976,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -924,6 +992,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 35,
@@ -937,6 +1006,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 35,
@@ -952,6 +1022,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 41,
@@ -965,6 +1036,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 41,
@@ -984,9 +1056,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 89,
@@ -1027,9 +1102,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 110,
@@ -1083,7 +1161,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -1098,6 +1178,7 @@ Object {
                 "value": "VSSTRESN",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 35,
@@ -1110,6 +1191,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 28,
@@ -1123,6 +1205,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 28,
@@ -1138,6 +1221,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 35,
@@ -1151,6 +1235,7 @@ Object {
                     "optional": true,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 34,
@@ -1170,9 +1255,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 91,
@@ -1213,9 +1301,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 119,
@@ -1269,7 +1360,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -1284,6 +1377,7 @@ Object {
                 "value": "VSSTRESU",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -1296,6 +1390,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -1309,6 +1404,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -1328,9 +1424,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 65,
@@ -1371,9 +1470,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 98,
@@ -1427,7 +1529,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 18,
@@ -1442,6 +1546,7 @@ Object {
                 "value": "VSSTAT",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -1454,6 +1559,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 26,
@@ -1467,6 +1573,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 26,
@@ -1486,9 +1593,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 68,
@@ -1529,9 +1639,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 110,
@@ -1585,7 +1698,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -1600,6 +1715,7 @@ Object {
                 "value": "VSREASND",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -1612,6 +1728,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 28,
@@ -1625,6 +1742,7 @@ Object {
                     "optional": true,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -1644,9 +1762,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 71,
@@ -1687,9 +1808,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 104,
@@ -1745,9 +1869,12 @@ Object {
           ],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 111,
@@ -1760,9 +1887,11 @@ Object {
                     },
                     "type": "timeconf",
                     "value": Object {
+                      "accept": [Function],
                       "at": null,
                       "items": Array [
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 70,
@@ -1777,6 +1906,7 @@ Object {
                           "value": "BASELINE",
                         },
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 80,
@@ -1791,6 +1921,7 @@ Object {
                           "value": "CLINIC_1",
                         },
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 90,
@@ -1805,6 +1936,7 @@ Object {
                           "value": "CLINIC_2",
                         },
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 100,
@@ -1819,6 +1951,7 @@ Object {
                           "value": "CLINIC_3",
                         },
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 110,
@@ -1874,6 +2007,7 @@ Object {
             },
           ],
           "interfaces": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 48,
@@ -1886,6 +2020,7 @@ Object {
             },
             "paths": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 36,
@@ -1898,6 +2033,7 @@ Object {
                 },
                 "parts": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 36,
@@ -1916,6 +2052,7 @@ Object {
                 "value": "base",
               },
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 48,
@@ -1928,6 +2065,7 @@ Object {
                 },
                 "parts": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 48,
@@ -1959,6 +2097,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 20,
@@ -1975,9 +2114,12 @@ Object {
           "type": "dataset-definition",
         },
         Object {
+          "accept": [Function],
           "columns": Array [
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 19,
@@ -1992,6 +2134,7 @@ Object {
                 "value": "VISITDY",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -2004,6 +2147,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -2017,6 +2161,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -2036,6 +2181,7 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": null,
                   "loc": Object {
                     "end": Object {
@@ -2051,9 +2197,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 60,
@@ -2094,9 +2243,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 95,
@@ -2150,7 +2302,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 19,
@@ -2165,6 +2319,7 @@ Object {
                 "value": "VISITHR",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -2177,6 +2332,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -2190,6 +2346,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -2209,6 +2366,7 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": null,
                   "loc": Object {
                     "end": Object {
@@ -2224,9 +2382,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 62,
@@ -2267,9 +2428,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 67,
@@ -2323,7 +2487,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 17,
@@ -2338,6 +2504,7 @@ Object {
                 "value": "VSSEQ",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 25,
@@ -2350,6 +2517,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 25,
@@ -2363,6 +2531,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 25,
@@ -2382,6 +2551,7 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": null,
                   "loc": Object {
                     "end": Object {
@@ -2397,9 +2567,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 66,
@@ -2440,9 +2613,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 128,
@@ -2496,7 +2672,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -2511,6 +2689,7 @@ Object {
                 "value": "VSTESTCD",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -2523,6 +2702,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 31,
@@ -2536,6 +2716,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 31,
@@ -2555,9 +2736,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 78,
@@ -2598,9 +2782,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 122,
@@ -2654,7 +2841,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 19,
@@ -2669,6 +2858,7 @@ Object {
                 "value": "VSORRES",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 40,
@@ -2681,6 +2871,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 26,
@@ -2694,6 +2885,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 26,
@@ -2709,6 +2901,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 34,
@@ -2722,6 +2915,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 34,
@@ -2737,6 +2931,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 40,
@@ -2750,6 +2945,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 40,
@@ -2769,9 +2965,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 86,
@@ -2812,9 +3011,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 124,
@@ -2868,7 +3070,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -2883,6 +3087,7 @@ Object {
                 "value": "VSORRESU",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -2895,6 +3100,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -2908,6 +3114,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -2927,9 +3134,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 65,
@@ -2970,9 +3180,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 120,
@@ -3026,7 +3239,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -3041,6 +3256,7 @@ Object {
                 "value": "VSSTRESC",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 41,
@@ -3053,6 +3269,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -3066,6 +3283,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -3081,6 +3299,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 35,
@@ -3094,6 +3313,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 35,
@@ -3109,6 +3329,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 41,
@@ -3122,6 +3343,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 41,
@@ -3141,9 +3363,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 89,
@@ -3184,9 +3409,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 110,
@@ -3240,7 +3468,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -3255,6 +3485,7 @@ Object {
                 "value": "VSSTRESN",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 34,
@@ -3267,6 +3498,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 28,
@@ -3280,6 +3512,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 28,
@@ -3295,6 +3528,7 @@ Object {
                     },
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 34,
@@ -3308,6 +3542,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 34,
@@ -3327,9 +3562,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 91,
@@ -3370,9 +3608,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 119,
@@ -3426,7 +3667,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -3441,6 +3684,7 @@ Object {
                 "value": "VSSTRESU",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -3453,6 +3697,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -3466,6 +3711,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -3485,9 +3731,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 65,
@@ -3528,9 +3777,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 98,
@@ -3584,7 +3836,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 18,
@@ -3599,6 +3853,7 @@ Object {
                 "value": "VSSTAT",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -3611,6 +3866,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 26,
@@ -3624,6 +3880,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 26,
@@ -3643,9 +3900,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 68,
@@ -3686,9 +3946,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 110,
@@ -3742,7 +4005,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 20,
@@ -3757,6 +4022,7 @@ Object {
                 "value": "VSREASND",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -3769,6 +4035,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 27,
@@ -3782,6 +4049,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 27,
@@ -3801,9 +4069,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 71,
@@ -3844,9 +4115,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 104,
@@ -3902,9 +4176,12 @@ Object {
           ],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 90,
@@ -3917,8 +4194,10 @@ Object {
                     },
                     "type": "timeconf",
                     "value": Object {
+                      "accept": [Function],
                       "at": Array [
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 79,
@@ -3934,6 +4213,7 @@ Object {
                           "value": 8,
                         },
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 84,
@@ -3949,6 +4229,7 @@ Object {
                           "value": 15,
                         },
                         Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 89,
@@ -3966,7 +4247,9 @@ Object {
                       ],
                       "items": Array [
                         Object {
+                          "accept": [Function],
                           "end": Object {
+                            "accept": [Function],
                             "loc": Object {
                               "end": Object {
                                 "col": 73,
@@ -3991,6 +4274,7 @@ Object {
                             },
                           },
                           "start": Object {
+                            "accept": [Function],
                             "loc": Object {
                               "end": Object {
                                 "col": 61,
@@ -4048,6 +4332,7 @@ Object {
             },
           ],
           "interfaces": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 39,
@@ -4060,6 +4345,7 @@ Object {
             },
             "paths": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 39,
@@ -4072,6 +4358,7 @@ Object {
                 },
                 "parts": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 39,
@@ -4103,6 +4390,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 23,
@@ -4121,9 +4409,12 @@ Object {
       ],
       "directives": Array [
         Object {
+          "accept": [Function],
           "args": Object {
+            "accept": [Function],
             "args": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 39,
@@ -4175,6 +4466,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 28,
@@ -4207,8 +4499,10 @@ Object {
 
 exports[`stringToAST() converts codelists 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "loc": Object {
         "end": Object {
           "col": 9,
@@ -4221,11 +4515,15 @@ Object {
       },
       "members": Array [
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 123,
@@ -4277,6 +4575,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 44,
@@ -4293,11 +4592,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 84,
@@ -4349,6 +4652,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -4365,11 +4669,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 147,
@@ -4421,6 +4729,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 37,
@@ -4437,11 +4746,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 100,
@@ -4493,6 +4806,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 53,
@@ -4509,11 +4823,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 88,
@@ -4565,6 +4883,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 24,
@@ -4581,11 +4900,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 112,
@@ -4637,6 +4960,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -4653,11 +4977,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 112,
@@ -4709,6 +5037,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -4726,6 +5055,7 @@ Object {
         },
       ],
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 21,
@@ -4742,6 +5072,7 @@ Object {
       "type": "codelist-definition",
     },
     Object {
+      "accept": [Function],
       "loc": Object {
         "end": Object {
           "col": 9,
@@ -4754,11 +5085,15 @@ Object {
       },
       "members": Array [
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 98,
@@ -4810,6 +5145,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 30,
@@ -4826,11 +5162,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 98,
@@ -4882,6 +5222,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 34,
@@ -4898,11 +5239,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 69,
@@ -4954,6 +5299,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 24,
@@ -4970,11 +5316,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 93,
@@ -5026,6 +5376,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -5043,6 +5394,7 @@ Object {
         },
       ],
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 26,
@@ -5075,11 +5427,15 @@ Object {
 
 exports[`stringToAST() converts interface definitions 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "columns": Array [
         Object {
+          "accept": [Function],
           "columnName": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -5094,6 +5450,7 @@ Object {
             "value": "USUBJID",
           },
           "columnType": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 24,
@@ -5106,6 +5463,7 @@ Object {
             },
             "members": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 24,
@@ -5119,6 +5477,7 @@ Object {
                 "optional": false,
                 "type": "type-expression-member",
                 "value": Object {
+                  "accept": [Function],
                   "loc": Object {
                     "end": Object {
                       "col": 24,
@@ -5138,6 +5497,7 @@ Object {
           },
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": null,
               "loc": Object {
                 "end": Object {
@@ -5153,9 +5513,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 61,
@@ -5196,9 +5559,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 101,
@@ -5252,7 +5618,9 @@ Object {
           "type": "column-definition",
         },
         Object {
+          "accept": [Function],
           "columnName": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 16,
@@ -5267,6 +5635,7 @@ Object {
             "value": "SUBJID",
           },
           "columnType": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 23,
@@ -5279,6 +5648,7 @@ Object {
             },
             "members": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 23,
@@ -5292,6 +5662,7 @@ Object {
                 "optional": false,
                 "type": "type-expression-member",
                 "value": Object {
+                  "accept": [Function],
                   "loc": Object {
                     "end": Object {
                       "col": 23,
@@ -5311,6 +5682,7 @@ Object {
           },
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": null,
               "loc": Object {
                 "end": Object {
@@ -5326,9 +5698,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 68,
@@ -5369,9 +5744,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 88,
@@ -5436,6 +5814,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 22,
@@ -5452,9 +5831,12 @@ Object {
       "type": "interface-definition",
     },
     Object {
+      "accept": [Function],
       "columns": Array [
         Object {
+          "accept": [Function],
           "columnName": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -5469,6 +5851,7 @@ Object {
             "value": "VISITNUM",
           },
           "columnType": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 26,
@@ -5481,6 +5864,7 @@ Object {
             },
             "members": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -5494,6 +5878,7 @@ Object {
                 "optional": false,
                 "type": "type-expression-member",
                 "value": Object {
+                  "accept": [Function],
                   "loc": Object {
                     "end": Object {
                       "col": 26,
@@ -5513,6 +5898,7 @@ Object {
           },
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": null,
               "loc": Object {
                 "end": Object {
@@ -5528,9 +5914,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 48,
@@ -5571,9 +5960,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 61,
@@ -5627,7 +6019,9 @@ Object {
           "type": "column-definition",
         },
         Object {
+          "accept": [Function],
           "columnName": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -5642,6 +6036,7 @@ Object {
             "value": "VISIT",
           },
           "columnType": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 22,
@@ -5654,6 +6049,7 @@ Object {
             },
             "members": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 22,
@@ -5667,6 +6063,7 @@ Object {
                 "optional": false,
                 "type": "type-expression-member",
                 "value": Object {
+                  "accept": [Function],
                   "loc": Object {
                     "end": Object {
                       "col": 22,
@@ -5686,6 +6083,7 @@ Object {
           },
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": null,
               "loc": Object {
                 "end": Object {
@@ -5701,9 +6099,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 46,
@@ -5744,9 +6145,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 86,
@@ -5800,7 +6204,9 @@ Object {
           "type": "column-definition",
         },
         Object {
+          "accept": [Function],
           "columnName": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -5815,6 +6221,7 @@ Object {
             "value": "VISITDY",
           },
           "columnType": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 25,
@@ -5827,6 +6234,7 @@ Object {
             },
             "members": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 25,
@@ -5840,6 +6248,7 @@ Object {
                 "optional": false,
                 "type": "type-expression-member",
                 "value": Object {
+                  "accept": [Function],
                   "loc": Object {
                     "end": Object {
                       "col": 25,
@@ -5859,6 +6268,7 @@ Object {
           },
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": null,
               "loc": Object {
                 "end": Object {
@@ -5874,9 +6284,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 62,
@@ -5917,9 +6330,12 @@ Object {
               "type": "directive",
             },
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 101,
@@ -5984,6 +6400,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 28,
@@ -6016,11 +6433,15 @@ Object {
 
 exports[`stringToAST() converts milestone definitions 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 12,
@@ -6045,6 +6466,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 31,
@@ -6057,10 +6479,13 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "at": null,
               "items": Array [
                 Object {
+                  "accept": [Function],
                   "day": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 20,
@@ -6087,6 +6512,7 @@ Object {
                   },
                   "type": "study-day",
                   "window": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 30,
@@ -6100,7 +6526,9 @@ Object {
                     "type": "window",
                     "window": Array [
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 25,
@@ -6129,7 +6557,9 @@ Object {
                         "type": "positive-window",
                       },
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 30,
@@ -6188,6 +6618,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 27,
@@ -6204,9 +6635,12 @@ Object {
       "type": "milestone-definition",
     },
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 12,
@@ -6231,6 +6665,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 19,
@@ -6243,10 +6678,13 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "at": null,
               "items": Array [
                 Object {
+                  "accept": [Function],
                   "day": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 18,
@@ -6302,6 +6740,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 26,
@@ -6318,9 +6757,12 @@ Object {
       "type": "milestone-definition",
     },
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 12,
@@ -6345,6 +6787,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 24,
@@ -6357,10 +6800,13 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "at": null,
               "items": Array [
                 Object {
+                  "accept": [Function],
                   "day": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 18,
@@ -6387,6 +6833,7 @@ Object {
                   },
                   "type": "study-day",
                   "window": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 23,
@@ -6400,7 +6847,9 @@ Object {
                     "type": "window",
                     "window": Array [
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 23,
@@ -6459,6 +6908,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 26,
@@ -6475,9 +6925,12 @@ Object {
       "type": "milestone-definition",
     },
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 12,
@@ -6502,6 +6955,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 25,
@@ -6514,10 +6968,13 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "at": null,
               "items": Array [
                 Object {
+                  "accept": [Function],
                   "day": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 19,
@@ -6544,6 +7001,7 @@ Object {
                   },
                   "type": "study-day",
                   "window": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 24,
@@ -6557,7 +7015,9 @@ Object {
                     "type": "window",
                     "window": Array [
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 24,
@@ -6616,6 +7076,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 26,
@@ -6632,9 +7093,12 @@ Object {
       "type": "milestone-definition",
     },
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 12,
@@ -6659,6 +7123,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 25,
@@ -6671,10 +7136,13 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "at": null,
               "items": Array [
                 Object {
+                  "accept": [Function],
                   "day": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 19,
@@ -6701,6 +7169,7 @@ Object {
                   },
                   "type": "study-day",
                   "window": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 24,
@@ -6714,7 +7183,9 @@ Object {
                     "type": "window",
                     "window": Array [
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 24,
@@ -6773,6 +7244,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 26,
@@ -6789,9 +7261,12 @@ Object {
       "type": "milestone-definition",
     },
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 13,
@@ -6816,6 +7291,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 26,
@@ -6828,10 +7304,13 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "at": null,
               "items": Array [
                 Object {
+                  "accept": [Function],
                   "day": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 20,
@@ -6858,6 +7337,7 @@ Object {
                   },
                   "type": "study-day",
                   "window": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 25,
@@ -6871,7 +7351,9 @@ Object {
                     "type": "window",
                     "window": Array [
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 25,
@@ -6930,6 +7412,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 26,
@@ -6946,9 +7429,12 @@ Object {
       "type": "milestone-definition",
     },
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 13,
@@ -6973,6 +7459,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 29,
@@ -6985,10 +7472,13 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "at": null,
               "items": Array [
                 Object {
+                  "accept": [Function],
                   "day": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 20,
@@ -7015,6 +7505,7 @@ Object {
                   },
                   "type": "study-day",
                   "window": Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 28,
@@ -7028,7 +7519,9 @@ Object {
                     "type": "window",
                     "window": Array [
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 24,
@@ -7057,7 +7550,9 @@ Object {
                         "type": "positive-window",
                       },
                       Object {
+                        "accept": [Function],
                         "days": Object {
+                          "accept": [Function],
                           "loc": Object {
                             "end": Object {
                               "col": 28,
@@ -7116,6 +7611,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 26,
@@ -7132,9 +7628,12 @@ Object {
       "type": "milestone-definition",
     },
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 13,
@@ -7159,6 +7658,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 28,
@@ -7171,6 +7671,7 @@ Object {
             },
             "type": "timeconf",
             "value": Object {
+              "accept": [Function],
               "loc": Object {
                 "end": Object {
                   "col": 27,
@@ -7182,6 +7683,7 @@ Object {
                 },
               },
               "operator": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 18,
@@ -7196,6 +7698,7 @@ Object {
                 "value": ">",
               },
               "rhs": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -7226,6 +7729,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 28,
@@ -7258,11 +7762,15 @@ Object {
 
 exports[`stringToAST() converts study metadata 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 12,
@@ -7287,6 +7795,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 29,
@@ -7303,7 +7812,9 @@ Object {
           "type": "key-value-pair",
         },
         Object {
+          "accept": [Function],
           "lhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 14,
@@ -7328,6 +7839,7 @@ Object {
             },
           },
           "rhs": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 44,
@@ -7373,9 +7885,12 @@ Object {
 
 exports[`stringToAST() supports extending a codelist 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "extends": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 36,
@@ -7388,6 +7903,7 @@ Object {
         },
         "parts": Array [
           Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 28,
@@ -7402,6 +7918,7 @@ Object {
             "value": "sdtm",
           },
           Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 31,
@@ -7416,6 +7933,7 @@ Object {
             "value": "vs",
           },
           Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 36,
@@ -7445,11 +7963,15 @@ Object {
       },
       "members": Array [
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 48,
@@ -7501,6 +8023,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -7517,11 +8040,15 @@ Object {
           "type": "codelist-member",
         },
         Object {
+          "accept": [Function],
           "directives": Array [
             Object {
+              "accept": [Function],
               "args": Object {
+                "accept": [Function],
                 "args": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 48,
@@ -7573,6 +8100,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -7608,13 +8136,18 @@ Object {
 
 exports[`stringToAST() supports extending a domain/dataset 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "columns": Array [
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 18,
@@ -7629,6 +8162,7 @@ Object {
                 "value": "NEWCOL",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 25,
@@ -7641,6 +8175,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 25,
@@ -7654,6 +8189,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 25,
@@ -7673,9 +8209,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 48,
@@ -7716,9 +8255,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 59,
@@ -7772,7 +8314,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 19,
@@ -7787,6 +8331,7 @@ Object {
                 "value": "NEWCOL2",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -7799,6 +8344,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 26,
@@ -7812,6 +8358,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 26,
@@ -7831,9 +8378,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 55,
@@ -7874,9 +8424,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 66,
@@ -7932,6 +8485,7 @@ Object {
           ],
           "directives": Array [],
           "extends": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 27,
@@ -7946,6 +8500,7 @@ Object {
             "value": "vs",
           },
           "interfaces": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 43,
@@ -7958,6 +8513,7 @@ Object {
             },
             "paths": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 43,
@@ -7970,6 +8526,7 @@ Object {
                 },
                 "parts": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 43,
@@ -8003,9 +8560,12 @@ Object {
           "type": "dataset-extension",
         },
         Object {
+          "accept": [Function],
           "columns": Array [
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 18,
@@ -8020,6 +8580,7 @@ Object {
                 "value": "NEWCOL",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 25,
@@ -8032,6 +8593,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 25,
@@ -8045,6 +8607,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 25,
@@ -8064,9 +8627,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 48,
@@ -8107,9 +8673,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 59,
@@ -8163,7 +8732,9 @@ Object {
               "type": "column-definition",
             },
             Object {
+              "accept": [Function],
               "columnName": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 19,
@@ -8178,6 +8749,7 @@ Object {
                 "value": "NEWCOL2",
               },
               "columnType": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -8190,6 +8762,7 @@ Object {
                 },
                 "members": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 26,
@@ -8203,6 +8776,7 @@ Object {
                     "optional": false,
                     "type": "type-expression-member",
                     "value": Object {
+                      "accept": [Function],
                       "loc": Object {
                         "end": Object {
                           "col": 26,
@@ -8222,9 +8796,12 @@ Object {
               },
               "directives": Array [
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 55,
@@ -8265,9 +8842,12 @@ Object {
                   "type": "directive",
                 },
                 Object {
+                  "accept": [Function],
                   "args": Object {
+                    "accept": [Function],
                     "args": Array [
                       Object {
+                        "accept": [Function],
                         "loc": Object {
                           "end": Object {
                             "col": 66,
@@ -8323,6 +8903,7 @@ Object {
           ],
           "directives": Array [],
           "interfaces": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 52,
@@ -8335,6 +8916,7 @@ Object {
             },
             "paths": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 40,
@@ -8347,6 +8929,7 @@ Object {
                 },
                 "parts": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 40,
@@ -8365,6 +8948,7 @@ Object {
                 "value": "base",
               },
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 52,
@@ -8377,6 +8961,7 @@ Object {
                 },
                 "parts": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 52,
@@ -8408,6 +8993,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 24,
@@ -8426,9 +9012,12 @@ Object {
       ],
       "directives": Array [
         Object {
+          "accept": [Function],
           "args": Object {
+            "accept": [Function],
             "args": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 46,
@@ -8470,6 +9059,7 @@ Object {
         },
       ],
       "extends": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 35,
@@ -8512,13 +9102,17 @@ Object {
 
 exports[`stringToAST() supports implementing datasets via a path 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "children": Array [
         Object {
+          "accept": [Function],
           "columns": Array [],
           "directives": Array [],
           "interfaces": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 44,
@@ -8531,6 +9125,7 @@ Object {
             },
             "paths": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 44,
@@ -8543,6 +9138,7 @@ Object {
                 },
                 "parts": Array [
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 38,
@@ -8557,6 +9153,7 @@ Object {
                     "value": "sdtm",
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 41,
@@ -8571,6 +9168,7 @@ Object {
                     "value": "vs",
                   },
                   Object {
+                    "accept": [Function],
                     "loc": Object {
                       "end": Object {
                         "col": 44,
@@ -8602,6 +9200,7 @@ Object {
             },
           },
           "name": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 22,
@@ -8630,6 +9229,7 @@ Object {
         },
       },
       "name": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 9,
@@ -8662,11 +9262,15 @@ Object {
 
 exports[`stringToAST() supports mapping 1`] = `
 Object {
+  "accept": [Function],
   "children": Array [
     Object {
+      "accept": [Function],
       "columns": Array [
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -8693,7 +9297,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             \\"{{VSTESTCD}}\\"
           ",
@@ -8721,6 +9327,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -8741,7 +9348,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -8768,7 +9377,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             {{MILESTONE.NAME}}.VS.{{VSTESTCD}}POS
           ",
@@ -8796,6 +9407,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -8816,7 +9428,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -8843,7 +9457,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             {{MILESTONE.NAME}}.VS.{{VSTESTCD}}ORRES
           ",
@@ -8871,6 +9487,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 30,
@@ -8891,7 +9508,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -8918,7 +9537,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             {{MILESTONE.NAME}}.VS{{VSTESTCD}}ORRESU
           ",
@@ -8946,6 +9567,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -8966,7 +9588,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -8993,7 +9617,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT
               CASE
@@ -9026,6 +9652,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -9046,7 +9673,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -9073,7 +9702,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT vs.VSORRES
             FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\" AND pg_typeof(vs.VSORRES) = \\"integer\\"
@@ -9102,6 +9733,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -9122,7 +9754,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -9149,7 +9783,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT
               CASE
@@ -9182,6 +9818,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -9202,7 +9839,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 16,
@@ -9229,7 +9868,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT CAST(vs.VSORRES as BOOLEAN)
             FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
@@ -9258,6 +9899,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -9278,7 +9920,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -9305,7 +9949,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             {{MILESTONE.NAME}}.VS.{{VSTESTCD}}REASND
           ",
@@ -9333,6 +9979,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -9354,6 +10001,7 @@ Object {
         },
       ],
       "dataset": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 22,
@@ -9366,6 +10014,7 @@ Object {
         },
         "parts": Array [
           Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 22,
@@ -9396,6 +10045,7 @@ Object {
       "type": "dataset-mapping",
       "variables": Array [
         Object {
+          "accept": [Function],
           "loc": Object {
             "end": Object {
               "col": 74,
@@ -9408,8 +10058,10 @@ Object {
           },
           "type": "variable-mapping",
           "values": Object {
+            "accept": [Function],
             "args": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 49,
@@ -9424,6 +10076,7 @@ Object {
                 "value": "HEIGHT",
               },
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 55,
@@ -9438,6 +10091,7 @@ Object {
                 "value": "HR",
               },
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 63,
@@ -9452,6 +10106,7 @@ Object {
                 "value": "TEMP",
               },
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 73,
@@ -9479,6 +10134,7 @@ Object {
             "type": "args",
           },
           "variable": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 36,
@@ -9496,9 +10152,12 @@ Object {
       ],
     },
     Object {
+      "accept": [Function],
       "columns": Array [
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -9525,7 +10184,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             \\"BMI\\"
           ",
@@ -9553,6 +10214,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -9573,7 +10235,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -9600,7 +10264,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             null
           ",
@@ -9628,6 +10294,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -9648,7 +10315,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -9663,6 +10332,7 @@ Object {
             "value": "VSORRES",
           },
           "computation": Object {
+            "accept": [Function],
             "code": "
             return (WEIGHT / HEIGHT / HEIGHT) * 10000
           ",
@@ -9691,7 +10361,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT vs.VSSTRESC FROM vs WHERE VSTESTCD = \\"HEIGHT\\";
           ",
@@ -9719,6 +10391,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 27,
@@ -9734,6 +10407,7 @@ Object {
               },
               "type": "column-mapping-source",
               "variable": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 37,
@@ -9749,7 +10423,9 @@ Object {
               },
             },
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT vs.VSSTRESC FROM vs WHERE VSTESTCD = \\"WEIGHT\\";
           ",
@@ -9777,6 +10453,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 23,
@@ -9792,6 +10469,7 @@ Object {
               },
               "type": "column-mapping-source",
               "variable": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 33,
@@ -9810,7 +10488,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -9837,7 +10517,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             null
           ",
@@ -9865,6 +10547,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -9885,7 +10568,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -9912,7 +10597,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSORRES FROM vs WHERE VSTESTCD = \\"BMI\\"
           ",
@@ -9940,6 +10627,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -9960,7 +10648,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -9987,7 +10677,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSSTRESC FROM vs WHERE VSTESTCD = \\"BMI\\" 
           ",
@@ -10015,6 +10707,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -10035,7 +10728,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10062,7 +10757,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             NULL
           ",
@@ -10090,6 +10787,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -10110,7 +10808,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 16,
@@ -10137,7 +10837,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT CAST(VSORRES as BOOLEAN) FROM vs WHERE VSTESTCD = \\"BMI\\"
           ",
@@ -10165,6 +10867,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -10185,7 +10888,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10212,7 +10917,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             null
           ",
@@ -10240,6 +10947,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -10261,6 +10969,7 @@ Object {
         },
       ],
       "dataset": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 22,
@@ -10273,6 +10982,7 @@ Object {
         },
         "parts": Array [
           Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 22,
@@ -10304,9 +11014,12 @@ Object {
       "variables": Array [],
     },
     Object {
+      "accept": [Function],
       "columns": Array [
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10333,7 +11046,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             \\"{{VSTESTCD}}\\"
           ",
@@ -10361,6 +11076,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -10381,7 +11097,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 15,
@@ -10408,7 +11126,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             {{MILESTONE.NAME}}.VS.BPPOS
           ",
@@ -10436,6 +11156,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -10456,7 +11177,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -10483,7 +11206,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             {{MILESTONE.NAME}}.VS.BPORRES.{{VSTESTCD}}
           ",
@@ -10511,6 +11236,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 30,
@@ -10531,7 +11257,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10558,7 +11286,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             \\"mmHg\\"
           ",
@@ -10586,6 +11316,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -10606,7 +11337,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10633,7 +11366,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSORRES FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
           ",
@@ -10661,6 +11396,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -10681,7 +11417,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10708,7 +11446,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSSTRESC FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
           ",
@@ -10736,6 +11476,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -10756,7 +11497,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10783,7 +11526,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSORRESU FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
           ",
@@ -10811,6 +11556,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -10831,7 +11577,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 16,
@@ -10858,7 +11606,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT CAST(VSORRES as BOOLEAN) FROM vs WHERE VSTESTCD = \\"{{VSTESTCD}}\\"
           ",
@@ -10886,6 +11636,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -10906,7 +11657,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -10933,7 +11686,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             {{MILESTONE.NAME}}.VS.BPREASND
           ",
@@ -10961,6 +11716,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -10982,6 +11738,7 @@ Object {
         },
       ],
       "dataset": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 22,
@@ -10994,6 +11751,7 @@ Object {
         },
         "parts": Array [
           Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 22,
@@ -11024,6 +11782,7 @@ Object {
       "type": "dataset-mapping",
       "variables": Array [
         Object {
+          "accept": [Function],
           "loc": Object {
             "end": Object {
               "col": 58,
@@ -11036,8 +11795,10 @@ Object {
           },
           "type": "variable-mapping",
           "values": Object {
+            "accept": [Function],
             "args": Array [
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 48,
@@ -11052,6 +11813,7 @@ Object {
                 "value": "DIABP",
               },
               Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 57,
@@ -11079,6 +11841,7 @@ Object {
             "type": "args",
           },
           "variable": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 36,
@@ -11096,9 +11859,12 @@ Object {
       ],
     },
     Object {
+      "accept": [Function],
       "columns": Array [
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -11125,7 +11891,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             \\"HR\\"
           ",
@@ -11153,6 +11921,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -11173,7 +11942,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 17,
@@ -11200,7 +11971,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT AVG(bpm)
             FROM hr
@@ -11233,6 +12006,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 34,
@@ -11253,7 +12027,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -11280,7 +12056,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             \\"BPM\\"
           ",
@@ -11308,6 +12086,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 31,
@@ -11328,7 +12107,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -11355,7 +12136,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSORRES FROM vs_hr
           ",
@@ -11383,6 +12166,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -11403,7 +12187,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -11430,7 +12216,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSORRES FROM vs_hr 
           ",
@@ -11458,6 +12246,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -11478,7 +12267,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -11505,7 +12296,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT VSORRESU FROM vs_hr   
           ",
@@ -11533,6 +12326,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -11553,7 +12347,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 16,
@@ -11580,7 +12376,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT CAST(VSORRES as BOOLEAN) FROM vs_hr
           ",
@@ -11608,6 +12406,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 26,
@@ -11628,7 +12427,9 @@ Object {
           "type": "column-mapping",
         },
         Object {
+          "accept": [Function],
           "column": Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 18,
@@ -11655,7 +12456,9 @@ Object {
           },
           "sources": Array [
             Object {
+              "accept": [Function],
               "code": Object {
+                "accept": [Function],
                 "code": "
             SELECT CASE WHEN VSSTAT IS FALSE THEN \\"No data collected during time period.\\"
                   ELSE NULL
@@ -11686,6 +12489,7 @@ Object {
                 },
               },
               "source": Object {
+                "accept": [Function],
                 "loc": Object {
                   "end": Object {
                     "col": 28,
@@ -11707,6 +12511,7 @@ Object {
         },
       ],
       "dataset": Object {
+        "accept": [Function],
         "loc": Object {
           "end": Object {
             "col": 25,
@@ -11719,6 +12524,7 @@ Object {
         },
         "parts": Array [
           Object {
+            "accept": [Function],
             "loc": Object {
               "end": Object {
                 "col": 25,

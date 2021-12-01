@@ -85,92 +85,6 @@ import {
   WindowScope,
 } from "./scope";
 
-export const accept = (node: Node, visitor: DocumentVisitor) => {
-  switch (node.type) {
-    case "args":
-      return visitor.visitArgs(node);
-    case "both-window":
-      return visitor.visitBothWindow(node);
-    case "codelist-definition":
-      return visitor.visitCodelistDefinition(node);
-    case "codelist-extension":
-      return visitor.visitCodelistExtension(node);
-    case "codelist-member":
-      return visitor.visitCodelistMember(node);
-    case "column-definition":
-      return visitor.visitColumnDefinition(node);
-    case "column-mapping":
-      return visitor.visitColumnMapping(node);
-    case "column-mapping-source":
-      return visitor.visitColumnMappingSource(node);
-    case "dataset-definition":
-      return visitor.visitDatasetDefinition(node);
-    case "dataset-extension":
-      return visitor.visitDatasetExtension(node);
-    case "dataset-mapping":
-      return visitor.visitDatasetMapping(node);
-    case "day-expression":
-      return visitor.visitDayExpression(node);
-    case "directive":
-      return visitor.visitDirective(node);
-    case "document":
-      return visitor.visit(node);
-    case "domain-definition":
-      return visitor.visitDomainDefinition(node);
-    case "domain-extension":
-      return visitor.visitDomainExtension(node);
-    case "hour-expression":
-      return visitor.visitHourExpression(node);
-    case "identifier":
-      return visitor.visitIdentifier(node);
-    case "identifier-list":
-      return visitor.visitIdentifierList(node);
-    case "interface-definition":
-      return visitor.visitInterfaceDefinition(node);
-    case "key-value-pair":
-      return visitor.visitKeyValuePair(node);
-    case "milestone-definition":
-      return visitor.visitMilestoneDefinition(node);
-    case "negative-window":
-      return visitor.visitNegativeWindow(node);
-    case "path":
-      return visitor.visitPath(node);
-    case "path-list":
-      return visitor.visitPathList(node);
-    case "positive-window":
-      return visitor.visitPositiveWindow(node);
-    case "source-code":
-      return visitor.visitSourceCode(node);
-    case "string":
-      return visitor.visitString(node);
-    case "study-day":
-      return visitor.visitStudyDay(node);
-    case "study-definition":
-      return visitor.visitStudyDefinition(node);
-    case "time-expression":
-      return visitor.visitTimeExpression(node);
-    case "time-list":
-      return visitor.visitTimeList(node);
-    case "time-operator":
-      return visitor.visitTimeOperator(node);
-    case "time-range":
-      return visitor.visitTimeRange(node);
-    case "timeconf":
-      return visitor.visitTimeconf(node);
-    case "type-expression":
-      return visitor.visitTypeExpression(node);
-    case "type-expression-member":
-      return visitor.visitTypeExpressionMember(node);
-    case "variable-mapping":
-      return visitor.visitVariableMapping(node);
-    case "window":
-      return visitor.visitWindow(node);
-  }
-
-  const unhandledType: never = node;
-  throw new Error(`Unhandled type: ${unhandledType}`);
-};
-
 export abstract class DocumentVisitor {
   private scope: Scope | null = null;
 
@@ -189,7 +103,7 @@ export abstract class DocumentVisitor {
     assert(isParentOf("args", this.scope));
     this.inScope({ type: "args", parent: this.scope, args: [] }, (scope) => {
       for (const arg of node.args) {
-        accept(arg, this);
+        arg.accept(this);
       }
       this.onVisitArgs(node, scope);
     });
@@ -203,7 +117,7 @@ export abstract class DocumentVisitor {
   visitBothWindow(node: BothWindow) {
     assert(isParentOf("both-window", this.scope));
     this.inScope({ type: "both-window", parent: this.scope }, (scope) => {
-      accept(node.days, this);
+      node.days.accept(this);
       this.onVisitBothWindow(node, scope);
     });
   }
@@ -218,9 +132,9 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "codelist", parent: this.scope, items: [] },
       (scope) => {
-        accept(node.name, this);
+        node.name.accept(this);
         for (const member of node.members) {
-          accept(member, this);
+          member.accept(this);
         }
         this.onVisitCodelistDefinition(node, scope);
       }
@@ -237,9 +151,9 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "codelist-extension", parent: this.scope, items: [] },
       (scope) => {
-        accept(node.extends, this);
+        node.extends.accept(this);
         for (const member of node.members) {
-          accept(member, this);
+          member.accept(this);
         }
         this.onVisitCodelistExtension(node, scope);
       }
@@ -256,9 +170,9 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "codelist-member", parent: this.scope, directives: {} },
       (scope) => {
-        accept(node.name, this);
+        node.name.accept(this);
         for (const directive of node.directives) {
-          accept(directive, this);
+          directive.accept(this);
         }
         this.onVisitCodelistMember(node, scope);
       }
@@ -275,10 +189,10 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "column", parent: this.scope, directives: {} },
       (scope) => {
-        accept(node.columnName, this);
-        accept(node.columnType, this);
+        node.columnName.accept(this);
+        node.columnType.accept(this);
         for (const directive of node.directives) {
-          accept(directive, this);
+          directive.accept(this);
         }
         this.onVisitColumnDefinition(node, scope);
       }
@@ -293,12 +207,12 @@ export abstract class DocumentVisitor {
   visitColumnMapping(node: ColumnMapping) {
     assert(isParentOf("column-mapping", this.scope));
     this.inScope({ type: "column-mapping", parent: this.scope }, (scope) => {
-      accept(node.column, this);
+      node.column.accept(this);
       for (const source of node.sources) {
-        accept(source, this);
+        source.accept(this);
       }
       if (node.computation) {
-        accept(node.computation, this);
+        node.computation.accept(this);
       }
       this.onVisitColumnMapping(node, scope);
     });
@@ -314,11 +228,11 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "column-mapping-source", parent: this.scope },
       (scope) => {
-        accept(node.source, this);
+        node.source.accept(this);
         if (node.variable) {
-          accept(node.variable, this);
+          node.variable.accept(this);
         }
-        accept(node.code, this);
+        node.code.accept(this);
         this.onVisitColumnMappingSource(node, scope);
       }
     );
@@ -334,15 +248,15 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "dataset", parent: this.scope, columns: [], directives: {} },
       (scope) => {
-        accept(node.name, this);
+        node.name.accept(this);
         if (node.interfaces) {
-          accept(node.interfaces, this);
+          node.interfaces.accept(this);
         }
         for (const directive of node.directives) {
-          accept(directive, this);
+          directive.accept(this);
         }
         for (const column of node.columns) {
-          accept(column, this);
+          column.accept(this);
         }
         this.onVisitDatasetDefinition(node, scope);
       }
@@ -364,15 +278,15 @@ export abstract class DocumentVisitor {
         columns: [],
       },
       (scope) => {
-        accept(node.extends, this);
+        node.extends.accept(this);
         if (node.interfaces) {
-          accept(node.interfaces, this);
+          node.interfaces.accept(this);
         }
         for (const directive of node.directives) {
-          accept(directive, this);
+          directive.accept(this);
         }
         for (const column of node.columns) {
-          accept(column, this);
+          column.accept(this);
         }
         this.onVisitDatasetExtension(node, scope);
       }
@@ -387,12 +301,12 @@ export abstract class DocumentVisitor {
   visitDatasetMapping(node: DatasetMapping) {
     assert(isParentOf("dataset-mapping", this.scope));
     this.inScope({ type: "dataset-mapping", parent: this.scope }, (scope) => {
-      accept(node.dataset, this);
+      node.dataset.accept(this);
       for (const variableMapping of node.variables) {
-        accept(variableMapping, this);
+        variableMapping.accept(this);
       }
       for (const column of node.columns) {
-        accept(column, this);
+        column.accept(this);
       }
       this.onVisitDatasetMapping(node, scope);
     });
@@ -421,7 +335,7 @@ export abstract class DocumentVisitor {
       { type: "directive", parent: this.scope, args: [] },
       (scope) => {
         if (node.args) {
-          accept(node.args, this);
+          node.args.accept(this);
         }
         this.onVisitDirective(node, scope);
       }
@@ -438,12 +352,12 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "domain", parent: this.scope, datasets: {}, directives: {} },
       (scope) => {
-        accept(node.name, this);
+        node.name.accept(this);
         for (const directive of node.directives) {
-          accept(directive, this);
+          directive.accept(this);
         }
         for (const child of node.children) {
-          accept(child, this);
+          child.accept(this);
         }
         this.onVisitDomainDefinition(node, scope);
       }
@@ -465,12 +379,12 @@ export abstract class DocumentVisitor {
         datasets: {},
       },
       (scope) => {
-        accept(node.extends, this);
+        node.extends.accept(this);
         for (const directive of node.directives) {
-          accept(directive, this);
+          directive.accept(this);
         }
         for (const child of node.children) {
-          accept(child, this);
+          child.accept(this);
         }
         this.onVisitDomainExtension(node, scope);
       }
@@ -509,7 +423,7 @@ export abstract class DocumentVisitor {
   visitIdentifierList(node: IdentifierList) {
     this.inScope({ type: "identifier-list", parent: null }, (scope) => {
       for (const identifier of node.identifiers) {
-        accept(identifier, this);
+        identifier.accept(this);
       }
       this.onVisitIdentifierList(node, scope);
     });
@@ -526,9 +440,9 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "interface", parent: this.scope, columns: [] },
       (scope) => {
-        accept(node.name, this);
+        node.name.accept(this);
         for (const column of node.columns) {
-          accept(column, this);
+          column.accept(this);
         }
         this.onVisitInterfaceDefinition(node, scope);
       }
@@ -543,8 +457,8 @@ export abstract class DocumentVisitor {
   visitKeyValuePair(node: KeyValuePair) {
     assert(isParentOf("key-value", this.scope));
     this.inScope({ type: "key-value", parent: this.scope }, (scope) => {
-      accept(node.lhs, this);
-      accept(node.rhs, this);
+      node.lhs.accept(this);
+      node.rhs.accept(this);
       this.onVisitKeyValuePair(node, scope);
     });
   }
@@ -557,9 +471,9 @@ export abstract class DocumentVisitor {
   visitMilestoneDefinition(node: MilestoneDefinition) {
     assert(isParentOf("milestone", this.scope));
     this.inScope({ type: "milestone", parent: this.scope, kv: {} }, (scope) => {
-      accept(node.name, this);
+      node.name.accept(this);
       for (const child of node.children) {
-        accept(child, this);
+        child.accept(this);
       }
       this.onVisitMilestoneDefinition(node, scope);
     });
@@ -573,7 +487,7 @@ export abstract class DocumentVisitor {
   visitNegativeWindow(node: NegativeWindow) {
     assert(isParentOf("negative-window", this.scope));
     this.inScope({ type: "negative-window", parent: this.scope }, (scope) => {
-      accept(node.days, this);
+      node.days.accept(this);
       this.onVisitNegativeWindow(node, scope);
     });
   }
@@ -584,7 +498,7 @@ export abstract class DocumentVisitor {
     assert(isParentOf("path", this.scope));
     this.inScope({ type: "path", parent: this.scope }, (scope) => {
       for (const part of node.parts) {
-        accept(part, this);
+        part.accept(this);
       }
       this.onVisitPath(node, scope);
     });
@@ -599,7 +513,7 @@ export abstract class DocumentVisitor {
     assert(isParentOf("path-list", this.scope));
     this.inScope({ type: "path-list", parent: this.scope }, (scope) => {
       for (const path of node.paths) {
-        accept(path, this);
+        path.accept(this);
       }
       this.onVisitPathList(node, scope);
     });
@@ -613,7 +527,7 @@ export abstract class DocumentVisitor {
   visitPositiveWindow(node: PositiveWindow) {
     assert(isParentOf("positive-window", this.scope));
     this.inScope({ type: "positive-window", parent: this.scope }, (scope) => {
-      accept(node.days, this);
+      node.days.accept(this);
       this.onVisitPositiveWindow(node, scope);
     });
   }
@@ -647,9 +561,9 @@ export abstract class DocumentVisitor {
   visitStudyDay(node: StudyDay) {
     assert(isParentOf("study-day", this.scope));
     this.inScope({ type: "study-day", parent: this.scope }, (scope) => {
-      accept(node.day, this);
+      node.day.accept(this);
       if (node.window) {
-        accept(node.window, this);
+        node.window.accept(this);
       }
       this.onVisitStudyDay(node, scope);
     });
@@ -664,7 +578,7 @@ export abstract class DocumentVisitor {
     assert(isParentOf("study", this.scope));
     this.inScope({ type: "study", parent: this.scope, kv: {} }, (scope) => {
       for (const child of node.children) {
-        accept(child, this);
+        child.accept(this);
       }
       this.onVisitStudyDefinition(node, scope);
     });
@@ -678,8 +592,8 @@ export abstract class DocumentVisitor {
   visitTimeExpression(node: TimeExpression) {
     assert(isParentOf("time-expression", this.scope));
     this.inScope({ type: "time-expression", parent: this.scope }, (scope) => {
-      accept(node.rhs, this);
-      accept(node.operator, this);
+      node.rhs.accept(this);
+      node.operator.accept(this);
       this.onVisitTimeExpression(node, scope);
     });
   }
@@ -693,10 +607,10 @@ export abstract class DocumentVisitor {
     assert(isParentOf("time-list", this.scope));
     this.inScope({ type: "time-list", parent: this.scope }, (scope) => {
       for (const item of node.items) {
-        accept(item, this);
+        item.accept(this);
       }
       for (const hour of node.at ?? []) {
-        accept(hour, this);
+        hour.accept(this);
       }
       this.onVisitTimeList(node, scope);
     });
@@ -722,8 +636,8 @@ export abstract class DocumentVisitor {
   visitTimeRange(node: TimeRange) {
     assert(isParentOf("time-range", this.scope));
     this.inScope({ type: "time-range", parent: this.scope }, (scope) => {
-      accept(node.start, this);
-      accept(node.end, this);
+      node.start.accept(this);
+      node.end.accept(this);
       this.onVisitTimeRange(node, scope);
     });
   }
@@ -736,7 +650,7 @@ export abstract class DocumentVisitor {
   visitTimeconf(node: Timeconf) {
     assert(isParentOf("timeconf", this.scope));
     this.inScope({ type: "timeconf", parent: this.scope }, (scope) => {
-      accept(node.value, this);
+      node.value.accept(this);
       this.onVisitTimeconf(node, scope);
     });
   }
@@ -750,7 +664,7 @@ export abstract class DocumentVisitor {
     assert(isParentOf("type-expression", this.scope));
     this.inScope({ type: "type-expression", parent: this.scope }, (scope) => {
       for (const member of node.members) {
-        accept(member, this);
+        member.accept(this);
       }
       this.onVisitTypeExpression(node, scope);
     });
@@ -766,7 +680,7 @@ export abstract class DocumentVisitor {
     this.inScope(
       { type: "type-expression-member", parent: this.scope },
       (scope) => {
-        accept(node.value, this);
+        node.value.accept(this);
         this.onVisitTypeExpressionMember(node, scope);
       }
     );
@@ -780,8 +694,8 @@ export abstract class DocumentVisitor {
   visitVariableMapping(node: VariableMapping) {
     assert(isParentOf("variable-mapping", this.scope));
     this.inScope({ type: "variable-mapping", parent: this.scope }, (scope) => {
-      accept(node.variable, this);
-      accept(node.values, this);
+      node.variable.accept(this);
+      node.values.accept(this);
       this.onVisitVariableMapping(node, scope);
     });
   }
@@ -792,7 +706,7 @@ export abstract class DocumentVisitor {
     assert(isParentOf("window", this.scope));
     this.inScope({ type: "window", parent: this.scope }, (scope) => {
       for (const window of node.window) {
-        accept(window, this);
+        window.accept(this);
       }
       this.onVisitWindow(node, scope);
     });
@@ -807,7 +721,7 @@ export abstract class DocumentVisitor {
     assert(this.scope === null);
     this.inScope({ type: "document", parent: this.scope }, (scope) => {
       for (const child of node.children) {
-        accept(child, this);
+        child.accept(this);
       }
       this.onVisitDocument(node, scope);
     });

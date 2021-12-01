@@ -15,8 +15,6 @@ import {
   DatasetDefinition,
   Directive,
   DomainDefinition,
-  Identifier,
-  InterfaceDefinition,
   KeyValuePair,
   MilestoneDefinition,
   String,
@@ -37,7 +35,7 @@ import {
   StringScope,
   StudyScope,
 } from "./scope";
-import { accept, DocumentVisitor } from "./visitor";
+import { DocumentVisitor } from "./visitor";
 
 class KeyValuePairAccessor {
   private valuesByKey: { [key: string]: Value };

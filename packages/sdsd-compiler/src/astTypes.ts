@@ -1,3 +1,5 @@
+import { DocumentVisitor } from "./compiler/visitor";
+
 export type NodeType =
   | "args"
   | "both-window"
@@ -83,6 +85,7 @@ export type Node =
 interface NodeBase<T extends NodeType> {
   type: T;
   loc: Loc;
+  accept(visitor: DocumentVisitor): void;
 }
 
 export interface DocumentPosition {
