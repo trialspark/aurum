@@ -1,5 +1,6 @@
 import { CodelistItem, Dataset, DatasetColumn } from ".";
-import { ColumnType } from "..";
+import { ColumnType, MilestoneWindow } from "..";
+import { TimeExpression } from "../astTypes";
 
 interface BaseScope<Type extends string, Parent extends Scope | null> {
   type: Type;
@@ -93,19 +94,49 @@ export interface ArgsScope
     WithArgs {}
 
 export interface KeyValueScope
-  extends BaseScope<"key-value", StudyScope | MilestoneScope> {}
+  extends BaseScope<"key-value", StudyScope | MilestoneScope> {
+  key: string;
+  value: ParsedValue;
+}
 
 export interface KeyScope extends BaseScope<"key", KeyValueScope> {
   key: string;
 }
 
+export interface ParsedTimeList {
+  type: "time-list";
+  members: ParsedTimeListMember[];
+}
+
+export interface ParsedTimeExpression {
+  type: "time-expression";
+  operator: TimeExpression["operator"]["value"];
+  rhs: ParsedTimeListMember;
+}
+
+export type ParsedTimeconf = ParsedTimeList | ParsedTimeExpression;
+
 export interface TimeconfScope
-  extends BaseScope<"timeconf", KeyValueScope | ArgsScope> {}
+  extends BaseScope<"timeconf", KeyValueScope | ArgsScope> {
+  result: ParsedTimeconf | null;
+}
 
-export interface TimeListScope extends BaseScope<"time-list", TimeconfScope> {}
+export interface ParsedStudyDay {
+  type: "study-day";
+  day: number;
+  window: MilestoneWindow;
+}
 
-export interface TimeListMemberScope
-  extends BaseScope<"time-list-member", TimeListScope> {}
+export interface ParsedMilestoneIdentifier {
+  type: "milestone-identifier";
+  value: string;
+}
+
+export type ParsedTimeListMember = ParsedStudyDay | ParsedMilestoneIdentifier;
+
+export interface TimeListScope extends BaseScope<"time-list", TimeconfScope> {
+  members: ParsedTimeListMember[];
+}
 
 export interface TimeRangeScope
   extends BaseScope<
@@ -114,15 +145,22 @@ export interface TimeRangeScope
   > {}
 
 export interface TimeExpressionScope
-  extends BaseScope<"time-expression", TimeconfScope> {}
+  extends BaseScope<"time-expression", TimeconfScope> {
+  rhs: ParsedTimeListMember;
+}
 
 export interface StudyDayScope
   extends BaseScope<
     "study-day",
     TimeExpressionScope | TimeRangeScope | TimeListScope
-  > {}
+  > {
+  window: MilestoneWindow;
+}
 
-export interface WindowScope extends BaseScope<"window", StudyDayScope> {}
+export interface WindowScope extends BaseScope<"window", StudyDayScope> {
+  before: number;
+  after: number;
+}
 
 export interface BothWindowScope
   extends BaseScope<"both-window", WindowScope> {}
@@ -231,7 +269,7 @@ export interface TypeExpressionMemberScope
 
 export type KeyValuePairs = { [key: string]: ParsedValue };
 export type DirectiveMap = { [name: string]: ParsedDirective };
-export type ParsedValue = string;
+export type ParsedValue = string | ParsedTimeconf;
 
 export type Scope =
   | ArgsScope
@@ -266,7 +304,6 @@ export type Scope =
   | StudyDayScope
   | StudyScope
   | TimeExpressionScope
-  | TimeListMemberScope
   | TimeListScope
   | TimeOperatorScope
   | TimeRangeScope
@@ -317,7 +354,6 @@ const parentTypes: {
   },
   "time-expression": { timeconf: null },
   "time-list": { timeconf: null },
-  "time-list-member": { "time-list": null },
   "time-operator": { "time-expression": null },
   "time-range": {
     "time-expression": null,

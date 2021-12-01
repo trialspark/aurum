@@ -1,95 +1,56 @@
 import assert from "assert";
-import {
-  AbsoluteMilestone,
-  CodelistItem,
-  Dataset,
-  DatasetColumn,
-  Domain,
-  Milestone,
-} from ".";
+import { Milestone } from ".";
 import {
   Args,
+  BothWindow,
   CodelistDefinition,
   CodelistMember,
   ColumnDefinition,
   DatasetDefinition,
   Directive,
   DomainDefinition,
+  Identifier,
   KeyValuePair,
   MilestoneDefinition,
+  NegativeWindow,
+  PositiveWindow,
   String,
   StudyDay,
   StudyDefinition,
+  Timeconf,
+  TimeExpression,
+  TimeList,
   TypeExpression,
   TypeExpressionMember,
   Value,
+  Window,
 } from "../astTypes";
 import { CodelistDef, File, NamedDefMap } from "./defBuilder";
 import {
   ArgsScope,
+  BothWindowScope,
   CodelistMemberScope,
   CodelistScope,
   ColumnScope,
   DatasetScope,
   DirectiveScope,
   DomainScope,
+  IdentifierScope,
   KeyValueScope,
+  MilestoneScope,
+  NegativeWindowScope,
+  PositiveWindowScope,
   StringScope,
+  StudyDayScope,
   StudyScope,
+  TimeconfScope,
+  TimeExpressionScope,
+  TimeListScope,
   TypeExpressionMemberScope,
   TypeExpressionScope,
+  WindowScope,
 } from "./scope";
 import { DocumentVisitor } from "./visitor";
-
-class KeyValuePairAccessor {
-  private valuesByKey: { [key: string]: Value };
-
-  constructor(pairs: KeyValuePair[]) {
-    this.valuesByKey = Object.fromEntries(
-      pairs.map((pair) => [pair.lhs.value, pair.rhs])
-    );
-  }
-
-  get(key: string): Value | null;
-  get(keys: string[]): (Value | null)[];
-  get(key: string | string[]): (Value | null) | (Value | null)[] {
-    if (typeof key === "string") {
-      return this.valuesByKey[key] ?? null;
-    }
-
-    return key.map((key) => this.get(key));
-  }
-}
-
-const milestoneFromStudyDay = (
-  name: string | null,
-  day: StudyDay
-): AbsoluteMilestone => {
-  const milestone: Milestone = {
-    name,
-    type: "absolute",
-    day: day.day.value,
-    window: {
-      before: 0,
-      after: 0,
-    },
-  };
-
-  for (const window of day.window?.window ?? []) {
-    if (window.type === "negative-window") {
-      milestone.window.before = window.days.value * -1;
-    }
-    if (window.type === "positive-window") {
-      milestone.window.after = window.days.value;
-    }
-    if (window.type === "both-window") {
-      milestone.window.before = window.days.value * -1;
-      milestone.window.after = window.days.value;
-    }
-  }
-
-  return milestone;
-};
 
 export class ConfigBuilder extends DocumentVisitor {
   constructor(
@@ -100,33 +61,38 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   onVisitStudyDefinition(_: StudyDefinition, scope: StudyScope) {
+    assert(typeof scope.kv.id === "string");
+    assert(typeof scope.kv.name === "string");
+
     this.file.result.study = {
       id: scope.kv.id,
       name: scope.kv.name,
     };
   }
 
-  onVisitMilestoneDefinition(node: MilestoneDefinition) {
-    const attributes = new KeyValuePairAccessor(node.children);
-    const at = attributes.get("at");
-
-    assert(at?.type === "timeconf");
-    const value = at.value;
+  onVisitMilestoneDefinition(node: MilestoneDefinition, scope: MilestoneScope) {
+    const at = scope.kv.at;
+    assert(typeof at !== "string");
 
     if (!this.file.result.milestones) {
       this.file.result.milestones = {};
     }
 
     const milestone: Milestone = (() => {
-      switch (value.type) {
+      switch (at.type) {
         case "time-list": {
-          const [day] = value.items;
+          const [day] = at.members;
           assert(day.type === "study-day");
 
-          return milestoneFromStudyDay(node.name.value, day);
+          return {
+            type: "absolute",
+            name: node.name.value,
+            day: day.day,
+            window: day.window,
+          } as const;
         }
 
-        case "time-expression":
+        case "time-expression": {
           return {
             name: node.name.value,
             type: "relative",
@@ -137,20 +103,25 @@ export class ConfigBuilder extends DocumentVisitor {
                 "<=": "before/on",
                 ">=": "after/on",
               } as const
-            )[value.operator.value],
+            )[at.operator],
             relativeTo: (() => {
-              const { rhs } = value;
-              switch (rhs.type) {
+              switch (at.rhs.type) {
                 case "study-day":
                   return {
                     type: "anonymous",
-                    milestone: milestoneFromStudyDay(null, rhs),
+                    milestone: {
+                      name: null,
+                      type: "absolute",
+                      day: at.rhs.day,
+                      window: at.rhs.window,
+                    },
                   } as const;
-                case "identifier":
-                  return { type: "reference", name: rhs.value } as const;
+                case "milestone-identifier":
+                  return { type: "reference", name: at.rhs.value } as const;
               }
             })(),
           } as const;
+        }
       }
     })();
 
@@ -168,6 +139,7 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   onVisitCodelistMember(node: CodelistMember, scope: CodelistMemberScope) {
+    assert(typeof scope.directives.desc.args[0] === "string");
     scope.parent.items.push({
       value: node.name.value,
       description: scope.directives.desc.args[0],
@@ -176,6 +148,7 @@ export class ConfigBuilder extends DocumentVisitor {
 
   onVisitDomainDefinition(node: DomainDefinition, scope: DomainScope) {
     const domains = this.file.result.domains || (this.file.result.domains = {});
+    assert(typeof scope.directives.abbr.args[0] === "string");
     domains[node.name.value] = {
       name: node.name.value,
       datasets: scope.datasets,
@@ -191,6 +164,8 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   onVisitColumnDefinition(node: ColumnDefinition, scope: ColumnScope) {
+    assert(typeof scope.directives.label.args[0] === "string");
+    assert(typeof scope.directives.desc.args[0] === "string");
     scope.parent.columns.push({
       name: node.columnName.value,
       label: scope.directives.label.args[0],
@@ -210,23 +185,34 @@ export class ConfigBuilder extends DocumentVisitor {
     scope.parent.args = scope.args;
   }
 
-  onVisitKeyValuePair(node: KeyValuePair, scope: KeyValueScope) {
-    if (node.rhs.type === "string") {
-      scope.parent.kv[node.lhs.value] = node.rhs.value;
-    }
+  onVisitKeyValuePair(_: KeyValuePair, scope: KeyValueScope) {
+    scope.parent.kv[scope.key] = scope.value;
   }
 
   onVisitString(node: String, scope: StringScope) {
     if (scope.parent.type === "args") {
       scope.parent.args.push(node.value);
     }
+    if (scope.parent.type === "key-value") {
+      scope.parent.value = node.value;
+    }
   }
 
-  onVisitIdentifier() {}
+  onVisitIdentifier(node: Identifier, scope: IdentifierScope) {
+    if (scope.parent.type === "key-value") {
+      scope.parent.key = node.value;
+    }
+    if (scope.parent.type === "time-expression") {
+      scope.parent.rhs = { type: "milestone-identifier", value: node.value };
+    }
+  }
 
   onVisitInterfaceDefinition() {}
 
-  onVisitBothWindow() {}
+  onVisitBothWindow(node: BothWindow, scope: BothWindowScope) {
+    scope.parent.before = node.days.value * -1;
+    scope.parent.after = node.days.value;
+  }
 
   onVisitCodelistExtension() {}
 
@@ -248,27 +234,51 @@ export class ConfigBuilder extends DocumentVisitor {
 
   onVisitIdentifierList() {}
 
-  onVisitNegativeWindow() {}
+  onVisitNegativeWindow(node: NegativeWindow, scope: NegativeWindowScope) {
+    scope.parent.before = node.days.value * -1;
+  }
 
   onVisitPath() {}
 
   onVisitPathList() {}
 
-  onVisitPositiveWindow() {}
+  onVisitPositiveWindow(node: PositiveWindow, scope: PositiveWindowScope) {
+    scope.parent.after = node.days.value;
+  }
 
   onVisitSourceCode() {}
 
-  onVisitStudyDay() {}
+  onVisitStudyDay(node: StudyDay, scope: StudyDayScope) {
+    if (scope.parent.type === "time-list") {
+      scope.parent.members.push({
+        type: "study-day",
+        day: node.day.value,
+        window: scope.window,
+      });
+    }
+  }
 
-  onVisitTimeExpression() {}
+  onVisitTimeExpression(node: TimeExpression, scope: TimeExpressionScope) {
+    scope.parent.result = {
+      type: "time-expression",
+      operator: node.operator.value,
+      rhs: scope.rhs,
+    };
+  }
 
-  onVisitTimeList() {}
+  onVisitTimeList(_: TimeList, scope: TimeListScope) {
+    scope.parent.result = { type: "time-list", members: scope.members };
+  }
 
   onVisitTimeOperator() {}
 
   onVisitTimeRange() {}
 
-  onVisitTimeconf() {}
+  onVisitTimeconf(_: Timeconf, scope: TimeconfScope) {
+    if (scope.parent.type === "key-value") {
+      scope.parent.value = scope.result ?? { type: "time-list", members: [] };
+    }
+  }
 
   onVisitTypeExpression(_: TypeExpression, scope: TypeExpressionScope) {
     scope.parent.types = scope.types;
@@ -293,7 +303,10 @@ export class ConfigBuilder extends DocumentVisitor {
 
   onVisitVariableMapping() {}
 
-  onVisitWindow() {}
+  onVisitWindow(_: Window, scope: WindowScope) {
+    scope.parent.window.before = scope.before;
+    scope.parent.window.after = scope.after;
+  }
 
   getFile(): File {
     this.visit(this.file.ast);

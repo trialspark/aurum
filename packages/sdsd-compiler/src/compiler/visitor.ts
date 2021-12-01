@@ -456,11 +456,14 @@ export abstract class DocumentVisitor {
 
   visitKeyValuePair(node: KeyValuePair) {
     assert(isParentOf("key-value", this.scope));
-    this.inScope({ type: "key-value", parent: this.scope }, (scope) => {
-      node.lhs.accept(this);
-      node.rhs.accept(this);
-      this.onVisitKeyValuePair(node, scope);
-    });
+    this.inScope(
+      { type: "key-value", parent: this.scope, key: "", value: "" },
+      (scope) => {
+        node.lhs.accept(this);
+        node.rhs.accept(this);
+        this.onVisitKeyValuePair(node, scope);
+      }
+    );
   }
 
   protected abstract onVisitMilestoneDefinition(
@@ -560,13 +563,20 @@ export abstract class DocumentVisitor {
 
   visitStudyDay(node: StudyDay) {
     assert(isParentOf("study-day", this.scope));
-    this.inScope({ type: "study-day", parent: this.scope }, (scope) => {
-      node.day.accept(this);
-      if (node.window) {
-        node.window.accept(this);
+    this.inScope(
+      {
+        type: "study-day",
+        parent: this.scope,
+        window: { before: 0, after: 0 },
+      },
+      (scope) => {
+        node.day.accept(this);
+        if (node.window) {
+          node.window.accept(this);
+        }
+        this.onVisitStudyDay(node, scope);
       }
-      this.onVisitStudyDay(node, scope);
-    });
+    );
   }
 
   protected abstract onVisitStudyDefinition(
@@ -591,11 +601,18 @@ export abstract class DocumentVisitor {
 
   visitTimeExpression(node: TimeExpression) {
     assert(isParentOf("time-expression", this.scope));
-    this.inScope({ type: "time-expression", parent: this.scope }, (scope) => {
-      node.rhs.accept(this);
-      node.operator.accept(this);
-      this.onVisitTimeExpression(node, scope);
-    });
+    this.inScope(
+      {
+        type: "time-expression",
+        parent: this.scope,
+        rhs: { type: "study-day", day: 0, window: { before: 0, after: 0 } },
+      },
+      (scope) => {
+        node.rhs.accept(this);
+        node.operator.accept(this);
+        this.onVisitTimeExpression(node, scope);
+      }
+    );
   }
 
   protected abstract onVisitTimeList(
@@ -605,15 +622,18 @@ export abstract class DocumentVisitor {
 
   visitTimeList(node: TimeList) {
     assert(isParentOf("time-list", this.scope));
-    this.inScope({ type: "time-list", parent: this.scope }, (scope) => {
-      for (const item of node.items) {
-        item.accept(this);
+    this.inScope(
+      { type: "time-list", parent: this.scope, members: [] },
+      (scope) => {
+        for (const item of node.items) {
+          item.accept(this);
+        }
+        for (const hour of node.at ?? []) {
+          hour.accept(this);
+        }
+        this.onVisitTimeList(node, scope);
       }
-      for (const hour of node.at ?? []) {
-        hour.accept(this);
-      }
-      this.onVisitTimeList(node, scope);
-    });
+    );
   }
 
   protected abstract onVisitTimeOperator(
@@ -649,10 +669,13 @@ export abstract class DocumentVisitor {
 
   visitTimeconf(node: Timeconf) {
     assert(isParentOf("timeconf", this.scope));
-    this.inScope({ type: "timeconf", parent: this.scope }, (scope) => {
-      node.value.accept(this);
-      this.onVisitTimeconf(node, scope);
-    });
+    this.inScope(
+      { type: "timeconf", parent: this.scope, result: null },
+      (scope) => {
+        node.value.accept(this);
+        this.onVisitTimeconf(node, scope);
+      }
+    );
   }
 
   protected abstract onVisitTypeExpression(
@@ -707,12 +730,15 @@ export abstract class DocumentVisitor {
 
   visitWindow(node: Window) {
     assert(isParentOf("window", this.scope));
-    this.inScope({ type: "window", parent: this.scope }, (scope) => {
-      for (const window of node.window) {
-        window.accept(this);
+    this.inScope(
+      { type: "window", parent: this.scope, before: 0, after: 0 },
+      (scope) => {
+        for (const window of node.window) {
+          window.accept(this);
+        }
+        this.onVisitWindow(node, scope);
       }
-      this.onVisitWindow(node, scope);
-    });
+    );
   }
 
   protected abstract onVisitDocument(
