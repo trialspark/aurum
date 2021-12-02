@@ -209,7 +209,7 @@ describe("Compiler", () => {
                                                     @desc("Describes why a measurement or test was not performed.")
                     }
                     
-                    dataset vs_hr implements base @milestone(t"BASELINE -> CLOSEOUT at h8, h15, h19") {
+                    dataset vs_hr implements base @milestone(t"BASELINE -> CLINIC_3 at h8, h15, h19") {
                       VISITDY Integer               @milestone.day
                                                     @label("Study Day")
                                                     @desc("Study day based upon RFSTDTC in Demographics.")

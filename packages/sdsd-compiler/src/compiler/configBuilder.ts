@@ -1,4 +1,5 @@
 import assert from "assert";
+import { range } from "lodash";
 import {
   CodelistItem,
   ColumnType,
@@ -7,7 +8,6 @@ import {
   DatasetMilestone,
   Milestone,
   RelativeMilestone,
-  StudyInfo,
 } from ".";
 import {
   Args,
@@ -18,6 +18,7 @@ import {
   DatasetDefinition,
   Directive,
   DomainDefinition,
+  HourExpression,
   Identifier,
   KeyValuePair,
   MilestoneDefinition,
@@ -33,10 +34,8 @@ import {
   TimeValue,
   TypeExpression,
   TypeExpressionMember,
-  Value,
   Window,
 } from "../astTypes";
-import { setFirst, unreachable } from "../utils";
 import { CodelistDef, File, NamedDefMap } from "./defBuilder";
 import { DocumentVisitor } from "./visitor";
 
@@ -58,7 +57,8 @@ interface TimeExpressionValue {
 
 interface TimeListValue {
   type: "time-list";
-  items: ParsedTimeValue[];
+  days: ParsedTimeValue[];
+  hours: ParsedHourValue[] | null;
 }
 
 interface StudyDayValue {
@@ -86,6 +86,10 @@ interface TimeRangeValue {
 interface ParsedDirective {
   name: string;
   args: ParsedValue[];
+}
+
+interface ParsedHourValue {
+  hour: number;
 }
 
 type ParsedTimeValue =
@@ -146,7 +150,7 @@ export class ConfigBuilder extends DocumentVisitor {
     const milestone = ((): Milestone => {
       switch (timeconf.type) {
         case "time-list": {
-          const [expression] = timeconf.items;
+          const [expression] = timeconf.days;
           assert(expression.type === "study-day");
 
           return {
@@ -227,6 +231,56 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
+  private getDatasetMilestonesFromTimeValue(
+    dayValue: ParsedTimeValue,
+    milestones: NamedDefMap<Milestone>
+  ): Omit<DatasetMilestone, "hour">[] {
+    switch (dayValue.type) {
+      case "study-day":
+        return [
+          {
+            name: null,
+            day: dayValue.day,
+          },
+        ];
+      case "milestone-identifier": {
+        const milestone = milestones[dayValue.milestoneName] as
+          | Milestone
+          | undefined;
+
+        return [
+          {
+            name: milestone?.name ?? null,
+            day: milestone?.type === "absolute" ? milestone.day : null,
+          },
+        ];
+      }
+      case "time-range": {
+        const { start, end } = dayValue;
+        const startMilestones = this.getDatasetMilestonesFromTimeValue(
+          start,
+          milestones
+        );
+        const endMilestones = this.getDatasetMilestonesFromTimeValue(
+          end,
+          milestones
+        );
+        const startDay =
+          Math.max(...startMilestones.map((milestone) => milestone.day ?? 0)) +
+          1;
+        const endDay =
+          Math.min(...endMilestones.map((milestone) => milestone.day ?? 0)) - 1;
+        const daysInBetween = range(startDay, endDay + 1);
+
+        return [
+          ...startMilestones,
+          ...daysInBetween.map((day) => ({ day, name: null, hour: null })),
+          ...endMilestones,
+        ];
+      }
+    }
+  }
+
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
     const {
       milestone: {
@@ -240,32 +294,19 @@ export class ConfigBuilder extends DocumentVisitor {
     return {
       name: node.name.accept(this).value,
       columns: node.columns.map((column) => column.accept(this)),
-      milestones: timelist.items.flatMap(
-        (item): DatasetMilestone | DatasetMilestone[] => {
-          switch (item.type) {
-            case "study-day":
-              return {
-                name: null,
-                day: item.day,
-                hour: 0,
-              };
-            case "milestone-identifier": {
-              const milestone = milestones[item.milestoneName] as
-                | Milestone
-                | undefined;
-
-              return {
-                name: milestone?.name ?? null,
-                day: milestone?.type === "absolute" ? milestone.day : null,
+      milestones: timelist.days
+        .flatMap((item) =>
+          this.getDatasetMilestonesFromTimeValue(item, milestones)
+        )
+        .flatMap(
+          (data): DatasetMilestone[] =>
+            timelist.hours?.map(({ hour }) => ({ ...data, hour })) ?? [
+              {
+                ...data,
                 hour: null,
-              };
-            }
-            case "time-range": {
-              return [];
-            }
-          }
-        }
-      ),
+              },
+            ]
+        ),
     };
   }
 
@@ -371,20 +412,17 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
+  visitHourExpression(node: HourExpression): ParsedHourValue {
+    return {
+      hour: node.value,
+    };
+  }
+
   visitTimeList(node: TimeList): TimeListValue {
     return {
       type: "time-list",
-      items: node.items.map((item): ParsedTimeValue => {
-        switch (item.type) {
-          case "identifier":
-            return {
-              type: "milestone-identifier",
-              milestoneName: item.accept(this).value,
-            };
-          default:
-            return item.accept(this);
-        }
-      }),
+      hours: node.at?.map((hour) => hour.accept(this)) ?? null,
+      days: node.items.map((item) => this.parseTimeValue(item)),
     };
   }
 
