@@ -98,6 +98,61 @@ Object {
         "vs": Object {
           "columns": Array [
             Object {
+              "description": "Identifier used to uniquely identify a subject across all studies.",
+              "label": "Unique Subject Identifier",
+              "name": "USUBJID",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+              ],
+            },
+            Object {
+              "description": "Subject identifier, which is unique within the study.",
+              "label": "Subject Identifier for the Study",
+              "name": "SUBJID",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+              ],
+            },
+            Object {
+              "description": "Clinical encounter number.",
+              "label": "Visit Number",
+              "name": "VISITNUM",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+              ],
+            },
+            Object {
+              "description": "Protocol-defined description of clinical encounter.",
+              "label": "Visit Name",
+              "name": "VISIT",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+              ],
+            },
+            Object {
+              "description": "Planned study day of the visit based upon RFSTDTC in Demographics.",
+              "label": "Planned Study Day of Visit",
+              "name": "VISITDY",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "Integer",
+                },
+              ],
+            },
+            Object {
               "description": "Sequence number given to ensure uniqueness of subject records within a domain.",
               "label": "Sequence Number",
               "name": "VSSEQ",
@@ -275,6 +330,28 @@ Object {
         },
         "vs_hr": Object {
           "columns": Array [
+            Object {
+              "description": "Identifier used to uniquely identify a subject across all studies.",
+              "label": "Unique Subject Identifier",
+              "name": "USUBJID",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+              ],
+            },
+            Object {
+              "description": "Subject identifier, which is unique within the study.",
+              "label": "Subject Identifier for the Study",
+              "name": "SUBJID",
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+              ],
+            },
             Object {
               "description": "Study day based upon RFSTDTC in Demographics.",
               "label": "Study Day",

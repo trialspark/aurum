@@ -21,9 +21,12 @@ import {
   DomainDefinition,
   HourExpression,
   Identifier,
+  InterfaceDefinition,
   KeyValuePair,
   MilestoneDefinition,
   NegativeWindow,
+  Path,
+  PathList,
   PositiveWindow,
   String,
   StudyDay,
@@ -37,7 +40,7 @@ import {
   TypeExpressionMember,
   Window,
 } from "../astTypes";
-import { CodelistDef, File, NamedDefMap } from "./defBuilder";
+import { CodelistDef, File, InterfaceDef, NamedDefMap } from "./defBuilder";
 import { DocumentVisitor } from "./visitor";
 
 interface StringValue {
@@ -102,11 +105,17 @@ type ParsedTimeconfValue = TimeExpressionValue | TimeListValue;
 
 type ParsedValue = StringValue | ParsedTimeconfValue;
 
+interface PathValue {
+  path: string;
+  parts: IdentifierValue[];
+}
+
 export class ConfigBuilder extends DocumentVisitor {
   constructor(
     private file: File,
     private accessors: {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getInterfaceDefs: () => NamedDefMap<InterfaceDef>;
       getMilestones: () => NamedDefMap<Milestone>;
     }
   ) {
@@ -265,6 +274,17 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
+  visitInterfaceDefinition(node: InterfaceDefinition) {
+    const iface: InterfaceDef = {
+      name: node.name.accept(this).value,
+      ast: node,
+      file: this.file,
+      columns: node.columns.map((column) => column.accept(this)),
+    };
+
+    this.file.interfaceDefs[iface.name] = iface;
+  }
+
   visitDomainDefinition(node: DomainDefinition) {
     const domains = this.file.result.domains || (this.file.result.domains = {});
     const { abbr } = this.getDirectives(node.directives);
@@ -285,6 +305,11 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
+    const interfaceDefs = this.accessors.getInterfaceDefs();
+    const interfaceColumns =
+      node.interfaces
+        ?.accept(this)
+        .map(({ path }) => interfaceDefs[path].columns) ?? [];
     const {
       milestone: {
         args: [timelist],
@@ -296,7 +321,10 @@ export class ConfigBuilder extends DocumentVisitor {
 
     return {
       name: node.name.accept(this).value,
-      columns: node.columns.map((column) => column.accept(this)),
+      columns: [
+        ...interfaceColumns.flat(),
+        ...node.columns.map((column) => column.accept(this)),
+      ],
       milestones: timelist.days
         .flatMap((item) =>
           this.getDatasetMilestonesFromTimeValue(item, milestones)
@@ -373,8 +401,23 @@ export class ConfigBuilder extends DocumentVisitor {
     return types;
   }
 
+  visitIdentifier(node: Identifier): IdentifierValue {
+    return { type: "identifier", value: node.value };
+  }
+
+  visitPath(node: Path): PathValue {
+    return {
+      path: node.value,
+      parts: node.parts.map((part) => part.accept(this)),
+    };
+  }
+
   visitArgs(node: Args): ParsedValue[] {
     return node.args.map((arg) => arg.accept(this));
+  }
+
+  visitPathList(node: PathList): PathValue[] {
+    return node.paths.map((path) => path.accept(this));
   }
 
   visitKeyValuePair(node: KeyValuePair): [string, ParsedValue] {
@@ -382,10 +425,6 @@ export class ConfigBuilder extends DocumentVisitor {
     const value = node.rhs.accept(this);
 
     return [key.value, value];
-  }
-
-  visitString(node: String): StringValue {
-    return { type: "string", value: node.value };
   }
 
   visitTimeconf(node: Timeconf): ParsedTimeconfValue {
@@ -469,8 +508,8 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
-  visitIdentifier(node: Identifier): IdentifierValue {
-    return { type: "identifier", value: node.value };
+  visitString(node: String): StringValue {
+    return { type: "string", value: node.value };
   }
 
   getFile(): File {

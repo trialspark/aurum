@@ -14,6 +14,7 @@ import {
   CodelistDef,
   DefBuilder,
   File,
+  InterfaceDef,
   NamedDefMap,
   StudyDef,
 } from "./defBuilder";
@@ -48,6 +49,14 @@ export class Compiler {
     return Object.fromEntries(
       Object.values(this.files)
         .map((file) => Object.entries(file.codelistDefs))
+        .flat()
+    );
+  }
+
+  private get interfaceDefs(): NamedDefMap<InterfaceDef> {
+    return Object.fromEntries(
+      Object.values(this.files)
+        .map((file) => Object.entries(file.interfaceDefs))
         .flat()
     );
   }
@@ -121,6 +130,7 @@ export class Compiler {
         }).getFile(),
         {
           getCodelistDefs: () => this.codelistDefs,
+          getInterfaceDefs: () => this.interfaceDefs,
           getMilestones: () => this.result.milestones,
         }
       ).getFile();

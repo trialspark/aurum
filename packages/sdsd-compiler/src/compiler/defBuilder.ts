@@ -1,4 +1,4 @@
-import { CompilationResult } from ".";
+import { CompilationResult, DatasetColumn } from ".";
 import {
   CodelistDefinition,
   Document,
@@ -18,6 +18,7 @@ export interface InterfaceDef {
   name: string;
   ast: InterfaceDefinition;
   file: File;
+  columns: DatasetColumn[];
 }
 
 export interface MilestoneDef {
