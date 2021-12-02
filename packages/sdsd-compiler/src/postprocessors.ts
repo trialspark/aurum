@@ -107,8 +107,8 @@ export const main = ([topLevelDefs]: [
       start: children[0]?.loc.start ?? { col: 0, line: 0 },
       end: last(children)?.loc.end ?? { col: 0, line: 0 },
     },
-    accept(visitor) {
-      visitor.visit(this);
+    accept(visitor): any {
+      return visitor.visit(this);
     },
   };
 };
@@ -125,8 +125,8 @@ export const studyDefinition = ([study, , KeyValuePairs, closebr]: [
     end: tokenToLoc(closebr).end,
   },
   children: KeyValuePairs,
-  accept(visitor) {
-    visitor.visitStudyDefinition(this);
+  accept(visitor): any {
+    return visitor.visitStudyDefinition(this);
   },
 });
 
@@ -150,8 +150,8 @@ export const milestoneDefinition = ([
   },
   name,
   children: keyValuePairs,
-  accept(visitor) {
-    visitor.visitMilestoneDefinition(this);
+  accept(visitor): any {
+    return visitor.visitMilestoneDefinition(this);
   },
 });
 
@@ -169,8 +169,8 @@ export const interfaceDefinition = ([iface, name, , columns, closebr]: [
   },
   name,
   columns,
-  accept(visitor) {
-    visitor.visitInterfaceDefinition(this);
+  accept(visitor): any {
+    return visitor.visitInterfaceDefinition(this);
   },
 });
 
@@ -188,8 +188,8 @@ export const codelistDefinition = ([codelist, name, , members, closebr]: [
   },
   name,
   members: members,
-  accept(visitor) {
-    visitor.visitCodelistDefinition(this);
+  accept(visitor): any {
+    return visitor.visitCodelistDefinition(this);
   },
 });
 
@@ -205,8 +205,8 @@ export const codelistExtension = ([extend, , path, , members, closebr]: [
   loc: { start: tokenToLoc(extend).start, end: tokenToLoc(closebr).end },
   extends: path,
   members,
-  accept(visitor) {
-    visitor.visitCodelistExtension(this);
+  accept(visitor): any {
+    return visitor.visitCodelistExtension(this);
   },
 });
 
@@ -233,8 +233,8 @@ export const domainDefinition = ([
   name,
   directives,
   children,
-  accept(visitor) {
-    visitor.visitDomainDefinition(this);
+  accept(visitor): any {
+    return visitor.visitDomainDefinition(this);
   },
 });
 
@@ -260,8 +260,8 @@ export const domainExtension = ([
   extends: name,
   directives,
   children,
-  accept(visitor) {
-    visitor.visitDomainExtension(this);
+  accept(visitor): any {
+    return visitor.visitDomainExtension(this);
   },
 });
 
@@ -287,8 +287,8 @@ export const datasetMapping = ([
   dataset,
   columns,
   variables: variables?.[1] ?? [],
-  accept(visitor) {
-    visitor.visitDatasetMapping(this);
+  accept(visitor): any {
+    return visitor.visitDatasetMapping(this);
   },
 });
 
@@ -323,8 +323,8 @@ export const datasetDefinition = ([
   interfaces: interfaces?.[1] ?? null,
   directives,
   columns,
-  accept(visitor) {
-    visitor.visitDatasetDefinition(this);
+  accept(visitor): any {
+    return visitor.visitDatasetDefinition(this);
   },
 });
 
@@ -338,8 +338,8 @@ export const datasetExtension = ([extend, dataset]: [
   interfaces: dataset.interfaces,
   directives: dataset.directives,
   columns: dataset.columns,
-  accept(visitor) {
-    visitor.visitDatasetExtension(this);
+  accept(visitor): any {
+    return visitor.visitDatasetExtension(this);
   },
 });
 
@@ -352,14 +352,14 @@ export const keyValuePair = ([identifier, , string]: [
   loc: { start: identifier.loc.start, end: string.loc.end },
   lhs: identifier,
   rhs: string,
-  accept(visitor) {
-    visitor.visitKeyValuePair(this);
+  accept(visitor): any {
+    return visitor.visitKeyValuePair(this);
   },
 });
 
 export const columnDefinition = ([columnName, columnType, directives]: [
   Identifier,
-  Identifier,
+  TypeExpression,
   Directive[]
 ]): ColumnDefinition => ({
   type: "column-definition",
@@ -370,8 +370,8 @@ export const columnDefinition = ([columnName, columnType, directives]: [
   columnName: columnName,
   columnType,
   directives,
-  accept(visitor) {
-    visitor.visitColumnDefinition(this);
+  accept(visitor): any {
+    return visitor.visitColumnDefinition(this);
   },
 });
 
@@ -386,8 +386,8 @@ export const codelistMember = ([[name], directives]: [
   },
   name,
   directives,
-  accept(visitor) {
-    visitor.visitCodelistMember(this);
+  accept(visitor): any {
+    return visitor.visitCodelistMember(this);
   },
 });
 
@@ -402,8 +402,8 @@ export const variableMapping = ([name, , , args, closeparen]: [
   loc: { start: name.loc.start, end: tokenToLoc(closeparen).end },
   variable: name,
   values: args,
-  accept(visitor) {
-    visitor.visitVariableMapping(this);
+  accept(visitor): any {
+    return visitor.visitVariableMapping(this);
   },
 });
 
@@ -420,8 +420,8 @@ export const columnMapping = ([column, sources, computation]: [
   column,
   sources,
   computation: computation?.[1] ?? null,
-  accept(visitor) {
-    visitor.visitColumnMapping(this);
+  accept(visitor): any {
+    return visitor.visitColumnMapping(this);
   },
 });
 
@@ -436,8 +436,8 @@ export const columnMappingSource = ([from, source, variable, code]: [
   source,
   variable: variable?.[1] ?? null,
   code,
-  accept(visitor) {
-    visitor.visitColumnMappingSource(this);
+  accept(visitor): any {
+    return visitor.visitColumnMappingSource(this);
   },
 });
 
@@ -452,8 +452,8 @@ export const directive = ([directive, optionalArgs]: [
   },
   name: directive.value.slice(1),
   args: optionalArgs?.[1] ?? null,
-  accept(visitor) {
-    visitor.visitDirective(this);
+  accept(visitor): any {
+    return visitor.visitDirective(this);
   },
 });
 
@@ -467,8 +467,8 @@ export const typeExpression = ([firstMembers, lastMember]: [
     type: "type-expression",
     loc: { start: members[0].loc.start, end: last(members)!.loc.end },
     members,
-    accept(visitor) {
-      visitor.visitTypeExpression(this);
+    accept(visitor): any {
+      return visitor.visitTypeExpression(this);
     },
   };
 };
@@ -484,8 +484,8 @@ export const typeExpressionMember = ([identifier, question]: [
   },
   value: identifier,
   optional: !!question,
-  accept(visitor) {
-    visitor.visitTypeExpressionMember(this);
+  accept(visitor): any {
+    return visitor.visitTypeExpressionMember(this);
   },
 });
 
@@ -495,8 +495,8 @@ export const identifier = ([token]: [IdentifierToken]): Identifier => ({
   type: "identifier",
   loc: tokenToLoc(token),
   value: token.toString(),
-  accept(visitor) {
-    visitor.visitIdentifier(this);
+  accept(visitor): any {
+    return visitor.visitIdentifier(this);
   },
 });
 
@@ -511,8 +511,8 @@ export const path = ([first, rest]: [
     loc: { start: identifiers[0].loc.start, end: last(identifiers)!.loc.end },
     value: identifiers.map((identifier) => identifier.value).join("."),
     parts: identifiers,
-    accept(visitor) {
-      visitor.visitPath(this);
+    accept(visitor): any {
+      return visitor.visitPath(this);
     },
   };
 };
@@ -526,8 +526,8 @@ export const sourceCode = ([start, code, end]: [
   loc: { start: tokenToLoc(start).start, end: tokenToLoc(end).end },
   language: start.value.slice(3),
   code: code?.value ?? "",
-  accept(visitor) {
-    visitor.visitSourceCode(this);
+  accept(visitor): any {
+    return visitor.visitSourceCode(this);
   },
 });
 
@@ -545,8 +545,8 @@ export const args = ([nthArgs, lastArgValue, trailingComma]: [
       end: trailingComma ? tokenToLoc(trailingComma).end : last(args)!.loc.end,
     },
     args,
-    accept(visitor) {
-      visitor.visitArgs(this);
+    accept(visitor): any {
+      return visitor.visitArgs(this);
     },
   };
 };
@@ -567,8 +567,8 @@ export const identifierList = ([args, lastIdentifier, trailingComma]: [
         : last(identifiers)!.loc.end,
     },
     identifiers,
-    accept(visitor) {
-      visitor.visitIdentifierList(this);
+    accept(visitor): any {
+      return visitor.visitIdentifierList(this);
     },
   };
 };
@@ -587,8 +587,8 @@ export const pathList = ([first, lastPath, trailingComma]: [
       end: trailingComma ? tokenToLoc(trailingComma).end : last(paths)!.loc.end,
     },
     paths,
-    accept(visitor) {
-      visitor.visitPathList(this);
+    accept(visitor): any {
+      return visitor.visitPathList(this);
     },
   };
 };
@@ -604,8 +604,8 @@ export const timeconf = ([timeconf, [value], end]: [
     end: tokenToLoc(end).end,
   },
   value,
-  accept(visitor) {
-    visitor.visitTimeconf(this);
+  accept(visitor): any {
+    return visitor.visitTimeconf(this);
   },
 });
 
@@ -620,8 +620,8 @@ export const studyDay = ([day, window]: [
   },
   day,
   window,
-  accept(visitor) {
-    visitor.visitStudyDay(this);
+  accept(visitor): any {
+    return visitor.visitStudyDay(this);
   },
 });
 
@@ -643,8 +643,8 @@ export const window = ([windows]: [
       end: last(window)!.loc.end,
     },
     window: window as Window["window"],
-    accept(visitor) {
-      visitor.visitWindow(this);
+    accept(visitor): any {
+      return visitor.visitWindow(this);
     },
   };
 };
@@ -660,8 +660,8 @@ export const positiveWindow = ([plus, day]: [
     end: day.loc.end,
   },
   days: day,
-  accept(visitor) {
-    visitor.visitPositiveWindow(this);
+  accept(visitor): any {
+    return visitor.visitPositiveWindow(this);
   },
 });
 
@@ -676,8 +676,8 @@ export const negativeWindow = ([minus, day]: [
     end: day.loc.end,
   },
   days: day,
-  accept(visitor) {
-    visitor.visitNegativeWindow(this);
+  accept(visitor): any {
+    return visitor.visitNegativeWindow(this);
   },
 });
 
@@ -693,8 +693,8 @@ export const bothWindow = ([plus, , day]: [
     end: day.loc.end,
   },
   days: day,
-  accept(visitor) {
-    visitor.visitBothWindow(this);
+  accept(visitor): any {
+    return visitor.visitBothWindow(this);
   },
 });
 
@@ -703,8 +703,8 @@ export const day = ([token]: [DayToken]): DayExpression => ({
   loc: tokenToLoc(token),
   unit: "day",
   value: parseInt(token.toString().slice(1)),
-  accept(visitor) {
-    visitor.visitDayExpression(this);
+  accept(visitor): any {
+    return visitor.visitDayExpression(this);
   },
 });
 
@@ -713,8 +713,8 @@ export const hour = ([token]: [HourToken]): HourExpression => ({
   loc: tokenToLoc(token),
   unit: "hour",
   value: parseInt(token.value.slice(1)),
-  accept(visitor) {
-    visitor.visitHourExpression(this);
+  accept(visitor): any {
+    return visitor.visitHourExpression(this);
   },
 });
 
@@ -729,8 +729,8 @@ export const timeExpression = ([operator, rhs]: [
   },
   operator,
   rhs,
-  accept(visitor) {
-    visitor.visitTimeExpression(this);
+  accept(visitor): any {
+    return visitor.visitTimeExpression(this);
   },
 });
 
@@ -740,8 +740,8 @@ export const timeOperator = ([[token]]: [
   type: "time-operator",
   loc: tokenToLoc(token),
   value: token.value,
-  accept(visitor) {
-    visitor.visitTimeOperator(this);
+  accept(visitor): any {
+    return visitor.visitTimeOperator(this);
   },
 });
 
@@ -754,8 +754,8 @@ export const timeRange = ([start, , end]: [
   loc: { start: start.loc.start, end: end.loc.end },
   start,
   end,
-  accept(visitor) {
-    visitor.visitTimeRange(this);
+  accept(visitor): any {
+    return visitor.visitTimeRange(this);
   },
 });
 
@@ -770,8 +770,8 @@ export const timeList = ([items, at]: [
   },
   items,
   at: at?.[1] ?? null,
-  accept(visitor) {
-    visitor.visitTimeList(this);
+  accept(visitor): any {
+    return visitor.visitTimeList(this);
   },
 });
 
@@ -799,7 +799,7 @@ export const string = ([token]: [StringToken]): String => ({
     .substring(1, token.value.length - 1)
     .replace(/\\"/g, '"')
     .replace(/\n\s*/g, " "),
-  accept(visitor) {
-    visitor.visitString(this);
+  accept(visitor): any {
+    return visitor.visitString(this);
   },
 });

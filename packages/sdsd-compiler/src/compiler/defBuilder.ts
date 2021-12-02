@@ -56,94 +56,20 @@ export class DefBuilder extends DocumentVisitor {
     super();
   }
 
-  onVisitStudyDefinition(node: StudyDefinition) {
+  visitStudyDefinition(node: StudyDefinition) {
     this.file.studyDefs.push({
       ast: node,
       file: this.file,
     });
   }
 
-  onVisitArgs() {}
-
-  onVisitCodelistDefinition(node: CodelistDefinition) {
+  visitCodelistDefinition(node: CodelistDefinition) {
     this.file.codelistDefs[node.name.value] = {
       name: node.name.value,
       ast: node,
       file: this.file,
     };
   }
-
-  onVisitCodelistMember() {}
-
-  onVisitColumnDefinition() {}
-
-  onVisitDatasetDefinition() {}
-
-  onVisitDirective() {}
-
-  onVisitDomainDefinition() {}
-
-  onVisitKeyValuePair() {}
-
-  onVisitMilestoneDefinition() {}
-
-  onVisitString() {}
-
-  onVisitIdentifier() {}
-
-  onVisitInterfaceDefinition() {}
-
-  onVisitBothWindow() {}
-
-  onVisitCodelistExtension() {}
-
-  onVisitColumnMapping() {}
-
-  onVisitColumnMappingSource() {}
-
-  onVisitDatasetExtension() {}
-
-  onVisitDatasetMapping() {}
-
-  onVisitDayExpression() {}
-
-  onVisitDocument() {}
-
-  onVisitDomainExtension() {}
-
-  onVisitHourExpression() {}
-
-  onVisitIdentifierList() {}
-
-  onVisitNegativeWindow() {}
-
-  onVisitPath() {}
-
-  onVisitPathList() {}
-
-  onVisitPositiveWindow() {}
-
-  onVisitSourceCode() {}
-
-  onVisitStudyDay() {}
-
-  onVisitTimeExpression() {}
-
-  onVisitTimeList() {}
-
-  onVisitTimeOperator() {}
-
-  onVisitTimeRange() {}
-
-  onVisitTimeconf() {}
-
-  onVisitTypeExpression() {}
-
-  onVisitTypeExpressionMember() {}
-
-  onVisitVariableMapping() {}
-
-  onVisitWindow() {}
 
   getFile(): File {
     this.visit(this.file.ast);

@@ -1,6 +1,14 @@
 import assert from "assert";
-import { Milestone } from ".";
-import { RelativeMilestone } from "..";
+import {
+  CodelistItem,
+  ColumnType,
+  Dataset,
+  DatasetColumn,
+  DatasetMilestone,
+  Milestone,
+  RelativeMilestone,
+  StudyInfo,
+} from ".";
 import {
   Args,
   BothWindow,
@@ -22,6 +30,7 @@ import {
   TimeExpression,
   TimeList,
   TimeRange,
+  TimeValue,
   TypeExpression,
   TypeExpressionMember,
   Value,
@@ -29,32 +38,64 @@ import {
 } from "../astTypes";
 import { setFirst, unreachable } from "../utils";
 import { CodelistDef, File, NamedDefMap } from "./defBuilder";
-import {
-  ArgsScope,
-  BothWindowScope,
-  CodelistMemberScope,
-  CodelistScope,
-  ColumnScope,
-  DatasetScope,
-  DirectiveScope,
-  DomainScope,
-  IdentifierScope,
-  KeyValueScope,
-  MilestoneScope,
-  NegativeWindowScope,
-  PositiveWindowScope,
-  StringScope,
-  StudyDayScope,
-  StudyScope,
-  TimeconfScope,
-  TimeExpressionScope,
-  TimeListScope,
-  TimeRangeScope,
-  TypeExpressionMemberScope,
-  TypeExpressionScope,
-  WindowScope,
-} from "./scope";
 import { DocumentVisitor } from "./visitor";
+
+interface StringValue {
+  type: "string";
+  value: string;
+}
+
+interface IdentifierValue {
+  type: "identifier";
+  value: string;
+}
+
+interface TimeExpressionValue {
+  type: "time-expression";
+  position: "before" | "after" | "before/on" | "after/on";
+  relativeTo: ParsedTimeValue;
+}
+
+interface TimeListValue {
+  type: "time-list";
+  items: ParsedTimeValue[];
+}
+
+interface StudyDayValue {
+  type: "study-day";
+  day: number;
+  window: StudyDayWindow;
+}
+
+interface StudyDayWindow {
+  before: number;
+  after: number;
+}
+
+interface MilestoneIdentifierValue {
+  type: "milestone-identifier";
+  milestoneName: string;
+}
+
+interface TimeRangeValue {
+  type: "time-range";
+  start: ParsedTimeValue;
+  end: ParsedTimeValue;
+}
+
+interface ParsedDirective {
+  name: string;
+  args: ParsedValue[];
+}
+
+type ParsedTimeValue =
+  | StudyDayValue
+  | MilestoneIdentifierValue
+  | TimeRangeValue;
+
+type ParsedTimeconfValue = TimeExpressionValue | TimeListValue;
+
+type ParsedValue = StringValue | ParsedTimeconfValue;
 
 export class ConfigBuilder extends DocumentVisitor {
   constructor(
@@ -67,67 +108,79 @@ export class ConfigBuilder extends DocumentVisitor {
     super();
   }
 
-  onVisitStudyDefinition(_: StudyDefinition, scope: StudyScope) {
-    assert(typeof scope.kv.id === "string");
-    assert(typeof scope.kv.name === "string");
+  private getAttributes(keyValuePairs: KeyValuePair[]) {
+    return Object.fromEntries(keyValuePairs.map((node) => node.accept(this)));
+  }
+
+  private getDirectives(directives: Directive[]) {
+    return Object.fromEntries(
+      directives.map((directive) => {
+        const parsed = directive.accept(this);
+
+        return [parsed.name, parsed];
+      })
+    );
+  }
+
+  visitStudyDefinition(node: StudyDefinition): void {
+    const { id, name } = this.getAttributes(node.children);
+
+    assert(id.type === "string");
+    assert(name.type === "string");
 
     this.file.result.study = {
-      id: scope.kv.id,
-      name: scope.kv.name,
+      id: id.value,
+      name: name.value,
     };
   }
 
-  onVisitMilestoneDefinition(node: MilestoneDefinition, scope: MilestoneScope) {
-    const at = scope.kv.at;
-    assert(typeof at !== "string");
-
+  visitMilestoneDefinition(node: MilestoneDefinition) {
     if (!this.file.result.milestones) {
       this.file.result.milestones = {};
     }
+    const timeconf = this.getAttributes(node.children).at;
+    assert(
+      timeconf.type === "time-list" || timeconf.type === "time-expression"
+    );
 
-    const milestone: Milestone = (() => {
-      switch (at.type) {
+    const milestone = ((): Milestone => {
+      switch (timeconf.type) {
         case "time-list": {
-          const [day] = at.members;
-          assert(day.type === "study-day");
+          const [expression] = timeconf.items;
+          assert(expression.type === "study-day");
 
           return {
             type: "absolute",
-            name: node.name.value,
-            day: day.day,
-            window: day.window,
-          } as const;
+            name: node.name.accept(this).value,
+            day: expression.day,
+            window: expression.window,
+          };
         }
 
         case "time-expression": {
+          const { position, relativeTo } = timeconf;
           return {
-            name: node.name.value,
             type: "relative",
-            position: (
-              {
-                "<": "before",
-                ">": "after",
-                "<=": "before/on",
-                ">=": "after/on",
-              } as const
-            )[at.operator],
-            relativeTo: (() => {
-              switch (at.rhs.type) {
+            name: node.name.accept(this).value,
+            position,
+            relativeTo: ((): RelativeMilestone["relativeTo"] => {
+              assert(relativeTo.type !== "time-range");
+              switch (relativeTo.type) {
+                case "milestone-identifier":
+                  return { type: "reference", name: relativeTo.milestoneName };
                 case "study-day":
                   return {
                     type: "anonymous",
                     milestone: {
-                      name: null,
                       type: "absolute",
-                      day: at.rhs.day,
-                      window: at.rhs.window,
+                      name: null,
+                      day: relativeTo.day,
+                      window: relativeTo.window,
                     },
-                  } as const;
-                case "milestone-identifier":
-                  return { type: "reference", name: at.rhs.value } as const;
+                  };
               }
             })(),
-          } as const;
+          };
         }
       }
     })();
@@ -135,275 +188,246 @@ export class ConfigBuilder extends DocumentVisitor {
     this.file.result.milestones[milestone.name!] = milestone;
   }
 
-  onVisitCodelistDefinition(node: CodelistDefinition, scope: CodelistScope) {
+  visitCodelistDefinition(node: CodelistDefinition) {
     const codelists =
       this.file.result.codelists ?? (this.file.result.codelists = {});
 
     codelists[node.name.value] = {
-      name: node.name.value,
-      items: scope.items,
+      name: node.name.accept(this).value,
+      items: node.members.map((member) => member.accept(this)),
     };
   }
 
-  onVisitCodelistMember(node: CodelistMember, scope: CodelistMemberScope) {
-    assert(typeof scope.directives.desc.args[0] === "string");
-    scope.parent.items.push({
-      value: node.name.value,
-      description: scope.directives.desc.args[0],
-    });
+  visitCodelistMember(node: CodelistMember): CodelistItem {
+    const { desc } = this.getDirectives(node.directives);
+    assert(desc.args[0].type === "string");
+
+    return {
+      value: node.name.accept(this).value,
+      description: desc.args[0].value,
+    };
   }
 
-  onVisitDomainDefinition(node: DomainDefinition, scope: DomainScope) {
+  visitDomainDefinition(node: DomainDefinition) {
     const domains = this.file.result.domains || (this.file.result.domains = {});
-    assert(typeof scope.directives.abbr.args[0] === "string");
+    const { abbr } = this.getDirectives(node.directives);
+
+    assert(abbr.args[0].type === "string");
+
     domains[node.name.value] = {
-      name: node.name.value,
-      datasets: scope.datasets,
-      abbr: scope.directives["abbr"].args[0],
+      name: node.name.accept(this).value,
+      abbr: abbr.args[0].value,
+      datasets: Object.fromEntries(
+        node.children.map((child) => {
+          const dataset = child.accept(this);
+
+          return [dataset.name, dataset];
+        })
+      ),
     };
   }
 
-  onVisitDatasetDefinition(node: DatasetDefinition, scope: DatasetScope) {
+  visitDatasetDefinition(node: DatasetDefinition): Dataset {
+    const {
+      milestone: {
+        args: [timelist],
+      },
+    } = this.getDirectives(node.directives);
     const milestones = this.accessors.getMilestones();
-    const datasetMilestones = scope.directives.milestone.args[0];
-    assert(
-      typeof datasetMilestones !== "string" &&
-        datasetMilestones.type === "time-list" // Can this actually be a range...?
-    );
-    scope.parent.datasets[node.name.value] = {
-      name: node.name.value,
-      columns: scope.columns,
-      milestones: datasetMilestones.members.flatMap((member) => {
-        switch (member.type) {
-          case "milestone-identifier": {
-            const milestone = milestones[member.value] as Milestone | undefined;
-            return [
-              {
+
+    assert(timelist.type === "time-list");
+
+    return {
+      name: node.name.accept(this).value,
+      columns: node.columns.map((column) => column.accept(this)),
+      milestones: timelist.items.flatMap(
+        (item): DatasetMilestone | DatasetMilestone[] => {
+          switch (item.type) {
+            case "study-day":
+              return {
+                name: null,
+                day: item.day,
+                hour: 0,
+              };
+            case "milestone-identifier": {
+              const milestone = milestones[item.milestoneName] as
+                | Milestone
+                | undefined;
+
+              return {
                 name: milestone?.name ?? null,
                 day: milestone?.type === "absolute" ? milestone.day : null,
                 hour: null,
-              },
-            ];
+              };
+            }
+            case "time-range": {
+              return [];
+            }
           }
-          case "study-day": {
-            return [
-              {
-                name: null,
-                day: member.day,
-                hour: null,
-              },
-            ];
-          }
+        }
+      ),
+    };
+  }
 
-          case "time-range": {
-            return [];
-          }
+  visitColumnDefinition(node: ColumnDefinition): DatasetColumn {
+    const {
+      label: {
+        args: [label],
+      },
+      desc: {
+        args: [desc],
+      },
+    } = this.getDirectives(node.directives);
+
+    assert(label.type === "string");
+    assert(desc.type === "string");
+
+    return {
+      name: node.columnName.accept(this).value,
+      label: label.value,
+      description: desc.value,
+      type: node.columnType.accept(this),
+    };
+  }
+
+  visitDirective(node: Directive): ParsedDirective {
+    return {
+      name: node.name,
+      args: node.args?.accept(this) ?? [],
+    };
+  }
+
+  visitArgs(node: Args): ParsedValue[] {
+    return node.args.map((arg) => arg.accept(this));
+  }
+
+  visitKeyValuePair(node: KeyValuePair): [string, ParsedValue] {
+    const key = node.lhs.accept(this);
+    const value = node.rhs.accept(this);
+
+    return [key.value, value];
+  }
+
+  visitString(node: String): StringValue {
+    return { type: "string", value: node.value };
+  }
+
+  visitIdentifier(node: Identifier): IdentifierValue {
+    return { type: "identifier", value: node.value };
+  }
+
+  visitBothWindow(node: BothWindow): StudyDayWindow {
+    return {
+      before: node.days.value * -1,
+      after: node.days.value,
+    };
+  }
+
+  visitNegativeWindow(node: NegativeWindow): Partial<StudyDayWindow> {
+    return { before: node.days.value * -1 };
+  }
+
+  visitPositiveWindow(node: PositiveWindow): Partial<StudyDayWindow> {
+    return {
+      after: node.days.value,
+    };
+  }
+
+  visitStudyDay(node: StudyDay): StudyDayValue {
+    return {
+      type: "study-day",
+      day: node.day.value,
+      window: node.window?.accept(this) ?? {
+        before: 0,
+        after: 0,
+      },
+    };
+  }
+
+  parseTimeValue(value: TimeValue): ParsedTimeValue {
+    switch (value.type) {
+      case "identifier":
+        return {
+          type: "milestone-identifier",
+          milestoneName: value.accept(this).value,
+        };
+      default:
+        return value.accept(this);
+    }
+  }
+
+  visitTimeExpression(node: TimeExpression): TimeExpressionValue {
+    return {
+      type: "time-expression",
+      position: (
+        {
+          "<": "before",
+          ">": "after",
+          "<=": "before/on",
+          ">=": "after/on",
+        } as const
+      )[node.operator.value],
+      relativeTo: this.parseTimeValue(node.rhs),
+    };
+  }
+
+  visitTimeList(node: TimeList): TimeListValue {
+    return {
+      type: "time-list",
+      items: node.items.map((item): ParsedTimeValue => {
+        switch (item.type) {
+          case "identifier":
+            return {
+              type: "milestone-identifier",
+              milestoneName: item.accept(this).value,
+            };
+          default:
+            return item.accept(this);
         }
       }),
     };
   }
 
-  onVisitColumnDefinition(node: ColumnDefinition, scope: ColumnScope) {
-    assert(typeof scope.directives.label.args[0] === "string");
-    assert(typeof scope.directives.desc.args[0] === "string");
-    scope.parent.columns.push({
-      name: node.columnName.value,
-      label: scope.directives.label.args[0],
-      description: scope.directives.desc.args[0],
-      type: scope.types,
-    });
-  }
-
-  onVisitDirective(node: Directive, scope: DirectiveScope) {
-    scope.parent.directives[node.name] = {
-      name: node.name,
-      args: scope.args,
+  visitTimeRange(node: TimeRange): TimeRangeValue {
+    return {
+      type: "time-range",
+      start: this.parseTimeValue(node.start),
+      end: this.parseTimeValue(node.end),
     };
   }
 
-  onVisitArgs(_: Args, scope: ArgsScope) {
-    scope.parent.args = scope.args;
+  visitTimeconf(node: Timeconf): ParsedTimeconfValue {
+    return node.value.accept(this);
   }
 
-  onVisitKeyValuePair(_: KeyValuePair, scope: KeyValueScope) {
-    scope.parent.kv[scope.key] = scope.value;
+  visitTypeExpression(node: TypeExpression): ColumnType[] {
+    return node.members.flatMap((member) => member.accept(this));
   }
 
-  onVisitString(node: String, scope: StringScope) {
-    switch (scope.parent.type) {
-      case "args": {
-        scope.parent.args.push(node.value);
-        return;
-      }
-      case "key-value": {
-        scope.parent.value = node.value;
-        return;
-      }
-    }
-    assert(unreachable(scope.parent));
-  }
-
-  onVisitIdentifier(node: Identifier, scope: IdentifierScope) {
-    switch (scope.parent.type) {
-      case "key-value": {
-        scope.parent.key = node.value;
-        return;
-      }
-      case "time-expression": {
-        scope.parent.rhs = { type: "milestone-identifier", value: node.value };
-        return;
-      }
-      case "time-range": {
-        setFirst(scope.parent, ["start", "end"], {
-          type: "milestone-identifier",
-          value: node.value,
-        });
-        return;
-      }
-      case "time-list": {
-        scope.parent.members.push({
-          type: "milestone-identifier",
-          value: node.value,
-        });
-      }
-    }
-    assert(unreachable(scope.parent));
-  }
-
-  onVisitInterfaceDefinition() {}
-
-  onVisitBothWindow(node: BothWindow, scope: BothWindowScope) {
-    scope.parent.before = node.days.value * -1;
-    scope.parent.after = node.days.value;
-  }
-
-  onVisitCodelistExtension() {}
-
-  onVisitColumnMapping() {}
-
-  onVisitColumnMappingSource() {}
-
-  onVisitDatasetExtension() {}
-
-  onVisitDatasetMapping() {}
-
-  onVisitDayExpression() {}
-
-  onVisitDocument() {}
-
-  onVisitDomainExtension() {}
-
-  onVisitHourExpression() {}
-
-  onVisitIdentifierList() {}
-
-  onVisitNegativeWindow(node: NegativeWindow, scope: NegativeWindowScope) {
-    scope.parent.before = node.days.value * -1;
-  }
-
-  onVisitPath() {}
-
-  onVisitPathList() {}
-
-  onVisitPositiveWindow(node: PositiveWindow, scope: PositiveWindowScope) {
-    scope.parent.after = node.days.value;
-  }
-
-  onVisitSourceCode() {}
-
-  onVisitStudyDay(node: StudyDay, scope: StudyDayScope): void {
-    switch (scope.parent.type) {
-      case "time-list": {
-        scope.parent.members.push({
-          type: "study-day",
-          day: node.day.value,
-          window: scope.window,
-        });
-        return;
-      }
-    }
-
-    assert(unreachable(scope.parent));
-  }
-
-  onVisitTimeExpression(node: TimeExpression, scope: TimeExpressionScope) {
-    scope.parent.result = {
-      type: "time-expression",
-      operator: node.operator.value,
-      rhs: scope.rhs,
-    };
-  }
-
-  onVisitTimeList(_: TimeList, scope: TimeListScope) {
-    scope.parent.result = { type: "time-list", members: scope.members };
-  }
-
-  onVisitTimeOperator() {}
-
-  onVisitTimeRange(node: TimeRange, scope: TimeRangeScope) {
-    switch (scope.parent.type) {
-      case "time-list": {
-        assert(
-          scope.start?.type === "milestone-identifier" ||
-            scope.start?.type === "study-day"
-        );
-        assert(
-          scope.end?.type === "milestone-identifier" ||
-            scope.end?.type === "study-day"
-        );
-        scope.parent.members.push({
-          type: "time-range",
-          start: scope.start,
-          end: scope.end!,
-        });
-      }
-    }
-    assert(unreachable(scope.parent));
-  }
-
-  onVisitTimeconf(_: Timeconf, scope: TimeconfScope) {
-    switch (scope.parent.type) {
-      case "key-value": {
-        scope.parent.value = scope.result ?? { type: "time-list", members: [] };
-        return;
-      }
-      case "args": {
-        if (scope.result) {
-          scope.parent.args.push(scope.result);
-        }
-        return;
-      }
-    }
-
-    assert(unreachable(scope.parent));
-  }
-
-  onVisitTypeExpression(_: TypeExpression, scope: TypeExpressionScope) {
-    scope.parent.types = scope.types;
-  }
-
-  onVisitTypeExpressionMember(
-    node: TypeExpressionMember,
-    scope: TypeExpressionMemberScope
-  ) {
+  visitTypeExpressionMember(node: TypeExpressionMember): ColumnType[] {
     const codelists = this.accessors.getCodelistDefs();
-    const name = node.value.value;
+    const type = node.value.accept(this).value;
+    const types: ColumnType[] = [];
 
-    if (name in codelists) {
-      scope.parent.types.push({ type: "codelist", value: name });
+    if (type in codelists) {
+      types.push({ type: "codelist", value: type });
     } else {
-      scope.parent.types.push({ type: "scalar", value: name });
+      types.push({ type: "scalar", value: type });
     }
+
     if (node.optional) {
-      scope.parent.types.push({ type: "scalar", value: "Null" });
+      types.push({ type: "scalar", value: "Null" });
     }
+
+    return types;
   }
 
-  onVisitVariableMapping() {}
-
-  onVisitWindow(_: Window, scope: WindowScope) {
-    scope.parent.window.before = scope.before;
-    scope.parent.window.after = scope.after;
+  visitWindow(node: Window): StudyDayWindow {
+    let window: StudyDayWindow = { before: 0, after: 0 };
+    for (const child of node.window) {
+      window = { ...window, ...child.accept(this) };
+    }
+    return window;
   }
 
   getFile(): File {

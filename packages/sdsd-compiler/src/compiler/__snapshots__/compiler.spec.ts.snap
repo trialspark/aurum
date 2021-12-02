@@ -244,6 +244,33 @@ Object {
               ],
             },
           ],
+          "milestones": Array [
+            Object {
+              "day": 0,
+              "hour": null,
+              "name": "BASELINE",
+            },
+            Object {
+              "day": 7,
+              "hour": null,
+              "name": "CLINIC_1",
+            },
+            Object {
+              "day": 14,
+              "hour": null,
+              "name": "CLINIC_2",
+            },
+            Object {
+              "day": 21,
+              "hour": null,
+              "name": "CLINIC_3",
+            },
+            Object {
+              "day": null,
+              "hour": null,
+              "name": null,
+            },
+          ],
           "name": "vs",
         },
         "vs_hr": Object {
@@ -390,6 +417,7 @@ Object {
               ],
             },
           ],
+          "milestones": Array [],
           "name": "vs_hr",
         },
       },

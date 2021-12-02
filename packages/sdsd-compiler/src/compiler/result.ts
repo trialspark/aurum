@@ -45,7 +45,7 @@ export interface Domain {
 export interface DatasetMilestone {
   name: string | null;
   day: number | null;
-  hour: number | number;
+  hour: number | null;
 }
 
 export interface Dataset {
