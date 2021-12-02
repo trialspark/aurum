@@ -16,6 +16,7 @@ import {
   CodelistMember,
   ColumnDefinition,
   DatasetDefinition,
+  DayExpression,
   Directive,
   DomainDefinition,
   HourExpression,
@@ -126,6 +127,68 @@ export class ConfigBuilder extends DocumentVisitor {
     );
   }
 
+  private getDatasetMilestonesFromTimeValue(
+    dayValue: ParsedTimeValue,
+    milestones: NamedDefMap<Milestone>
+  ): Omit<DatasetMilestone, "hour">[] {
+    switch (dayValue.type) {
+      case "study-day":
+        return [
+          {
+            name: null,
+            day: dayValue.day,
+          },
+        ];
+      case "milestone-identifier": {
+        const milestone = milestones[dayValue.milestoneName] as
+          | Milestone
+          | undefined;
+
+        return [
+          {
+            name: milestone?.name ?? null,
+            day: milestone?.type === "absolute" ? milestone.day : null,
+          },
+        ];
+      }
+      case "time-range": {
+        const { start, end } = dayValue;
+        const startMilestones = this.getDatasetMilestonesFromTimeValue(
+          start,
+          milestones
+        );
+        const endMilestones = this.getDatasetMilestonesFromTimeValue(
+          end,
+          milestones
+        );
+        const startDay =
+          Math.max(...startMilestones.map((milestone) => milestone.day ?? 0)) +
+          1;
+        const endDay =
+          Math.min(...endMilestones.map((milestone) => milestone.day ?? 0)) - 1;
+        const daysInBetween = range(startDay, endDay + 1);
+
+        return [
+          ...startMilestones,
+          ...daysInBetween.map((day) => ({ day, name: null, hour: null })),
+          ...endMilestones,
+        ];
+      }
+    }
+  }
+
+  private parseTimeValue(value: TimeValue): ParsedTimeValue {
+    switch (value.type) {
+      case "identifier":
+        return {
+          type: "milestone-identifier",
+          milestoneName: value.accept(this).value,
+        };
+      default:
+        return value.accept(this);
+    }
+  }
+
   visitStudyDefinition(node: StudyDefinition): void {
     const { id, name } = this.getAttributes(node.children);
 
@@ -202,16 +265,6 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
-  visitCodelistMember(node: CodelistMember): CodelistItem {
-    const { desc } = this.getDirectives(node.directives);
-    assert(desc.args[0].type === "string");
-
-    return {
-      value: node.name.accept(this).value,
-      description: desc.args[0].value,
-    };
-  }
-
   visitDomainDefinition(node: DomainDefinition) {
     const domains = this.file.result.domains || (this.file.result.domains = {});
     const { abbr } = this.getDirectives(node.directives);
@@ -229,56 +282,6 @@ export class ConfigBuilder extends DocumentVisitor {
         })
       ),
     };
-  }
-
-  private getDatasetMilestonesFromTimeValue(
-    dayValue: ParsedTimeValue,
-    milestones: NamedDefMap<Milestone>
-  ): Omit<DatasetMilestone, "hour">[] {
-    switch (dayValue.type) {
-      case "study-day":
-        return [
-          {
-            name: null,
-            day: dayValue.day,
-          },
-        ];
-      case "milestone-identifier": {
-        const milestone = milestones[dayValue.milestoneName] as
-          | Milestone
-          | undefined;
-
-        return [
-          {
-            name: milestone?.name ?? null,
-            day: milestone?.type === "absolute" ? milestone.day : null,
-          },
-        ];
-      }
-      case "time-range": {
-        const { start, end } = dayValue;
-        const startMilestones = this.getDatasetMilestonesFromTimeValue(
-          start,
-          milestones
-        );
-        const endMilestones = this.getDatasetMilestonesFromTimeValue(
-          end,
-          milestones
-        );
-        const startDay =
-          Math.max(...startMilestones.map((milestone) => milestone.day ?? 0)) +
-          1;
-        const endDay =
-          Math.min(...endMilestones.map((milestone) => milestone.day ?? 0)) - 1;
-        const daysInBetween = range(startDay, endDay + 1);
-
-        return [
-          ...startMilestones,
-          ...daysInBetween.map((day) => ({ day, name: null, hour: null })),
-          ...endMilestones,
-        ];
-      }
-    }
   }
 
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
@@ -310,6 +313,16 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
+  visitCodelistMember(node: CodelistMember): CodelistItem {
+    const { desc } = this.getDirectives(node.directives);
+    assert(desc.args[0].type === "string");
+
+    return {
+      value: node.name.accept(this).value,
+      description: desc.args[0].value,
+    };
+  }
+
   visitColumnDefinition(node: ColumnDefinition): DatasetColumn {
     const {
       label: {
@@ -338,6 +351,28 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
+  visitTypeExpression(node: TypeExpression): ColumnType[] {
+    return node.members.flatMap((member) => member.accept(this));
+  }
+
+  visitTypeExpressionMember(node: TypeExpressionMember): ColumnType[] {
+    const codelists = this.accessors.getCodelistDefs();
+    const type = node.value.accept(this).value;
+    const types: ColumnType[] = [];
+
+    if (type in codelists) {
+      types.push({ type: "codelist", value: type });
+    } else {
+      types.push({ type: "scalar", value: type });
+    }
+
+    if (node.optional) {
+      types.push({ type: "scalar", value: "Null" });
+    }
+
+    return types;
+  }
+
   visitArgs(node: Args): ParsedValue[] {
     return node.args.map((arg) => arg.accept(this));
   }
@@ -353,8 +388,27 @@ export class ConfigBuilder extends DocumentVisitor {
     return { type: "string", value: node.value };
   }
 
-  visitIdentifier(node: Identifier): IdentifierValue {
-    return { type: "identifier", value: node.value };
+  visitTimeconf(node: Timeconf): ParsedTimeconfValue {
+    return node.value.accept(this);
+  }
+
+  visitStudyDay(node: StudyDay): StudyDayValue {
+    return {
+      type: "study-day",
+      day: node.day.accept(this),
+      window: node.window?.accept(this) ?? {
+        before: 0,
+        after: 0,
+      },
+    };
+  }
+
+  visitWindow(node: Window): StudyDayWindow {
+    let window: StudyDayWindow = { before: 0, after: 0 };
+    for (const child of node.window) {
+      window = { ...window, ...child.accept(this) };
+    }
+    return window;
   }
 
   visitBothWindow(node: BothWindow): StudyDayWindow {
@@ -374,29 +428,6 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
-  visitStudyDay(node: StudyDay): StudyDayValue {
-    return {
-      type: "study-day",
-      day: node.day.value,
-      window: node.window?.accept(this) ?? {
-        before: 0,
-        after: 0,
-      },
-    };
-  }
-
-  parseTimeValue(value: TimeValue): ParsedTimeValue {
-    switch (value.type) {
-      case "identifier":
-        return {
-          type: "milestone-identifier",
-          milestoneName: value.accept(this).value,
-        };
-      default:
-        return value.accept(this);
-    }
-  }
-
   visitTimeExpression(node: TimeExpression): TimeExpressionValue {
     return {
       type: "time-expression",
@@ -410,6 +441,10 @@ export class ConfigBuilder extends DocumentVisitor {
       )[node.operator.value],
       relativeTo: this.parseTimeValue(node.rhs),
     };
+  }
+
+  visitDayExpression(node: DayExpression): number {
+    return node.value;
   }
 
   visitHourExpression(node: HourExpression): ParsedHourValue {
@@ -434,38 +469,8 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
-  visitTimeconf(node: Timeconf): ParsedTimeconfValue {
-    return node.value.accept(this);
-  }
-
-  visitTypeExpression(node: TypeExpression): ColumnType[] {
-    return node.members.flatMap((member) => member.accept(this));
-  }
-
-  visitTypeExpressionMember(node: TypeExpressionMember): ColumnType[] {
-    const codelists = this.accessors.getCodelistDefs();
-    const type = node.value.accept(this).value;
-    const types: ColumnType[] = [];
-
-    if (type in codelists) {
-      types.push({ type: "codelist", value: type });
-    } else {
-      types.push({ type: "scalar", value: type });
-    }
-
-    if (node.optional) {
-      types.push({ type: "scalar", value: "Null" });
-    }
-
-    return types;
-  }
-
-  visitWindow(node: Window): StudyDayWindow {
-    let window: StudyDayWindow = { before: 0, after: 0 };
-    for (const child of node.window) {
-      window = { ...window, ...child.accept(this) };
-    }
-    return window;
+  visitIdentifier(node: Identifier): IdentifierValue {
+    return { type: "identifier", value: node.value };
   }
 
   getFile(): File {
