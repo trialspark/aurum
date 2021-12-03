@@ -132,6 +132,14 @@ export class Compiler {
           getCodelistDefs: () => this.codelistDefs,
           getInterfaceDefs: () => this.interfaceDefs,
           getMilestones: () => this.result.milestones,
+          getDatasets: () =>
+            Object.fromEntries(
+              Object.values(this.result.domains).flatMap((domain) =>
+                Object.entries(domain.datasets).map(
+                  ([datasetName, dataset]) => [datasetName, { domain, dataset }]
+                )
+              )
+            ),
         }
       ).getFile();
     } else {

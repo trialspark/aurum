@@ -175,7 +175,7 @@ describe("Compiler", () => {
                 "vs.sdsd",
                 `
                   domain "VITAL SIGNS" @abbr("VS") {
-                    dataset vs implements base, visit_base @milestone(t"BASELINE, CLINIC_1, CLINIC_2, CLINIC_3, CLINIC_4") {
+                    dataset vs implements base, visit_base @milestone(t"BASELINE, CLINIC_1, CLINIC_2, CLINIC_3") {
                       VSSEQ Integer                 @sequence
                                                     @label("Sequence Number")
                                                     @desc("Sequence number given to ensure uniqueness of subject records within a domain.")
@@ -255,6 +255,192 @@ describe("Compiler", () => {
             it("compiles without error", () => {
               expect(compiler.errors).toEqual([]);
               expect(compiler.result).toMatchSnapshot();
+            });
+
+            describe("and dataset mappings are added", () => {
+              beforeEach(() => {
+                compiler.set(
+                  "vs_map.sdsd",
+                  `
+                    map dataset vs with VSTESTCD as ("HEIGHT", "HR", "TEMP", "WEIGHT") {
+                      VSTESTCD from literal \`\`\`json
+                        "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSPOS from esource \`\`\`path
+                        {{MILESTONE.NAME}}.VS.{{VSTESTCD}}POS
+                      \`\`\`
+                      
+                      VSORRES from esource \`\`\`path
+                        {{MILESTONE.NAME}}.VS.{{VSTESTCD}}ORRES
+                      \`\`\`
+                      
+                      VSORRESU from esource \`\`\`path
+                        {{MILESTONE.NAME}}.VS.{{VSTESTCD}}ORRESU
+                      \`\`\`
+                      
+                      VSSTRESC from self \`\`\`sql
+                        SELECT
+                          CASE
+                            WHEN vs.VSORRESU = "lbs" THEN vs.VSORRES / 2.2046
+                            WHEN vs.VSORRESU = "F" THEN (cs.VSORRES - 32) * .5556
+                            ELSE vs.VSORRES
+                        FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSSTRESN from self \`\`\`sql
+                        SELECT vs.VSORRES
+                        FROM vs WHERE VSTESTCD = "{{VSTESTCD}}" AND pg_typeof(vs.VSORRES) = "integer"
+                      \`\`\`
+                      
+                      VSSTRESU from self \`\`\`sql
+                        SELECT
+                          CASE
+                            WHEN vs.VSORRESU = "lbs" THEN "kg"
+                            WHEN vs.VSORRESU = "F" THEN "C"
+                            ELSE vs.VSORRESU
+                        FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSSTAT from self \`\`\`sql
+                        SELECT CAST(vs.VSORRES as BOOLEAN)
+                        FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSREASND from esource \`\`\`path
+                        {{MILESTONE.NAME}}.VS.{{VSTESTCD}}REASND
+                      \`\`\`
+                    }
+                    
+                    map dataset vs {
+                      VSTESTCD from literal \`\`\`json
+                        "BMI"
+                      \`\`\`
+                      
+                      VSPOS from literal \`\`\`json
+                        null
+                      \`\`\`
+                      
+                      VSORRES from self as HEIGHT \`\`\`sql
+                        SELECT vs.VSSTRESC FROM vs WHERE VSTESTCD = "HEIGHT";
+                      \`\`\` from self as WEIGHT \`\`\`sql
+                        SELECT vs.VSSTRESC FROM vs WHERE VSTESTCD = "WEIGHT";
+                      \`\`\` => \`\`\`python
+                        return (WEIGHT / HEIGHT / HEIGHT) * 10000
+                      \`\`\`
+                      
+                      VSORRESU from literal \`\`\`json
+                        null
+                      \`\`\`
+                      
+                      VSSTRESC from self \`\`\`sql
+                        SELECT VSORRES FROM vs WHERE VSTESTCD = "BMI"
+                      \`\`\`
+                      
+                      VSSTRESN from self \`\`\`sql
+                        SELECT VSSTRESC FROM vs WHERE VSTESTCD = "BMI" 
+                      \`\`\`
+                      
+                      VSSTRESU from literal \`\`\`json
+                        null
+                      \`\`\`
+                      
+                      VSSTAT from self \`\`\`sql
+                        SELECT CAST(VSORRES as BOOLEAN) FROM vs WHERE VSTESTCD = "BMI"
+                      \`\`\`
+                      
+                      VSREASND from literal \`\`\`json
+                        null
+                      \`\`\`
+                    }
+                    
+                    map dataset vs with VSTESTCD as ("DIABP", "SYSBP") {
+                      VSTESTCD from literal \`\`\`json
+                        "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSPOS from esource \`\`\`path
+                        {{MILESTONE.NAME}}.VS.BPPOS
+                      \`\`\`
+                      
+                      VSORRES from esource \`\`\`path
+                        {{MILESTONE.NAME}}.VS.BPORRES.{{VSTESTCD}}
+                      \`\`\`
+                      
+                      VSORRESU from literal \`\`\`json
+                        "mmHg"
+                      \`\`\`
+                      
+                      VSSTRESC from self \`\`\`sql
+                        SELECT VSORRES FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSSTRESN from self \`\`\`sql
+                        SELECT VSSTRESC FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSSTRESU from self \`\`\`sql
+                        SELECT VSORRESU FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSSTAT from self \`\`\`sql
+                        SELECT CAST(VSORRES as BOOLEAN) FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
+                      \`\`\`
+                      
+                      VSREASND from esource \`\`\`path
+                        {{MILESTONE.NAME}}.VS.BPREASND
+                      \`\`\`
+                    }
+                    
+                    map dataset vs_hr {
+                      VSTESTCD from literal \`\`\`json
+                        "HR"
+                      \`\`\`
+                    
+                      VSORRES from apple_watch \`\`\`sql
+                        SELECT AVG(bpm)
+                        FROM hr
+                        WHERE
+                          study_day = {{MILESTONE.STUDY_DAY}}
+                          AND hour > {{MILESTONE.HOUR}} - 2
+                          AND hour < {{MILESTONE.HOUR}} + 2;
+                      \`\`\`
+                    
+                      VSORRESU from literal \`\`\`json
+                        "BPM"
+                      \`\`\`
+                    
+                      VSSTRESC from self \`\`\`sql
+                        SELECT VSORRES FROM vs_hr
+                      \`\`\`
+                    
+                      VSSTRESC from self \`\`\`sql
+                        SELECT VSORRES FROM vs_hr 
+                      \`\`\`
+                    
+                      VSSTRESU from self \`\`\`sql
+                        SELECT VSORRESU FROM vs_hr   
+                      \`\`\`
+                    
+                      VSSTAT from self \`\`\`sql
+                        SELECT CAST(VSORRES as BOOLEAN) FROM vs_hr
+                      \`\`\`
+                    
+                      VSREASND from self \`\`\`sql
+                        SELECT CASE WHEN VSSTAT IS FALSE THEN "No data collected during time period."
+                              ELSE NULL
+                              END
+                        FROM vs_hr;
+                      \`\`\`
+                    }
+                  `
+                );
+              });
+
+              it("compiles without error", () => {
+                expect(compiler.errors).toEqual([]);
+                expect(compiler.result).toMatchSnapshot();
+              });
             });
           });
         });

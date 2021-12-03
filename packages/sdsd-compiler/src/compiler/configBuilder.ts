@@ -1,11 +1,14 @@
 import assert from "assert";
-import { range } from "lodash";
+import { escapeRegExp, range } from "lodash";
 import {
   CodelistItem,
   ColumnType,
   Dataset,
   DatasetColumn,
+  DatasetMappingColumn,
+  DatasetMappingVariable,
   DatasetMilestone,
+  Domain,
   Milestone,
   RelativeMilestone,
 } from ".";
@@ -15,7 +18,10 @@ import {
   CodelistDefinition,
   CodelistMember,
   ColumnDefinition,
+  ColumnMapping,
+  ColumnMappingSource,
   DatasetDefinition,
+  DatasetMapping,
   DayExpression,
   Directive,
   DomainDefinition,
@@ -28,6 +34,7 @@ import {
   Path,
   PathList,
   PositiveWindow,
+  SourceCode,
   String,
   StudyDay,
   StudyDefinition,
@@ -38,6 +45,7 @@ import {
   TimeValue,
   TypeExpression,
   TypeExpressionMember,
+  VariableMapping,
   Window,
 } from "../astTypes";
 import { CodelistDef, File, InterfaceDef, NamedDefMap } from "./defBuilder";
@@ -110,6 +118,22 @@ interface PathValue {
   parts: IdentifierValue[];
 }
 
+interface ParsedVariableMapping {
+  variable: string;
+  values: string[];
+}
+
+interface ParsedColumnMappingSource {
+  source: string;
+  variable: string | null;
+  code: ParsedSourceCode;
+}
+
+interface ParsedSourceCode {
+  language: string;
+  code: string;
+}
+
 export class ConfigBuilder extends DocumentVisitor {
   constructor(
     private file: File,
@@ -117,6 +141,7 @@ export class ConfigBuilder extends DocumentVisitor {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
       getInterfaceDefs: () => NamedDefMap<InterfaceDef>;
       getMilestones: () => NamedDefMap<Milestone>;
+      getDatasets: () => NamedDefMap<{ domain: Domain; dataset: Dataset }>;
     }
   ) {
     super();
@@ -196,6 +221,72 @@ export class ConfigBuilder extends DocumentVisitor {
       default:
         return value.accept(this);
     }
+  }
+
+  private interpolateVariablesIntoCode(
+    code: string,
+    variables: { [name: string]: string | number }
+  ): string {
+    return Object.entries(variables).reduce(
+      (code, [variableName, variableValue]) =>
+        code.replace(
+          new RegExp(`{{\\s*${escapeRegExp(variableName)}\\s*}}`, "g"),
+          variableValue
+        ),
+      code
+    );
+  }
+
+  private interpolateVariablesIntoColumnMapping(
+    mapping: DatasetMappingColumn,
+    variables: { [name: string]: string | number }
+  ): DatasetMappingColumn {
+    return {
+      ...mapping,
+      mappingLogic: {
+        ...mapping.mappingLogic,
+        code: this.interpolateVariablesIntoCode(
+          mapping.mappingLogic.code,
+          variables
+        ),
+      },
+      variables: mapping.variables.map((variable) => ({
+        ...variable,
+        code: {
+          ...variable.code,
+          code: this.interpolateVariablesIntoCode(
+            variable.code.code,
+            variables
+          ),
+        },
+      })),
+    };
+  }
+
+  private getInterpolationVariables(
+    variable: ParsedVariableMapping | null,
+    variableValue: string | null,
+    milestone: DatasetMilestone | null
+  ): { [name: string]: string | number } {
+    const variables: { [name: string]: string | number } = {};
+
+    if (variable && variableValue != null) {
+      variables[variable.variable] = variableValue;
+    }
+
+    if (milestone?.name) {
+      variables["MILESTONE.NAME"] = milestone.name;
+    }
+
+    if (milestone?.day != null) {
+      variables["MILESTONE.STUDY_DAY"] = milestone.day;
+    }
+
+    if (milestone?.hour != null) {
+      variables["MILESTONE.HOUR"] = milestone.hour;
+    }
+
+    return variables;
   }
 
   visitStudyDefinition(node: StudyDefinition): void {
@@ -338,6 +429,95 @@ export class ConfigBuilder extends DocumentVisitor {
               },
             ]
         ),
+      mappings: [],
+    };
+  }
+
+  visitDatasetMapping(node: DatasetMapping) {
+    const datasetName = node.dataset.accept(this).path;
+    const { dataset } = this.accessors.getDatasets()[datasetName];
+    const milestones: (DatasetMilestone | null)[] = dataset.milestones;
+    const variables: (ParsedVariableMapping | null)[] = node.variables.map(
+      (variable) => variable.accept(this)
+    );
+
+    if (milestones.length === 0) {
+      milestones.push(null);
+    }
+    if (variables.length === 0) {
+      variables.push(null);
+    }
+
+    for (const variable of variables) {
+      for (const value of variable?.values ?? [null]) {
+        for (const milestone of milestones) {
+          dataset.mappings.push({
+            columns: Object.fromEntries(
+              node.columns.map((column) => {
+                const columnMapping =
+                  this.interpolateVariablesIntoColumnMapping(
+                    column.accept(this),
+                    this.getInterpolationVariables(variable, value, milestone)
+                  );
+                return [columnMapping.name, columnMapping] as const;
+              })
+            ),
+          });
+        }
+      }
+    }
+  }
+
+  visitColumnMapping(node: ColumnMapping): DatasetMappingColumn {
+    const sources = node.sources.map((source) => source.accept(this));
+    const computation = node.computation?.accept(this);
+
+    return {
+      name: node.column.accept(this).value,
+      variables: sources
+        .filter((source) => source.variable != null)
+        .map((source) => ({
+          name: source.variable!,
+          code: {
+            source: source.source,
+            language: source.code.language,
+            code: source.code.code,
+          },
+        })),
+      mappingLogic: ((): DatasetMappingColumn["mappingLogic"] => {
+        if (computation) {
+          return {
+            source: null,
+            language: computation.language,
+            code: computation.code,
+          };
+        }
+
+        const [source] = sources;
+
+        return {
+          source: source.source,
+          language: source.code.language,
+          code: source.code.code,
+        };
+      })(),
+    };
+  }
+
+  visitColumnMappingSource(
+    node: ColumnMappingSource
+  ): ParsedColumnMappingSource {
+    return {
+      source: node.source.accept(this).value,
+      variable: node.variable?.accept(this).value ?? null,
+      code: node.code.accept(this),
+    };
+  }
+
+  visitSourceCode(node: SourceCode): ParsedSourceCode {
+    return {
+      language: node.language,
+      code: node.code,
     };
   }
 
@@ -348,6 +528,16 @@ export class ConfigBuilder extends DocumentVisitor {
     return {
       value: node.name.accept(this).value,
       description: desc.args[0].value,
+    };
+  }
+
+  visitVariableMapping(node: VariableMapping): ParsedVariableMapping {
+    return {
+      variable: node.variable.accept(this).value,
+      values: node.values
+        .accept(this)
+        .filter((arg): arg is StringValue => arg.type === "string")
+        .map((arg) => arg.value),
     };
   }
 

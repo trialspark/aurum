@@ -52,6 +52,7 @@ export interface Dataset {
   name: string;
   milestones: DatasetMilestone[];
   columns: DatasetColumn[];
+  mappings: DatasetMapping[];
 }
 
 export interface DatasetColumn {
@@ -72,6 +73,27 @@ export interface CodelistRef {
 }
 
 export type ColumnType = Scalar | CodelistRef;
+
+export interface DatasetMapping {
+  columns: { [name: string]: DatasetMappingColumn };
+}
+
+export interface DatasetMappingColumn {
+  name: string;
+  variables: DatasetMappingVariable[];
+  mappingLogic: MappingCode;
+}
+
+export interface DatasetMappingVariable {
+  name: string;
+  code: MappingCode;
+}
+
+export interface MappingCode {
+  language: string;
+  code: string;
+  source: string | null;
+}
 
 export interface CompilationResult {
   study: StudyInfo;
