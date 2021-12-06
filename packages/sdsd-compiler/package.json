@@ -31,6 +31,7 @@
     "jest-transform-nearley": "^2.0.0"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.2",
     "lodash": "^4.17.21",
     "moo": "^0.5.1",
     "nearley": "^2.20.1"

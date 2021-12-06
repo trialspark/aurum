@@ -32,3 +32,10 @@ export const setFirst = <O extends object, K extends keyof O, V extends O[K]>(
     }
   }
 };
+
+export type ObjectValues<O extends object> = O[keyof O];
+
+export const atLeastOne = <A extends any[], D>(
+  array: A | undefined,
+  defaultMember: D
+): (A[number] | D)[] => (array?.length ? array : [defaultMember]);

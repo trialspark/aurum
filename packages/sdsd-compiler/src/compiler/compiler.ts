@@ -1,4 +1,5 @@
 import { CompilationResult } from ".";
+import { combineReducers } from "@reduxjs/toolkit";
 import { stringToAST } from "..";
 import {
   CodelistDefinition,
@@ -9,16 +10,38 @@ import {
   Node,
   StudyDefinition,
 } from "../astTypes";
-import { ConfigBuilder } from "./configBuilder";
+import {
+  ConfigBuilder,
+  configBuilderActions,
+  configBuilderReducer,
+} from "./configBuilder";
 import {
   CodelistDef,
   DefBuilder,
+  defBuilderActions,
+  defBuilderReducer,
   File,
   InterfaceDef,
   NamedDefMap,
   StudyDef,
 } from "./defBuilder";
 import { CompilerError, CompilerErrorCode, CompilerErrorScope } from "./errors";
+import { ObjectValues } from "../utils";
+
+const reducer = combineReducers({
+  defBuilder: defBuilderReducer,
+  configBuilder: configBuilderReducer,
+});
+
+type ReducerState = ReturnType<typeof reducer>;
+type Action = ReturnType<
+  ObjectValues<typeof defBuilderActions & typeof configBuilderActions>
+>;
+
+interface AttributableAction {
+  action: Action;
+  file: File;
+}
 
 export interface CompilerOptions {}
 
@@ -32,38 +55,36 @@ type ErrorsByCode<Code extends CompilerErrorCode> = Map<
 >;
 
 export class Compiler {
+  private state: ReducerState = this.getInitialState();
+  private actions: AttributableAction[] = [];
+
   public get errors(): CompilerError[] {
     return Array.from(this.errorsByCode.values()).flat();
   }
-  public result: CompilationResult;
+  public get result(): CompilationResult {
+    return this.state.configBuilder.result;
+  }
 
   private files: ParsedFileMap = {};
   private errorsByCode: ErrorsByCode<CompilerErrorCode> = new Map();
 
   private get studyDefs(): StudyDef[] {
-    return Object.values(this.files)
-      .map((file) => file.studyDefs)
-      .flat();
+    return this.state.defBuilder.studyDefs;
   }
   private get codelistDefs(): NamedDefMap<CodelistDef> {
-    return Object.fromEntries(
-      Object.values(this.files)
-        .map((file) => Object.entries(file.codelistDefs))
-        .flat()
-    );
+    return this.state.defBuilder.codelistDefs;
   }
 
-  private get interfaceDefs(): NamedDefMap<InterfaceDef> {
-    return Object.fromEntries(
-      Object.values(this.files)
-        .map((file) => Object.entries(file.interfaceDefs))
-        .flat()
-    );
+  private get interfaceDefs(): ReducerState["configBuilder"]["interfaces"] {
+    return this.state.configBuilder.interfaces;
   }
 
   constructor(public options: CompilerOptions) {
     this.checkForGlobalErrors();
-    this.result = this.getResult();
+  }
+
+  private getInitialState(): ReducerState {
+    return reducer(undefined, { type: "@@init" });
   }
 
   private errorIf(predicate: boolean, error: CompilerError) {
@@ -89,46 +110,26 @@ export class Compiler {
     });
   }
 
-  private getResult(): CompilationResult {
-    let result: CompilationResult = {
-      study: {
-        id: "",
-        name: "",
-      },
-      milestones: {},
-      codelists: {},
-      domains: {},
-    };
-
-    for (const { result: partialResult } of Object.values(this.files)) {
-      result = {
-        study: {
-          ...result.study,
-          ...partialResult.study,
-        },
-        milestones: { ...result.milestones, ...partialResult.milestones },
-        codelists: { ...result.codelists, ...partialResult.codelists },
-        domains: { ...result.domains, ...partialResult.domains },
-      };
-    }
-
-    return result;
+  private applyActions(state: ReducerState, actions: Action[]): ReducerState {
+    return actions.reduce(reducer, state);
   }
 
   set(filename: string, source: string | null): void {
+    // Remove any actions from the last time this file was compiled
+    this.actions = this.actions.filter(
+      (action) => action.file.name !== filename
+    );
+
     if (source != null) {
-      this.files[filename] = new ConfigBuilder(
-        new DefBuilder({
-          name: filename,
-          ast: stringToAST(source),
-          result: {},
-          studyDefs: [],
-          milestoneDefs: {},
-          codelistDefs: {},
-          interfaceDefs: {},
-          domainDefs: {},
-        }).getFile(),
-        {
+      // If we have new file contents to compile
+      const newActions: Action[] = [];
+      const file: File = {
+        name: filename,
+        ast: stringToAST(source),
+      };
+      newActions.push(...new DefBuilder(file).getActions());
+      newActions.push(
+        ...new ConfigBuilder(file, {
           getCodelistDefs: () => this.codelistDefs,
           getInterfaceDefs: () => this.interfaceDefs,
           getMilestones: () => this.result.milestones,
@@ -140,13 +141,19 @@ export class Compiler {
                 )
               )
             ),
-        }
-      ).getFile();
-    } else {
-      delete this.files[filename];
+        }).getActions()
+      );
+      this.actions = [
+        ...this.actions,
+        ...newActions.map((action) => ({ file, action })),
+      ];
     }
 
+    this.state = this.applyActions(
+      this.getInitialState(),
+      this.actions.map(({ action }) => action)
+    );
+
     this.checkForGlobalErrors();
-    this.result = this.getResult();
   }
 }

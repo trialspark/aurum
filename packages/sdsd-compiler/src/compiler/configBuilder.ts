@@ -1,16 +1,20 @@
+import { createSlice, freeze, PayloadAction, original } from "@reduxjs/toolkit";
 import assert from "assert";
 import { escapeRegExp, range } from "lodash";
 import {
+  Codelist,
   CodelistItem,
   ColumnType,
+  CompilationResult,
   Dataset,
   DatasetColumn,
   DatasetMappingColumn,
-  DatasetMappingVariable,
+  DatasetMapping as DatasetMappingResult,
   DatasetMilestone,
   Domain,
   Milestone,
   RelativeMilestone,
+  StudyInfo,
 } from ".";
 import {
   Args,
@@ -48,8 +52,74 @@ import {
   VariableMapping,
   Window,
 } from "../astTypes";
+import { atLeastOne } from "../utils";
 import { CodelistDef, File, InterfaceDef, NamedDefMap } from "./defBuilder";
 import { DocumentVisitor } from "./visitor";
+
+export interface ConfigBuilderState {
+  result: CompilationResult;
+  interfaces: NamedDefMap<Interface>;
+}
+
+const initialState: ConfigBuilderState = {
+  result: {
+    study: {
+      id: "",
+      name: "",
+    },
+    milestones: {},
+    codelists: {},
+    domains: {},
+  },
+  interfaces: {},
+};
+
+const { reducer, actions } = createSlice({
+  initialState,
+  name: "configBuilder",
+  reducers: {
+    setStudy: (state, action: PayloadAction<StudyInfo>) => {
+      state.result.study = freeze(action.payload);
+    },
+    addMilestone: (state, action: PayloadAction<Milestone>) => {
+      state.result.milestones[action.payload.name!] = freeze(action.payload);
+    },
+    addInterface: (state, action: PayloadAction<Interface>) => {
+      state.interfaces[action.payload.name] = freeze(action.payload);
+    },
+    addCodelist: (state, action: PayloadAction<Codelist>) => {
+      state.result.codelists[action.payload.name] = freeze(action.payload);
+    },
+    addDomain: (state, action: PayloadAction<Domain>) => {
+      state.result.domains[action.payload.name] = freeze(action.payload);
+    },
+    addDatasetMapping: (
+      state,
+      action: PayloadAction<{
+        dataset: string;
+        mappings: DatasetMappingResult[];
+      }>
+    ) => {
+      const datasetName = action.payload.dataset;
+      const domainName = Object.entries(original(state)!.result.domains).find(
+        ([, value]) => datasetName in value.datasets
+      )?.[0];
+
+      if (domainName) {
+        state.result.domains[domainName].datasets[datasetName].mappings.push(
+          ...action.payload.mappings
+        );
+      }
+    },
+  },
+});
+
+type Action = ReturnType<typeof actions[keyof typeof actions]>;
+
+interface Interface {
+  name: string;
+  columns: DatasetColumn[];
+}
 
 interface StringValue {
   type: "string";
@@ -135,11 +205,13 @@ interface ParsedSourceCode {
 }
 
 export class ConfigBuilder extends DocumentVisitor {
+  private actions: Action[] = [];
+
   constructor(
     private file: File,
     private accessors: {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
-      getInterfaceDefs: () => NamedDefMap<InterfaceDef>;
+      getInterfaceDefs: () => NamedDefMap<Interface>;
       getMilestones: () => NamedDefMap<Milestone>;
       getDatasets: () => NamedDefMap<{ domain: Domain; dataset: Dataset }>;
     }
@@ -231,7 +303,7 @@ export class ConfigBuilder extends DocumentVisitor {
       (code, [variableName, variableValue]) =>
         code.replace(
           new RegExp(`{{\\s*${escapeRegExp(variableName)}\\s*}}`, "g"),
-          variableValue
+          () => variableValue.toString()
         ),
       code
     );
@@ -295,104 +367,106 @@ export class ConfigBuilder extends DocumentVisitor {
     assert(id.type === "string");
     assert(name.type === "string");
 
-    this.file.result.study = {
-      id: id.value,
-      name: name.value,
-    };
+    this.actions.push(
+      actions.setStudy({
+        id: id.value,
+        name: name.value,
+      })
+    );
   }
 
   visitMilestoneDefinition(node: MilestoneDefinition) {
-    if (!this.file.result.milestones) {
-      this.file.result.milestones = {};
-    }
     const timeconf = this.getAttributes(node.children).at;
     assert(
       timeconf.type === "time-list" || timeconf.type === "time-expression"
     );
 
-    const milestone = ((): Milestone => {
-      switch (timeconf.type) {
-        case "time-list": {
-          const [expression] = timeconf.days;
-          assert(expression.type === "study-day");
+    this.actions.push(
+      actions.addMilestone(
+        ((): Milestone => {
+          switch (timeconf.type) {
+            case "time-list": {
+              const [expression] = timeconf.days;
+              assert(expression.type === "study-day");
 
-          return {
-            type: "absolute",
-            name: node.name.accept(this).value,
-            day: expression.day,
-            window: expression.window,
-          };
-        }
+              return {
+                type: "absolute",
+                name: node.name.accept(this).value,
+                day: expression.day,
+                window: expression.window,
+              };
+            }
 
-        case "time-expression": {
-          const { position, relativeTo } = timeconf;
-          return {
-            type: "relative",
-            name: node.name.accept(this).value,
-            position,
-            relativeTo: ((): RelativeMilestone["relativeTo"] => {
-              assert(relativeTo.type !== "time-range");
-              switch (relativeTo.type) {
-                case "milestone-identifier":
-                  return { type: "reference", name: relativeTo.milestoneName };
-                case "study-day":
-                  return {
-                    type: "anonymous",
-                    milestone: {
-                      type: "absolute",
-                      name: null,
-                      day: relativeTo.day,
-                      window: relativeTo.window,
-                    },
-                  };
-              }
-            })(),
-          };
-        }
-      }
-    })();
-
-    this.file.result.milestones[milestone.name!] = milestone;
+            case "time-expression": {
+              const { position, relativeTo } = timeconf;
+              return {
+                type: "relative",
+                name: node.name.accept(this).value,
+                position,
+                relativeTo: ((): RelativeMilestone["relativeTo"] => {
+                  assert(relativeTo.type !== "time-range");
+                  switch (relativeTo.type) {
+                    case "milestone-identifier":
+                      return {
+                        type: "reference",
+                        name: relativeTo.milestoneName,
+                      };
+                    case "study-day":
+                      return {
+                        type: "anonymous",
+                        milestone: {
+                          type: "absolute",
+                          name: null,
+                          day: relativeTo.day,
+                          window: relativeTo.window,
+                        },
+                      };
+                  }
+                })(),
+              };
+            }
+          }
+        })()
+      )
+    );
   }
 
   visitCodelistDefinition(node: CodelistDefinition) {
-    const codelists =
-      this.file.result.codelists ?? (this.file.result.codelists = {});
-
-    codelists[node.name.value] = {
-      name: node.name.accept(this).value,
-      items: node.members.map((member) => member.accept(this)),
-    };
+    this.actions.push(
+      actions.addCodelist({
+        name: node.name.accept(this).value,
+        items: node.members.map((member) => member.accept(this)),
+      })
+    );
   }
 
   visitInterfaceDefinition(node: InterfaceDefinition) {
-    const iface: InterfaceDef = {
-      name: node.name.accept(this).value,
-      ast: node,
-      file: this.file,
-      columns: node.columns.map((column) => column.accept(this)),
-    };
-
-    this.file.interfaceDefs[iface.name] = iface;
+    this.actions.push(
+      actions.addInterface({
+        name: node.name.accept(this).value,
+        columns: node.columns.map((column) => column.accept(this)),
+      })
+    );
   }
 
   visitDomainDefinition(node: DomainDefinition) {
-    const domains = this.file.result.domains || (this.file.result.domains = {});
     const { abbr } = this.getDirectives(node.directives);
 
     assert(abbr.args[0].type === "string");
 
-    domains[node.name.value] = {
-      name: node.name.accept(this).value,
-      abbr: abbr.args[0].value,
-      datasets: Object.fromEntries(
-        node.children.map((child) => {
-          const dataset = child.accept(this);
+    this.actions.push(
+      actions.addDomain({
+        name: node.name.accept(this).value,
+        abbr: abbr.args[0].value,
+        datasets: Object.fromEntries(
+          node.children.map((child) => {
+            const dataset = child.accept(this);
 
-          return [dataset.name, dataset];
-        })
-      ),
-    };
+            return [dataset.name, dataset];
+          })
+        ),
+      })
+    );
   }
 
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
@@ -436,36 +510,39 @@ export class ConfigBuilder extends DocumentVisitor {
   visitDatasetMapping(node: DatasetMapping) {
     const datasetName = node.dataset.accept(this).path;
     const { dataset } = this.accessors.getDatasets()[datasetName];
-    const milestones: (DatasetMilestone | null)[] = dataset.milestones;
-    const variables: (ParsedVariableMapping | null)[] = node.variables.map(
-      (variable) => variable.accept(this)
+    const milestones = atLeastOne(dataset.milestones, null);
+    const variables = atLeastOne(
+      node.variables.map((variable) => variable.accept(this)),
+      null
     );
 
-    if (milestones.length === 0) {
-      milestones.push(null);
-    }
-    if (variables.length === 0) {
-      variables.push(null);
-    }
-
-    for (const variable of variables) {
-      for (const value of variable?.values ?? [null]) {
-        for (const milestone of milestones) {
-          dataset.mappings.push({
-            columns: Object.fromEntries(
-              node.columns.map((column) => {
-                const columnMapping =
-                  this.interpolateVariablesIntoColumnMapping(
-                    column.accept(this),
-                    this.getInterpolationVariables(variable, value, milestone)
-                  );
-                return [columnMapping.name, columnMapping] as const;
+    this.actions.push(
+      actions.addDatasetMapping({
+        dataset: datasetName,
+        mappings: variables.flatMap((variable) =>
+          (variable?.values ?? [null]).flatMap((value) =>
+            milestones.map(
+              (milestone): DatasetMappingResult => ({
+                columns: Object.fromEntries(
+                  node.columns.map((column) => {
+                    const columnMapping =
+                      this.interpolateVariablesIntoColumnMapping(
+                        column.accept(this),
+                        this.getInterpolationVariables(
+                          variable,
+                          value,
+                          milestone
+                        )
+                      );
+                    return [columnMapping.name, columnMapping] as const;
+                  })
+                ),
               })
-            ),
-          });
-        }
-      }
-    }
+            )
+          )
+        ),
+      })
+    );
   }
 
   visitColumnMapping(node: ColumnMapping): DatasetMappingColumn {
@@ -702,8 +779,10 @@ export class ConfigBuilder extends DocumentVisitor {
     return { type: "string", value: node.value };
   }
 
-  getFile(): File {
+  getActions(): Action[] {
     this.visit(this.file.ast);
-    return this.file;
+    return this.actions;
   }
 }
+
+export { actions as configBuilderActions, reducer as configBuilderReducer };
