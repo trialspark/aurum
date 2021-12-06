@@ -116,7 +116,8 @@ export type DocumentChild =
   | CodelistDefinition
   | CodelistExtension
   | DomainDefinition
-  | DomainExtension;
+  | DomainExtension
+  | DatasetMapping;
 
 export type DomainChild = DatasetDefinition;
 

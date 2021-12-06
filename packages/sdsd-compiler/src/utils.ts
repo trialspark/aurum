@@ -39,3 +39,6 @@ export const atLeastOne = <A extends any[], D>(
   array: A | undefined,
   defaultMember: D
 ): (A[number] | D)[] => (array?.length ? array : [defaultMember]);
+
+export const nonNull = <A>(array: A[]): NonNullable<A>[] =>
+  array.filter((member): member is NonNullable<A> => member != null);

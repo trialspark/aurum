@@ -97,6 +97,7 @@ export const main = ([topLevelDefs]: [
   | CodelistExtension
   | DomainDefinition
   | DomainExtension
+  | DatasetMapping
 ][]): Document => {
   const children = topLevelDefs.flat();
 

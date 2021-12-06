@@ -8,6 +8,7 @@ import {
   MilestoneDefinition,
   StudyDefinition,
 } from "../astTypes";
+import { nonNull } from "../utils";
 import { DocumentVisitor } from "./visitor";
 
 export interface DefBuilderState {
@@ -36,6 +37,7 @@ const { reducer, actions } = createSlice({
     addCodelistDef: (state, action: PayloadAction<CodelistDef>) => {
       state.codelistDefs[action.payload.name] = freeze(action.payload);
     },
+    noop: () => {},
   },
 });
 
@@ -78,34 +80,57 @@ export interface File {
 }
 
 export class DefBuilder extends DocumentVisitor {
-  private actions: Action[] = [];
-
   constructor(private file: File) {
     super();
   }
 
-  visitStudyDefinition(node: StudyDefinition) {
-    this.actions.push(
-      actions.addStudyDef({
-        ast: node,
-        file: this.file,
-      })
-    );
+  visitStudyDefinition(node: StudyDefinition): Action {
+    return actions.addStudyDef({
+      ast: node,
+      file: this.file,
+    });
   }
 
-  visitCodelistDefinition(node: CodelistDefinition) {
-    this.actions.push(
-      actions.addCodelistDef({
-        name: node.name.value,
-        ast: node,
-        file: this.file,
-      })
-    );
+  visitCodelistDefinition(node: CodelistDefinition): Action {
+    return actions.addCodelistDef({
+      name: node.name.value,
+      ast: node,
+      file: this.file,
+    });
+  }
+
+  visitInterfaceDefinition(): null {
+    return null;
+  }
+
+  visitMilestoneDefinition(): null {
+    return null;
+  }
+
+  visitDomainDefinition(): null {
+    return null;
+  }
+
+  visitCodelistExtension(): null {
+    return null;
+  }
+
+  visitDomainExtension(): null {
+    return null;
+  }
+
+  visitDatasetMapping(): null {
+    return null;
+  }
+
+  visit(node: Document): Action[] {
+    return nonNull(
+      node.children.map((child) => child.accept(this))
+    ) as Action[];
   }
 
   getActions(): Action[] {
-    this.visit(this.file.ast);
-    return this.actions;
+    return this.visit(this.file.ast);
   }
 }
 
