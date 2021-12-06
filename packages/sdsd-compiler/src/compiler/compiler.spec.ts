@@ -121,11 +121,11 @@ describe("Compiler", () => {
                                  @label("Visit Number")
                                  @desc("Clinical encounter number.")
                                  
-                VISIT String     @milestone.id
+                VISIT String     @milestone.name
                                  @label("Visit Name")
                                  @desc("Protocol-defined description of clinical encounter.")
                               
-                VISITDY Integer  @milestone.day
+                VISITDY Integer  @milestone.study_day
                                  @label("Planned Study Day of Visit")
                                  @desc("Planned study day of the visit based upon RFSTDTC in Demographics.")
               }
@@ -210,7 +210,7 @@ describe("Compiler", () => {
                     }
                     
                     dataset vs_hr implements base @milestone(t"BASELINE -> CLINIC_3 at h8, h15, h19") {
-                      VISITDY Integer               @milestone.day
+                      VISITDY Integer               @milestone.study_day
                                                     @label("Study Day")
                                                     @desc("Study day based upon RFSTDTC in Demographics.")
                                                     

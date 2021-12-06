@@ -52,7 +52,7 @@ export const lexer = new TokenSkippingLexer(
         match: /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
         lineBreaks: true,
       },
-      directive: /@[a-zA-Z][a-zA-Z.]*/,
+      directive: /@[a-zA-Z][a-zA-Z._]*/,
       timeconf: { match: 't"', push: "timeconf" },
       codeblock: { match: /```\w*/, push: "codeblock" },
       openbr: "{",

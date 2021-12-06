@@ -55,11 +55,20 @@ export interface Dataset {
   mappings: DatasetMapping[];
 }
 
+export type DatasetColumnRole =
+  | "subject.uuid"
+  | "subject.id"
+  | "milestone.name"
+  | "milestone.study_day"
+  | "milestone.hour"
+  | "sequence";
+
 export interface DatasetColumn {
   name: string;
   label: string;
   description: string;
   type: ColumnType[];
+  role: DatasetColumnRole | null;
 }
 
 export interface Scalar {

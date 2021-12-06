@@ -15,6 +15,7 @@ import {
   Milestone,
   RelativeMilestone,
   StudyInfo,
+  DatasetColumnRole,
 } from ".";
 import {
   Args,
@@ -504,6 +505,30 @@ export class ConfigBuilder extends DocumentVisitor {
       node.variables.map((variable) => variable.accept(this)),
       null
     );
+    const autoMappedColumns: DatasetMappingColumn[] = dataset.columns
+      .map((column) => ({
+        name: column.name,
+        variables: [],
+        mappingLogic: {
+          source: "literal",
+          language: "json",
+          code: ((): string => {
+            switch (column.role) {
+              case "milestone.name":
+                return `"{{${column.role.toUpperCase()}}}"`;
+              case "milestone.study_day":
+              case "milestone.hour":
+                return `{{${column.role.toUpperCase()}}}`;
+              case "subject.uuid":
+              case "subject.id":
+              case "sequence":
+              case null:
+                return "";
+            }
+          })(),
+        },
+      }))
+      .filter((mapping) => mapping.mappingLogic.code !== "");
 
     return actions.addDatasetMapping({
       dataset: datasetName,
@@ -511,16 +536,25 @@ export class ConfigBuilder extends DocumentVisitor {
         (variable?.values ?? [null]).flatMap((value) =>
           milestones.map(
             (milestone): DatasetMappingResult => ({
-              columns: Object.fromEntries(
-                node.columns.map((column) => {
+              columns: Object.fromEntries([
+                ...autoMappedColumns.map(
+                  (column): [string, DatasetMappingColumn] => [
+                    column.name,
+                    this.interpolateVariablesIntoColumnMapping(
+                      column,
+                      this.getInterpolationVariables(variable, value, milestone)
+                    ),
+                  ]
+                ),
+                ...node.columns.map((column) => {
                   const columnMapping =
                     this.interpolateVariablesIntoColumnMapping(
                       column.accept(this),
                       this.getInterpolationVariables(variable, value, milestone)
                     );
                   return [columnMapping.name, columnMapping] as const;
-                })
-              ),
+                }),
+              ]),
             })
           )
         )
@@ -602,6 +636,7 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   visitColumnDefinition(node: ColumnDefinition): DatasetColumn {
+    const directives = this.getDirectives(node.directives);
     const {
       label: {
         args: [label],
@@ -609,7 +644,7 @@ export class ConfigBuilder extends DocumentVisitor {
       desc: {
         args: [desc],
       },
-    } = this.getDirectives(node.directives);
+    } = directives;
 
     assert(label.type === "string");
     assert(desc.type === "string");
@@ -619,6 +654,24 @@ export class ConfigBuilder extends DocumentVisitor {
       label: label.value,
       description: desc.value,
       type: node.columnType.accept(this),
+      role: ((): DatasetColumnRole | null => {
+        const roles: { [R in DatasetColumnRole]: null } = {
+          "milestone.study_day": null,
+          "milestone.hour": null,
+          "milestone.name": null,
+          "subject.id": null,
+          "subject.uuid": null,
+          sequence: null,
+        };
+
+        for (const role in roles) {
+          if (role in directives) {
+            return role as DatasetColumnRole;
+          }
+        }
+
+        return null;
+      })(),
     };
   }
 
