@@ -55,9 +55,9 @@ import {
 
 main                    -> (studyDefinition |
                             milestoneDefinition |
-                            interfaceDefinition |
                             codelistDefinition |
                             codelistExtension |
+                            interfaceDefinition |
                             domainDefinition |
                             domainExtension |
                             datasetMapping):* {% main %}

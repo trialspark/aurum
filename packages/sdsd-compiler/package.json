@@ -28,7 +28,8 @@
     "@types/lodash": "^4.14.177",
     "@types/moo": "^0.5.5",
     "@types/nearley": "^2.11.2",
-    "jest-transform-nearley": "^2.0.0"
+    "jest-transform-nearley": "^2.0.0",
+    "utility-types": "^3.10.0"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",

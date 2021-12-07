@@ -1,4 +1,5 @@
 import { createSlice, freeze, PayloadAction, original } from "@reduxjs/toolkit";
+import { UnionToIntersection } from "utility-types";
 import assert from "assert";
 import { escapeRegExp, range } from "lodash";
 import {
@@ -16,6 +17,7 @@ import {
   RelativeMilestone,
   StudyInfo,
   DatasetColumnRole,
+  AttributableAction,
 } from ".";
 import {
   Args,
@@ -206,24 +208,26 @@ interface ParsedSourceCode {
   code: string;
 }
 
-export class ConfigBuilder extends DocumentVisitor {
+/**
+ * Parses/transforms core/shared entities like directives/args/identifiers/strings/values/etc.
+ */
+class BaseConfigBuilder extends DocumentVisitor {
   constructor(
-    private file: File,
-    private accessors: {
+    private files: File[],
+    protected accessors: {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
-      getInterfaceDefs: () => NamedDefMap<Interface>;
-      getMilestones: () => NamedDefMap<Milestone>;
-      getDatasets: () => NamedDefMap<{ domain: Domain; dataset: Dataset }>;
     }
   ) {
     super();
   }
 
-  private getAttributes(keyValuePairs: KeyValuePair[]) {
+  protected getAttributes(keyValuePairs: KeyValuePair[]) {
     return Object.fromEntries(keyValuePairs.map((node) => node.accept(this)));
   }
 
-  private getDirectives(directives: Directive[]) {
+  protected getDirectives(directives: Directive[]): {
+    [directiveName: string]: ParsedDirective;
+  } {
     return Object.fromEntries(
       directives.map((directive) => {
         const parsed = directive.accept(this);
@@ -231,56 +235,6 @@ export class ConfigBuilder extends DocumentVisitor {
         return [parsed.name, parsed];
       })
     );
-  }
-
-  private getDatasetMilestonesFromTimeValue(
-    dayValue: ParsedTimeValue,
-    milestones: NamedDefMap<Milestone>
-  ): Omit<DatasetMilestone, "hour">[] {
-    switch (dayValue.type) {
-      case "study-day":
-        return [
-          {
-            name: null,
-            day: dayValue.day,
-          },
-        ];
-      case "milestone-identifier": {
-        const milestone = milestones[dayValue.milestoneName] as
-          | Milestone
-          | undefined;
-
-        return [
-          {
-            name: milestone?.name ?? null,
-            day: milestone?.type === "absolute" ? milestone.day : null,
-          },
-        ];
-      }
-      case "time-range": {
-        const { start, end } = dayValue;
-        const startMilestones = this.getDatasetMilestonesFromTimeValue(
-          start,
-          milestones
-        );
-        const endMilestones = this.getDatasetMilestonesFromTimeValue(
-          end,
-          milestones
-        );
-        const startDay =
-          Math.max(...startMilestones.map((milestone) => milestone.day ?? 0)) +
-          1;
-        const endDay =
-          Math.min(...endMilestones.map((milestone) => milestone.day ?? 0)) - 1;
-        const daysInBetween = range(startDay, endDay + 1);
-
-        return [
-          ...startMilestones,
-          ...daysInBetween.map((day) => ({ day, name: null, hour: null })),
-          ...endMilestones,
-        ];
-      }
-    }
   }
 
   private parseTimeValue(value: TimeValue): ParsedTimeValue {
@@ -293,366 +247,6 @@ export class ConfigBuilder extends DocumentVisitor {
       default:
         return value.accept(this);
     }
-  }
-
-  private interpolateVariablesIntoCode(
-    code: string,
-    variables: { [name: string]: string | number }
-  ): string {
-    return Object.entries(variables).reduce(
-      (code, [variableName, variableValue]) =>
-        code.replace(
-          new RegExp(`{{\\s*${escapeRegExp(variableName)}\\s*}}`, "g"),
-          () => variableValue.toString()
-        ),
-      code
-    );
-  }
-
-  private interpolateVariablesIntoColumnMapping(
-    mapping: DatasetMappingColumn,
-    variables: { [name: string]: string | number }
-  ): DatasetMappingColumn {
-    return {
-      ...mapping,
-      mappingLogic: {
-        ...mapping.mappingLogic,
-        code: this.interpolateVariablesIntoCode(
-          mapping.mappingLogic.code,
-          variables
-        ),
-      },
-      variables: mapping.variables.map((variable) => ({
-        ...variable,
-        code: {
-          ...variable.code,
-          code: this.interpolateVariablesIntoCode(
-            variable.code.code,
-            variables
-          ),
-        },
-      })),
-    };
-  }
-
-  private getInterpolationVariables(
-    variable: ParsedVariableMapping | null,
-    variableValue: string | null,
-    milestone: DatasetMilestone | null
-  ): { [name: string]: string | number } {
-    const variables: { [name: string]: string | number } = {};
-
-    if (variable && variableValue != null) {
-      variables[variable.variable] = variableValue;
-    }
-
-    if (milestone?.name) {
-      variables["MILESTONE.NAME"] = milestone.name;
-    }
-
-    if (milestone?.day != null) {
-      variables["MILESTONE.STUDY_DAY"] = milestone.day;
-    }
-
-    if (milestone?.hour != null) {
-      variables["MILESTONE.HOUR"] = milestone.hour;
-    }
-
-    return variables;
-  }
-
-  visitStudyDefinition(node: StudyDefinition): Action[] {
-    const { id, name } = this.getAttributes(node.children);
-
-    assert(id.type === "string");
-    assert(name.type === "string");
-
-    return [
-      actions.setStudy({
-        id: id.value,
-        name: name.value,
-      }),
-    ];
-  }
-
-  visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
-    const timeconf = this.getAttributes(node.children).at;
-    assert(
-      timeconf.type === "time-list" || timeconf.type === "time-expression"
-    );
-
-    return [
-      actions.addMilestone(
-        ((): Milestone => {
-          switch (timeconf.type) {
-            case "time-list": {
-              const [expression] = timeconf.days;
-              assert(expression.type === "study-day");
-
-              return {
-                type: "absolute",
-                name: node.name.accept(this).value,
-                day: expression.day,
-                window: expression.window,
-              };
-            }
-
-            case "time-expression": {
-              const { position, relativeTo } = timeconf;
-              return {
-                type: "relative",
-                name: node.name.accept(this).value,
-                position,
-                relativeTo: ((): RelativeMilestone["relativeTo"] => {
-                  assert(relativeTo.type !== "time-range");
-                  switch (relativeTo.type) {
-                    case "milestone-identifier":
-                      return {
-                        type: "reference",
-                        name: relativeTo.milestoneName,
-                      };
-                    case "study-day":
-                      return {
-                        type: "anonymous",
-                        milestone: {
-                          type: "absolute",
-                          name: null,
-                          day: relativeTo.day,
-                          window: relativeTo.window,
-                        },
-                      };
-                  }
-                })(),
-              };
-            }
-          }
-        })()
-      ),
-    ];
-  }
-
-  visitCodelistDefinition(node: CodelistDefinition): Action[] {
-    return [
-      actions.addCodelist({
-        name: node.name.accept(this).value,
-        items: node.members.map((member) => member.accept(this)),
-      }),
-    ];
-  }
-
-  visitInterfaceDefinition(node: InterfaceDefinition): Action[] {
-    return [
-      actions.addInterface({
-        name: node.name.accept(this).value,
-        columns: node.columns.map((column) => column.accept(this)),
-      }),
-    ];
-  }
-
-  visitDomainDefinition(node: DomainDefinition): Action[] {
-    const { abbr } = this.getDirectives(node.directives);
-
-    assert(abbr.args[0].type === "string");
-
-    return [
-      actions.addDomain({
-        name: node.name.accept(this).value,
-        abbr: abbr.args[0].value,
-        datasets: Object.fromEntries(
-          node.children.map((child) => {
-            const dataset = child.accept(this);
-
-            return [dataset.name, dataset];
-          })
-        ),
-      }),
-    ];
-  }
-
-  visitDatasetDefinition(node: DatasetDefinition): Dataset {
-    const interfaceDefs = this.accessors.getInterfaceDefs();
-    const interfaceColumns =
-      node.interfaces
-        ?.accept(this)
-        .map(({ path }) => interfaceDefs[path].columns) ?? [];
-    const {
-      milestone: {
-        args: [timelist],
-      },
-    } = this.getDirectives(node.directives);
-    const milestones = this.accessors.getMilestones();
-
-    assert(timelist.type === "time-list");
-
-    return {
-      name: node.name.accept(this).value,
-      columns: [
-        ...interfaceColumns.flat(),
-        ...node.columns.map((column) => column.accept(this)),
-      ],
-      milestones: timelist.days
-        .flatMap((item) =>
-          this.getDatasetMilestonesFromTimeValue(item, milestones)
-        )
-        .flatMap(
-          (data): DatasetMilestone[] =>
-            timelist.hours?.map(({ hour }) => ({ ...data, hour })) ?? [
-              {
-                ...data,
-                hour: null,
-              },
-            ]
-        ),
-      mappings: [],
-    };
-  }
-
-  visitDatasetMapping(node: DatasetMapping): Action[] {
-    const datasetName = node.dataset.accept(this).path;
-    const { dataset } = this.accessors.getDatasets()[datasetName];
-    const milestones = atLeastOne(dataset.milestones, null);
-    const variables = atLeastOne(
-      node.variables.map((variable) => variable.accept(this)),
-      null
-    );
-    const autoMappedColumns: DatasetMappingColumn[] = dataset.columns
-      .map((column) => ({
-        name: column.name,
-        variables: [],
-        mappingLogic: {
-          source: "literal",
-          language: "json",
-          code: ((): string => {
-            switch (column.role) {
-              case "milestone.name":
-                return `"{{${column.role.toUpperCase()}}}"`;
-              case "milestone.study_day":
-              case "milestone.hour":
-                return `{{${column.role.toUpperCase()}}}`;
-              case "subject.uuid":
-              case "subject.id":
-              case "sequence":
-              case null:
-                return "";
-            }
-          })(),
-        },
-      }))
-      .filter((mapping) => mapping.mappingLogic.code !== "");
-
-    return [
-      actions.addDatasetMapping({
-        dataset: datasetName,
-        mappings: variables.flatMap((variable) =>
-          (variable?.values ?? [null]).flatMap((value) =>
-            milestones.map(
-              (milestone): DatasetMappingResult => ({
-                columns: Object.fromEntries([
-                  ...autoMappedColumns.map(
-                    (column): [string, DatasetMappingColumn] => [
-                      column.name,
-                      this.interpolateVariablesIntoColumnMapping(
-                        column,
-                        this.getInterpolationVariables(
-                          variable,
-                          value,
-                          milestone
-                        )
-                      ),
-                    ]
-                  ),
-                  ...node.columns.map((column) => {
-                    const columnMapping =
-                      this.interpolateVariablesIntoColumnMapping(
-                        column.accept(this),
-                        this.getInterpolationVariables(
-                          variable,
-                          value,
-                          milestone
-                        )
-                      );
-                    return [columnMapping.name, columnMapping] as const;
-                  }),
-                ]),
-              })
-            )
-          )
-        ),
-      }),
-    ];
-  }
-
-  visitColumnMapping(node: ColumnMapping): DatasetMappingColumn {
-    const sources = node.sources.map((source) => source.accept(this));
-    const computation = node.computation?.accept(this);
-
-    return {
-      name: node.column.accept(this).value,
-      variables: sources
-        .filter((source) => source.variable != null)
-        .map((source) => ({
-          name: source.variable!,
-          code: {
-            source: source.source,
-            language: source.code.language,
-            code: source.code.code,
-          },
-        })),
-      mappingLogic: ((): DatasetMappingColumn["mappingLogic"] => {
-        if (computation) {
-          return {
-            source: null,
-            language: computation.language,
-            code: computation.code,
-          };
-        }
-
-        const [source] = sources;
-
-        return {
-          source: source.source,
-          language: source.code.language,
-          code: source.code.code,
-        };
-      })(),
-    };
-  }
-
-  visitColumnMappingSource(
-    node: ColumnMappingSource
-  ): ParsedColumnMappingSource {
-    return {
-      source: node.source.accept(this).value,
-      variable: node.variable?.accept(this).value ?? null,
-      code: node.code.accept(this),
-    };
-  }
-
-  visitSourceCode(node: SourceCode): ParsedSourceCode {
-    return {
-      language: node.language,
-      code: node.code,
-    };
-  }
-
-  visitCodelistMember(node: CodelistMember): CodelistItem {
-    const { desc } = this.getDirectives(node.directives);
-    assert(desc.args[0].type === "string");
-
-    return {
-      value: node.name.accept(this).value,
-      description: desc.args[0].value,
-    };
-  }
-
-  visitVariableMapping(node: VariableMapping): ParsedVariableMapping {
-    return {
-      variable: node.variable.accept(this).value,
-      values: node.values
-        .accept(this)
-        .filter((arg): arg is StringValue => arg.type === "string")
-        .map((arg) => arg.value),
-    };
   }
 
   visitColumnDefinition(node: ColumnDefinition): DatasetColumn {
@@ -831,6 +425,13 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
+  visitSourceCode(node: SourceCode): ParsedSourceCode {
+    return {
+      language: node.language,
+      code: node.code,
+    };
+  }
+
   visitString(node: String): StringValue {
     return { type: "string", value: node.value };
   }
@@ -843,9 +444,475 @@ export class ConfigBuilder extends DocumentVisitor {
     });
   }
 
-  getActions(): Action[] {
-    return this.visit(this.file.ast);
+  getActions(): AttributableAction[] {
+    return this.files.flatMap((file) =>
+      this.visit(file.ast).map((action) => ({ file, action }))
+    );
   }
 }
+
+/**
+ * Builds configuration entities for studies, codelists, and milestones.
+ */
+export class Phase1ConfigBuilder extends BaseConfigBuilder {
+  constructor(
+    files: File[],
+    protected accessors: {
+      getCodelistDefs: () => NamedDefMap<CodelistDef>;
+    }
+  ) {
+    super(files, accessors);
+  }
+
+  visitStudyDefinition(node: StudyDefinition): Action[] {
+    const { id, name } = this.getAttributes(node.children);
+
+    assert(id.type === "string");
+    assert(name.type === "string");
+
+    return [
+      actions.setStudy({
+        id: id.value,
+        name: name.value,
+      }),
+    ];
+  }
+
+  visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
+    const timeconf = this.getAttributes(node.children).at;
+    assert(
+      timeconf.type === "time-list" || timeconf.type === "time-expression"
+    );
+
+    return [
+      actions.addMilestone(
+        ((): Milestone => {
+          switch (timeconf.type) {
+            case "time-list": {
+              const [expression] = timeconf.days;
+              assert(expression.type === "study-day");
+
+              return {
+                type: "absolute",
+                name: node.name.accept(this).value,
+                day: expression.day,
+                window: expression.window,
+              };
+            }
+
+            case "time-expression": {
+              const { position, relativeTo } = timeconf;
+              return {
+                type: "relative",
+                name: node.name.accept(this).value,
+                position,
+                relativeTo: ((): RelativeMilestone["relativeTo"] => {
+                  assert(relativeTo.type !== "time-range");
+                  switch (relativeTo.type) {
+                    case "milestone-identifier":
+                      return {
+                        type: "reference",
+                        name: relativeTo.milestoneName,
+                      };
+                    case "study-day":
+                      return {
+                        type: "anonymous",
+                        milestone: {
+                          type: "absolute",
+                          name: null,
+                          day: relativeTo.day,
+                          window: relativeTo.window,
+                        },
+                      };
+                  }
+                })(),
+              };
+            }
+          }
+        })()
+      ),
+    ];
+  }
+
+  visitCodelistDefinition(node: CodelistDefinition): Action[] {
+    return [
+      actions.addCodelist({
+        name: node.name.accept(this).value,
+        items: node.members.map((member) => member.accept(this)),
+      }),
+    ];
+  }
+
+  visitCodelistMember(node: CodelistMember): CodelistItem {
+    const { desc } = this.getDirectives(node.directives);
+    assert(desc.args[0].type === "string");
+
+    return {
+      value: node.name.accept(this).value,
+      description: desc.args[0].value,
+    };
+  }
+}
+
+/**
+ * Builds configuration entities for interfaces.
+ */
+export class Phase2ConfigBuilder extends BaseConfigBuilder {
+  visitInterfaceDefinition(node: InterfaceDefinition): Action[] {
+    return [
+      actions.addInterface({
+        name: node.name.accept(this).value,
+        columns: node.columns.map((column) => column.accept(this)),
+      }),
+    ];
+  }
+}
+
+/**
+ * Builds configuration entities for domain definitions.
+ */
+export class Phase3ConfigBuilder extends BaseConfigBuilder {
+  constructor(
+    files: File[],
+    protected accessors: {
+      getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getInterfaceDefs: () => NamedDefMap<Interface>;
+      getMilestones: () => NamedDefMap<Milestone>;
+    }
+  ) {
+    super(files, accessors);
+  }
+
+  private getDatasetMilestonesFromTimeValue(
+    dayValue: ParsedTimeValue,
+    milestones: NamedDefMap<Milestone>
+  ): Omit<DatasetMilestone, "hour">[] {
+    switch (dayValue.type) {
+      case "study-day":
+        return [
+          {
+            name: null,
+            day: dayValue.day,
+          },
+        ];
+      case "milestone-identifier": {
+        const milestone = milestones[dayValue.milestoneName] as
+          | Milestone
+          | undefined;
+
+        return [
+          {
+            name: milestone?.name ?? null,
+            day: milestone?.type === "absolute" ? milestone.day : null,
+          },
+        ];
+      }
+      case "time-range": {
+        const { start, end } = dayValue;
+        const startMilestones = this.getDatasetMilestonesFromTimeValue(
+          start,
+          milestones
+        );
+        const endMilestones = this.getDatasetMilestonesFromTimeValue(
+          end,
+          milestones
+        );
+        const startDay =
+          Math.max(...startMilestones.map((milestone) => milestone.day ?? 0)) +
+          1;
+        const endDay =
+          Math.min(...endMilestones.map((milestone) => milestone.day ?? 0)) - 1;
+        const daysInBetween = range(startDay, endDay + 1);
+
+        return [
+          ...startMilestones,
+          ...daysInBetween.map((day) => ({ day, name: null, hour: null })),
+          ...endMilestones,
+        ];
+      }
+    }
+  }
+
+  visitDomainDefinition(node: DomainDefinition): Action[] {
+    const { abbr } = this.getDirectives(node.directives);
+
+    assert(abbr.args[0].type === "string");
+
+    return [
+      actions.addDomain({
+        name: node.name.accept(this).value,
+        abbr: abbr.args[0].value,
+        datasets: Object.fromEntries(
+          node.children.map((child) => {
+            const dataset = child.accept(this);
+
+            return [dataset.name, dataset];
+          })
+        ),
+      }),
+    ];
+  }
+
+  visitDatasetDefinition(node: DatasetDefinition): Dataset {
+    const interfaceDefs = this.accessors.getInterfaceDefs();
+    const interfaceColumns =
+      node.interfaces
+        ?.accept(this)
+        .map(({ path }) => interfaceDefs[path].columns) ?? [];
+    const {
+      milestone: {
+        args: [timelist],
+      },
+    } = this.getDirectives(node.directives);
+    const milestones = this.accessors.getMilestones();
+
+    assert(timelist.type === "time-list");
+
+    return {
+      name: node.name.accept(this).value,
+      columns: [
+        ...interfaceColumns.flat(),
+        ...node.columns.map((column) => column.accept(this)),
+      ],
+      milestones: timelist.days
+        .flatMap((item) =>
+          this.getDatasetMilestonesFromTimeValue(item, milestones)
+        )
+        .flatMap(
+          (data): DatasetMilestone[] =>
+            timelist.hours?.map(({ hour }) => ({ ...data, hour })) ?? [
+              {
+                ...data,
+                hour: null,
+              },
+            ]
+        ),
+      mappings: [],
+    };
+  }
+}
+
+/**
+ * Builds configuration entities for dataset mappings.
+ */
+export class Phase4ConfigBuilder extends BaseConfigBuilder {
+  constructor(
+    files: File[],
+    protected accessors: {
+      getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getDatasets: () => NamedDefMap<{ domain: Domain; dataset: Dataset }>;
+    }
+  ) {
+    super(files, accessors);
+  }
+
+  private interpolateVariablesIntoCode(
+    code: string,
+    variables: { [name: string]: string | number }
+  ): string {
+    return Object.entries(variables).reduce(
+      (code, [variableName, variableValue]) =>
+        code.replace(
+          new RegExp(`{{\\s*${escapeRegExp(variableName)}\\s*}}`, "g"),
+          () => variableValue.toString()
+        ),
+      code
+    );
+  }
+
+  private interpolateVariablesIntoColumnMapping(
+    mapping: DatasetMappingColumn,
+    variables: { [name: string]: string | number }
+  ): DatasetMappingColumn {
+    return {
+      ...mapping,
+      mappingLogic: {
+        ...mapping.mappingLogic,
+        code: this.interpolateVariablesIntoCode(
+          mapping.mappingLogic.code,
+          variables
+        ),
+      },
+      variables: mapping.variables.map((variable) => ({
+        ...variable,
+        code: {
+          ...variable.code,
+          code: this.interpolateVariablesIntoCode(
+            variable.code.code,
+            variables
+          ),
+        },
+      })),
+    };
+  }
+
+  private getInterpolationVariables(
+    variable: ParsedVariableMapping | null,
+    variableValue: string | null,
+    milestone: DatasetMilestone | null
+  ): { [name: string]: string | number } {
+    const variables: { [name: string]: string | number } = {};
+
+    if (variable && variableValue != null) {
+      variables[variable.variable] = variableValue;
+    }
+
+    if (milestone?.name) {
+      variables["MILESTONE.NAME"] = milestone.name;
+    }
+
+    if (milestone?.day != null) {
+      variables["MILESTONE.STUDY_DAY"] = milestone.day;
+    }
+
+    if (milestone?.hour != null) {
+      variables["MILESTONE.HOUR"] = milestone.hour;
+    }
+
+    return variables;
+  }
+
+  visitDatasetMapping(node: DatasetMapping): Action[] {
+    const datasetName = node.dataset.accept(this).path;
+    const { dataset } = this.accessors.getDatasets()[datasetName];
+    const milestones = atLeastOne(dataset.milestones, null);
+    const variables = atLeastOne(
+      node.variables.map((variable) => variable.accept(this)),
+      null
+    );
+    const autoMappedColumns: DatasetMappingColumn[] = dataset.columns
+      .map((column) => ({
+        name: column.name,
+        variables: [],
+        mappingLogic: {
+          source: "literal",
+          language: "json",
+          code: ((): string => {
+            switch (column.role) {
+              case "milestone.name":
+                return `"{{${column.role.toUpperCase()}}}"`;
+              case "milestone.study_day":
+              case "milestone.hour":
+                return `{{${column.role.toUpperCase()}}}`;
+              case "subject.uuid":
+              case "subject.id":
+              case "sequence":
+              case null:
+                return "";
+            }
+          })(),
+        },
+      }))
+      .filter((mapping) => mapping.mappingLogic.code !== "");
+
+    return [
+      actions.addDatasetMapping({
+        dataset: datasetName,
+        mappings: variables.flatMap((variable) =>
+          (variable?.values ?? [null]).flatMap((value) =>
+            milestones.map(
+              (milestone): DatasetMappingResult => ({
+                columns: Object.fromEntries([
+                  ...autoMappedColumns.map(
+                    (column): [string, DatasetMappingColumn] => [
+                      column.name,
+                      this.interpolateVariablesIntoColumnMapping(
+                        column,
+                        this.getInterpolationVariables(
+                          variable,
+                          value,
+                          milestone
+                        )
+                      ),
+                    ]
+                  ),
+                  ...node.columns.map((column) => {
+                    const columnMapping =
+                      this.interpolateVariablesIntoColumnMapping(
+                        column.accept(this),
+                        this.getInterpolationVariables(
+                          variable,
+                          value,
+                          milestone
+                        )
+                      );
+                    return [columnMapping.name, columnMapping] as const;
+                  }),
+                ]),
+              })
+            )
+          )
+        ),
+      }),
+    ];
+  }
+
+  visitColumnMapping(node: ColumnMapping): DatasetMappingColumn {
+    const sources = node.sources.map((source) => source.accept(this));
+    const computation = node.computation?.accept(this);
+
+    return {
+      name: node.column.accept(this).value,
+      variables: sources
+        .filter((source) => source.variable != null)
+        .map((source) => ({
+          name: source.variable!,
+          code: {
+            source: source.source,
+            language: source.code.language,
+            code: source.code.code,
+          },
+        })),
+      mappingLogic: ((): DatasetMappingColumn["mappingLogic"] => {
+        if (computation) {
+          return {
+            source: null,
+            language: computation.language,
+            code: computation.code,
+          };
+        }
+
+        const [source] = sources;
+
+        return {
+          source: source.source,
+          language: source.code.language,
+          code: source.code.code,
+        };
+      })(),
+    };
+  }
+
+  visitColumnMappingSource(
+    node: ColumnMappingSource
+  ): ParsedColumnMappingSource {
+    return {
+      source: node.source.accept(this).value,
+      variable: node.variable?.accept(this).value ?? null,
+      code: node.code.accept(this),
+    };
+  }
+
+  visitVariableMapping(node: VariableMapping): ParsedVariableMapping {
+    return {
+      variable: node.variable.accept(this).value,
+      values: node.values
+        .accept(this)
+        .filter((arg): arg is StringValue => arg.type === "string")
+        .map((arg) => arg.value),
+    };
+  }
+}
+
+export const configBuilders = [
+  Phase1ConfigBuilder,
+  Phase2ConfigBuilder,
+  Phase3ConfigBuilder,
+  Phase4ConfigBuilder,
+] as const;
+
+export type SuperAccessor = UnionToIntersection<
+  ConstructorParameters<typeof configBuilders[number]>[1]
+>;
 
 export { actions as configBuilderActions, reducer as configBuilderReducer };

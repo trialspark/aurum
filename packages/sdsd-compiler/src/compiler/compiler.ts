@@ -11,9 +11,11 @@ import {
   StudyDefinition,
 } from "../astTypes";
 import {
-  ConfigBuilder,
+  Phase1ConfigBuilder,
   configBuilderActions,
   configBuilderReducer,
+  SuperAccessor,
+  configBuilders,
 } from "./configBuilder";
 import {
   CodelistDef,
@@ -38,16 +40,12 @@ type Action = ReturnType<
   ObjectValues<typeof defBuilderActions & typeof configBuilderActions>
 >;
 
-interface AttributableAction {
+export interface AttributableAction {
   action: Action;
   file: File;
 }
 
 export interface CompilerOptions {}
-
-interface ParsedFileMap {
-  [filename: string]: File;
-}
 
 type ErrorsByCode<Code extends CompilerErrorCode> = Map<
   Code,
@@ -65,7 +63,6 @@ export class Compiler {
     return this.state.configBuilder.result;
   }
 
-  private files: ParsedFileMap = {};
   private errorsByCode: ErrorsByCode<CompilerErrorCode> = new Map();
 
   private get studyDefs(): StudyDef[] {
@@ -110,53 +107,58 @@ export class Compiler {
     });
   }
 
-  private applyActions(state: ReducerState, actions: Action[]): ReducerState {
-    return actions.reduce(reducer, state);
+  private removeActionsForFiles(names: Set<string>) {
+    const remainingActions = this.actions.filter(
+      ({ file }) => !names.has(file.name)
+    );
+
+    this.actions = [];
+    this.state = this.getInitialState();
+    this.applyActions(remainingActions);
   }
 
-  updateFiles(files: { [filename: string]: string | null }): void {
-    for (const [filename, source] of Object.entries(files)) {
-      // Remove any actions from the last time this file was compiled
-      this.actions = this.actions.filter(
-        (action) => action.file.name !== filename
-      );
+  private applyActions(actions: AttributableAction[]) {
+    this.state = actions
+      .map(({ action }) => action)
+      .reduce(reducer, this.state);
+    this.actions = [...this.actions, ...actions];
+  }
 
-      if (source != null) {
-        // If we have new file contents to compile
-        const newActions: Action[] = [];
-        const file: File = {
+  updateFiles(filesMap: { [filename: string]: string | null }): void {
+    const filenames = new Set(Object.keys(filesMap));
+    const files = Object.entries(filesMap)
+      .filter(([, value]) => value !== null)
+      .map(
+        ([filename, value]): File => ({
           name: filename,
-          ast: stringToAST(source),
-        };
-        newActions.push(...new DefBuilder(file).getActions());
-        newActions.push(
-          ...new ConfigBuilder(file, {
-            getCodelistDefs: () => this.codelistDefs,
-            getInterfaceDefs: () => this.interfaceDefs,
-            getMilestones: () => this.result.milestones,
-            getDatasets: () =>
-              Object.fromEntries(
-                Object.values(this.result.domains).flatMap((domain) =>
-                  Object.entries(domain.datasets).map(
-                    ([datasetName, dataset]) => [
-                      datasetName,
-                      { domain, dataset },
-                    ]
-                  )
-                )
-              ),
-          }).getActions()
-        );
-        this.actions = [
-          ...this.actions,
-          ...newActions.map((action) => ({ file, action })),
-        ];
-      }
-
-      this.state = this.applyActions(
-        this.getInitialState(),
-        this.actions.map(({ action }) => action)
+          ast: stringToAST(value!),
+        })
       );
+
+    const accessors: SuperAccessor = {
+      getCodelistDefs: () => this.codelistDefs,
+      getInterfaceDefs: () => this.interfaceDefs,
+      getMilestones: () => this.result.milestones,
+      getDatasets: () =>
+        Object.fromEntries(
+          Object.values(this.result.domains).flatMap((domain) =>
+            Object.values(domain.datasets).map((dataset) => [
+              dataset.name,
+              { domain, dataset },
+            ])
+          )
+        ),
+    };
+
+    // Clear out any actions for these files since we're updating them
+    this.removeActionsForFiles(filenames);
+
+    // Build defs
+    this.applyActions(new DefBuilder(files).getActions());
+
+    // Build config in phases
+    for (const ConfigBuilder of configBuilders) {
+      this.applyActions(new ConfigBuilder(files, accessors).getActions());
     }
 
     this.checkForGlobalErrors();

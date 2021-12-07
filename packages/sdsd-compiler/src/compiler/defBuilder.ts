@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, freeze, original } from "@reduxjs/toolkit";
-import { CompilationResult, DatasetColumn } from ".";
+import assert from "assert";
+import { AttributableAction, CompilationResult, DatasetColumn } from ".";
 import {
   CodelistDefinition,
   Document,
@@ -80,25 +81,38 @@ export interface File {
 }
 
 export class DefBuilder extends DocumentVisitor {
-  constructor(private file: File) {
+  private currentFile: File | null = null;
+
+  constructor(private files: File[]) {
     super();
   }
 
+  private withFile<R>(file: File, fn: () => R): R {
+    try {
+      this.currentFile = file;
+      return fn();
+    } finally {
+      this.currentFile = null;
+    }
+  }
+
   visitStudyDefinition(node: StudyDefinition): Action[] {
+    assert(this.currentFile != null);
     return [
       actions.addStudyDef({
         ast: node,
-        file: this.file,
+        file: this.currentFile,
       }),
     ];
   }
 
   visitCodelistDefinition(node: CodelistDefinition): Action[] {
+    assert(this.currentFile != null);
     return [
       actions.addCodelistDef({
         name: node.name.value,
         ast: node,
-        file: this.file,
+        file: this.currentFile,
       }),
     ];
   }
@@ -139,8 +153,13 @@ export class DefBuilder extends DocumentVisitor {
     });
   }
 
-  getActions(): Action[] {
-    return this.visit(this.file.ast);
+  getActions(): AttributableAction[] {
+    return this.files.flatMap((file) =>
+      this.withFile(file, () => this.visit(file.ast)).map((action) => ({
+        file,
+        action,
+      }))
+    );
   }
 }
 
