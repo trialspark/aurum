@@ -114,45 +114,50 @@ export class Compiler {
     return actions.reduce(reducer, state);
   }
 
-  set(filename: string, source: string | null): void {
-    // Remove any actions from the last time this file was compiled
-    this.actions = this.actions.filter(
-      (action) => action.file.name !== filename
-    );
-
-    if (source != null) {
-      // If we have new file contents to compile
-      const newActions: Action[] = [];
-      const file: File = {
-        name: filename,
-        ast: stringToAST(source),
-      };
-      newActions.push(...new DefBuilder(file).getActions());
-      newActions.push(
-        ...new ConfigBuilder(file, {
-          getCodelistDefs: () => this.codelistDefs,
-          getInterfaceDefs: () => this.interfaceDefs,
-          getMilestones: () => this.result.milestones,
-          getDatasets: () =>
-            Object.fromEntries(
-              Object.values(this.result.domains).flatMap((domain) =>
-                Object.entries(domain.datasets).map(
-                  ([datasetName, dataset]) => [datasetName, { domain, dataset }]
-                )
-              )
-            ),
-        }).getActions()
+  updateFiles(files: { [filename: string]: string | null }): void {
+    for (const [filename, source] of Object.entries(files)) {
+      // Remove any actions from the last time this file was compiled
+      this.actions = this.actions.filter(
+        (action) => action.file.name !== filename
       );
-      this.actions = [
-        ...this.actions,
-        ...newActions.map((action) => ({ file, action })),
-      ];
-    }
 
-    this.state = this.applyActions(
-      this.getInitialState(),
-      this.actions.map(({ action }) => action)
-    );
+      if (source != null) {
+        // If we have new file contents to compile
+        const newActions: Action[] = [];
+        const file: File = {
+          name: filename,
+          ast: stringToAST(source),
+        };
+        newActions.push(...new DefBuilder(file).getActions());
+        newActions.push(
+          ...new ConfigBuilder(file, {
+            getCodelistDefs: () => this.codelistDefs,
+            getInterfaceDefs: () => this.interfaceDefs,
+            getMilestones: () => this.result.milestones,
+            getDatasets: () =>
+              Object.fromEntries(
+                Object.values(this.result.domains).flatMap((domain) =>
+                  Object.entries(domain.datasets).map(
+                    ([datasetName, dataset]) => [
+                      datasetName,
+                      { domain, dataset },
+                    ]
+                  )
+                )
+              ),
+          }).getActions()
+        );
+        this.actions = [
+          ...this.actions,
+          ...newActions.map((action) => ({ file, action })),
+        ];
+      }
+
+      this.state = this.applyActions(
+        this.getInitialState(),
+        this.actions.map(({ action }) => action)
+      );
+    }
 
     this.checkForGlobalErrors();
   }

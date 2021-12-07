@@ -17,15 +17,14 @@ describe("Compiler", () => {
 
   describe("when a study definition is added", () => {
     beforeEach(() => {
-      compiler.set(
-        "study.sdsd",
-        `
+      compiler.updateFiles({
+        "study.sdsd": `
           study {
             id: "MY-STUDY"
             name: "Longer version of my study"
           }
-        `
-      );
+        `,
+      });
     });
 
     it("compiles without error", () => {
@@ -34,15 +33,14 @@ describe("Compiler", () => {
     });
 
     it("errors when the study definition is removed", () => {
-      compiler.set("study.sdsd", null);
+      compiler.updateFiles({ "study.sdsd": null });
       expect(compiler.errors).toMatchSnapshot();
     });
 
     describe("and some milestones are added", () => {
       beforeEach(() => {
-        compiler.set(
-          "milestones.sdsd",
-          `
+        compiler.updateFiles({
+          "milestones.sdsd": `
             milestone SCREENING {
               at: t"d-14 +d14 -d10"
             }
@@ -66,8 +64,8 @@ describe("Compiler", () => {
             milestone EARLY_TERM {
               at: t"> BASELINE"
             }
-          `
-        );
+          `,
+        });
       });
 
       it("compiles without error", () => {
@@ -76,36 +74,33 @@ describe("Compiler", () => {
       });
 
       it("can add milestones in a separate file", () => {
-        compiler.set(
-          "milestones2.sdsd",
-          `
+        compiler.updateFiles({
+          "milestones2.sdsd": `
             milestone CLOSEOUT {
               at: t"d28"
             }
-          `
-        );
+          `,
+        });
         expect(compiler.errors).toEqual([]);
         expect(compiler.result).toMatchSnapshot();
       });
 
       it("can remove milestones", () => {
-        compiler.set(
-          "milestones.sdsd",
-          `
+        compiler.updateFiles({
+          "milestones.sdsd": `
             milestone CLOSEOUT {
               at: t"d28"
             }
-          `
-        );
+          `,
+        });
         expect(compiler.errors).toEqual([]);
         expect(compiler.result).toMatchSnapshot();
       });
 
       describe("and some interfaces are added", () => {
         beforeEach(() => {
-          compiler.set(
-            "interfaces.sdsd",
-            `
+          compiler.updateFiles({
+            "interfaces.sdsd": `
               interface base {
                 USUBJID String   @subject.uuid
                                  @label("Unique Subject Identifier")
@@ -129,15 +124,14 @@ describe("Compiler", () => {
                                  @label("Planned Study Day of Visit")
                                  @desc("Planned study day of the visit based upon RFSTDTC in Demographics.")
               }
-            `
-          );
+            `,
+          });
         });
 
         describe("and some codelists are added", () => {
           beforeEach(() => {
-            compiler.set(
-              "codelists.sdsd",
-              `
+            compiler.updateFiles({
+              "codelists.sdsd": `
                 codelist VSTestCode {
                   BMI    @desc("A general indicator of the body fat an individual is carrying based upon the ratio of weight to height.")
                   DIABP  @desc("The minimum blood pressure in the systemic arterial circulation during the cardiac cycle.")
@@ -160,8 +154,8 @@ describe("Compiler", () => {
                   "beats/min" @desc("The number of heartbeats measured per minute time.")
                   C           @desc("A unit of temperature of the temperature scale designed so that the freezing point of water is 0 degrees and the boiling point is 100 degrees at standard atmospheric pressure.")
                 }
-              `
-            );
+              `,
+            });
           });
 
           it("compiles without error", () => {
@@ -171,9 +165,8 @@ describe("Compiler", () => {
 
           describe("and a domain is added", () => {
             beforeEach(() => {
-              compiler.set(
-                "vs.sdsd",
-                `
+              compiler.updateFiles({
+                "vs.sdsd": `
                   domain "VITAL SIGNS" @abbr("VS") {
                     dataset vs implements base, visit_base @milestone(t"BASELINE, CLINIC_1, CLINIC_2, CLINIC_3") {
                       VSSEQ Integer                 @sequence
@@ -248,8 +241,8 @@ describe("Compiler", () => {
                                                     @desc("Describes why a measurement or test was not performed.")
                     }
                   }
-                `
-              );
+                `,
+              });
             });
 
             it("compiles without error", () => {
@@ -259,9 +252,8 @@ describe("Compiler", () => {
 
             describe("and dataset mappings are added", () => {
               beforeEach(() => {
-                compiler.set(
-                  "vs_map.sdsd",
-                  `
+                compiler.updateFiles({
+                  "vs_map.sdsd": `
                     map dataset vs with VSTESTCD as ("HEIGHT", "HR", "TEMP", "WEIGHT") {
                       VSTESTCD from literal \`\`\`json
                         "{{VSTESTCD}}"
@@ -433,8 +425,8 @@ describe("Compiler", () => {
                         FROM vs_hr;
                       \`\`\`
                     }
-                  `
-                );
+                  `,
+                });
               });
 
               it("compiles without error", () => {
