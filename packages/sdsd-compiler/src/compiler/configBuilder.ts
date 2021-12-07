@@ -361,102 +361,112 @@ export class ConfigBuilder extends DocumentVisitor {
     return variables;
   }
 
-  visitStudyDefinition(node: StudyDefinition): Action {
+  visitStudyDefinition(node: StudyDefinition): Action[] {
     const { id, name } = this.getAttributes(node.children);
 
     assert(id.type === "string");
     assert(name.type === "string");
 
-    return actions.setStudy({
-      id: id.value,
-      name: name.value,
-    });
+    return [
+      actions.setStudy({
+        id: id.value,
+        name: name.value,
+      }),
+    ];
   }
 
-  visitMilestoneDefinition(node: MilestoneDefinition): Action {
+  visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
     const timeconf = this.getAttributes(node.children).at;
     assert(
       timeconf.type === "time-list" || timeconf.type === "time-expression"
     );
 
-    return actions.addMilestone(
-      ((): Milestone => {
-        switch (timeconf.type) {
-          case "time-list": {
-            const [expression] = timeconf.days;
-            assert(expression.type === "study-day");
+    return [
+      actions.addMilestone(
+        ((): Milestone => {
+          switch (timeconf.type) {
+            case "time-list": {
+              const [expression] = timeconf.days;
+              assert(expression.type === "study-day");
 
-            return {
-              type: "absolute",
-              name: node.name.accept(this).value,
-              day: expression.day,
-              window: expression.window,
-            };
+              return {
+                type: "absolute",
+                name: node.name.accept(this).value,
+                day: expression.day,
+                window: expression.window,
+              };
+            }
+
+            case "time-expression": {
+              const { position, relativeTo } = timeconf;
+              return {
+                type: "relative",
+                name: node.name.accept(this).value,
+                position,
+                relativeTo: ((): RelativeMilestone["relativeTo"] => {
+                  assert(relativeTo.type !== "time-range");
+                  switch (relativeTo.type) {
+                    case "milestone-identifier":
+                      return {
+                        type: "reference",
+                        name: relativeTo.milestoneName,
+                      };
+                    case "study-day":
+                      return {
+                        type: "anonymous",
+                        milestone: {
+                          type: "absolute",
+                          name: null,
+                          day: relativeTo.day,
+                          window: relativeTo.window,
+                        },
+                      };
+                  }
+                })(),
+              };
+            }
           }
-
-          case "time-expression": {
-            const { position, relativeTo } = timeconf;
-            return {
-              type: "relative",
-              name: node.name.accept(this).value,
-              position,
-              relativeTo: ((): RelativeMilestone["relativeTo"] => {
-                assert(relativeTo.type !== "time-range");
-                switch (relativeTo.type) {
-                  case "milestone-identifier":
-                    return {
-                      type: "reference",
-                      name: relativeTo.milestoneName,
-                    };
-                  case "study-day":
-                    return {
-                      type: "anonymous",
-                      milestone: {
-                        type: "absolute",
-                        name: null,
-                        day: relativeTo.day,
-                        window: relativeTo.window,
-                      },
-                    };
-                }
-              })(),
-            };
-          }
-        }
-      })()
-    );
+        })()
+      ),
+    ];
   }
 
-  visitCodelistDefinition(node: CodelistDefinition): Action {
-    return actions.addCodelist({
-      name: node.name.accept(this).value,
-      items: node.members.map((member) => member.accept(this)),
-    });
+  visitCodelistDefinition(node: CodelistDefinition): Action[] {
+    return [
+      actions.addCodelist({
+        name: node.name.accept(this).value,
+        items: node.members.map((member) => member.accept(this)),
+      }),
+    ];
   }
 
-  visitInterfaceDefinition(node: InterfaceDefinition): Action {
-    return actions.addInterface({
-      name: node.name.accept(this).value,
-      columns: node.columns.map((column) => column.accept(this)),
-    });
+  visitInterfaceDefinition(node: InterfaceDefinition): Action[] {
+    return [
+      actions.addInterface({
+        name: node.name.accept(this).value,
+        columns: node.columns.map((column) => column.accept(this)),
+      }),
+    ];
   }
 
-  visitDomainDefinition(node: DomainDefinition): Action {
+  visitDomainDefinition(node: DomainDefinition): Action[] {
     const { abbr } = this.getDirectives(node.directives);
 
     assert(abbr.args[0].type === "string");
 
-    return actions.addDomain({
-      name: node.name.accept(this).value,
-      abbr: abbr.args[0].value,
-      datasets: Object.fromEntries(
-        node.children.map((child) => {
-          const dataset = child.accept(this);
+    return [
+      actions.addDomain({
+        name: node.name.accept(this).value,
+        abbr: abbr.args[0].value,
+        datasets: Object.fromEntries(
+          node.children.map((child) => {
+            const dataset = child.accept(this);
 
-          return [dataset.name, dataset];
-        })
-      ),
-    });
+            return [dataset.name, dataset];
+          })
+        ),
+      }),
+    ];
   }
 
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
@@ -497,7 +507,7 @@ export class ConfigBuilder extends DocumentVisitor {
     };
   }
 
-  visitDatasetMapping(node: DatasetMapping): Action {
+  visitDatasetMapping(node: DatasetMapping): Action[] {
     const datasetName = node.dataset.accept(this).path;
     const { dataset } = this.accessors.getDatasets()[datasetName];
     const milestones = atLeastOne(dataset.milestones, null);
@@ -530,36 +540,46 @@ export class ConfigBuilder extends DocumentVisitor {
       }))
       .filter((mapping) => mapping.mappingLogic.code !== "");
 
-    return actions.addDatasetMapping({
-      dataset: datasetName,
-      mappings: variables.flatMap((variable) =>
-        (variable?.values ?? [null]).flatMap((value) =>
-          milestones.map(
-            (milestone): DatasetMappingResult => ({
-              columns: Object.fromEntries([
-                ...autoMappedColumns.map(
-                  (column): [string, DatasetMappingColumn] => [
-                    column.name,
-                    this.interpolateVariablesIntoColumnMapping(
-                      column,
-                      this.getInterpolationVariables(variable, value, milestone)
-                    ),
-                  ]
-                ),
-                ...node.columns.map((column) => {
-                  const columnMapping =
-                    this.interpolateVariablesIntoColumnMapping(
-                      column.accept(this),
-                      this.getInterpolationVariables(variable, value, milestone)
-                    );
-                  return [columnMapping.name, columnMapping] as const;
-                }),
-              ]),
-            })
+    return [
+      actions.addDatasetMapping({
+        dataset: datasetName,
+        mappings: variables.flatMap((variable) =>
+          (variable?.values ?? [null]).flatMap((value) =>
+            milestones.map(
+              (milestone): DatasetMappingResult => ({
+                columns: Object.fromEntries([
+                  ...autoMappedColumns.map(
+                    (column): [string, DatasetMappingColumn] => [
+                      column.name,
+                      this.interpolateVariablesIntoColumnMapping(
+                        column,
+                        this.getInterpolationVariables(
+                          variable,
+                          value,
+                          milestone
+                        )
+                      ),
+                    ]
+                  ),
+                  ...node.columns.map((column) => {
+                    const columnMapping =
+                      this.interpolateVariablesIntoColumnMapping(
+                        column.accept(this),
+                        this.getInterpolationVariables(
+                          variable,
+                          value,
+                          milestone
+                        )
+                      );
+                    return [columnMapping.name, columnMapping] as const;
+                  }),
+                ]),
+              })
+            )
           )
-        )
-      ),
-    });
+        ),
+      }),
+    ];
   }
 
   visitColumnMapping(node: ColumnMapping): DatasetMappingColumn {
@@ -816,9 +836,11 @@ export class ConfigBuilder extends DocumentVisitor {
   }
 
   visit(node: Document): Action[] {
-    return nonNull(
-      node.children.map((child) => child.accept(this))
-    ) as Action[];
+    return node.children.flatMap((child) => {
+      const actions = child.accept(this);
+
+      return Array.isArray(actions) ? actions : [];
+    });
   }
 
   getActions(): Action[] {

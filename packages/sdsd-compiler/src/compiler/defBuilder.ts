@@ -84,19 +84,23 @@ export class DefBuilder extends DocumentVisitor {
     super();
   }
 
-  visitStudyDefinition(node: StudyDefinition): Action {
-    return actions.addStudyDef({
-      ast: node,
-      file: this.file,
-    });
+  visitStudyDefinition(node: StudyDefinition): Action[] {
+    return [
+      actions.addStudyDef({
+        ast: node,
+        file: this.file,
+      }),
+    ];
   }
 
-  visitCodelistDefinition(node: CodelistDefinition): Action {
-    return actions.addCodelistDef({
-      name: node.name.value,
-      ast: node,
-      file: this.file,
-    });
+  visitCodelistDefinition(node: CodelistDefinition): Action[] {
+    return [
+      actions.addCodelistDef({
+        name: node.name.value,
+        ast: node,
+        file: this.file,
+      }),
+    ];
   }
 
   visitInterfaceDefinition(): null {
@@ -124,9 +128,15 @@ export class DefBuilder extends DocumentVisitor {
   }
 
   visit(node: Document): Action[] {
-    return nonNull(
-      node.children.map((child) => child.accept(this))
-    ) as Action[];
+    return node.children.flatMap((child) => {
+      const actions = child.accept(this);
+
+      if (Array.isArray(actions)) {
+        return actions;
+      }
+
+      return [];
+    });
   }
 
   getActions(): Action[] {
