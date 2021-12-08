@@ -1,33 +1,17 @@
 import { CompilationResult, Dataset, DefinitionType, Domain } from ".";
-import { combineReducers } from "@reduxjs/toolkit";
 import { stringToAST } from "..";
-import {
-  configBuilderActions,
-  configBuilderReducer,
-  SuperAccessor,
-  configBuilders,
-} from "./configBuilder";
-import {
-  CodelistDef,
-  DefBuilder,
-  defBuilderActions,
-  defBuilderReducer,
-  File,
-  NamedDefMap,
-  StudyDef,
-} from "./defBuilder";
+import { SuperAccessor, configBuilders } from "./configBuilder";
+import { DefBuilder } from "./defBuilder";
 import { Diagnostic, DiagnosticCode, DiagnosticScope } from "./diagnostics";
-import { ObjectValues } from "../utils";
-
-const reducer = combineReducers({
-  defBuilder: defBuilderReducer,
-  configBuilder: configBuilderReducer,
-});
-
-type ReducerState = ReturnType<typeof reducer>;
-type Action = ReturnType<
-  ObjectValues<typeof defBuilderActions & typeof configBuilderActions>
->;
+import {
+  Action,
+  CodelistDef,
+  NamedDefMap,
+  reducer,
+  ReducerState,
+  StudyDef,
+  File,
+} from "./state";
 
 export interface AttributableAction {
   action: Action;

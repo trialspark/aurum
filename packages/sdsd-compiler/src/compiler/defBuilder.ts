@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, freeze } from "@reduxjs/toolkit";
-import assert from "assert";
 import { AttributableAction } from ".";
 import {
   CodelistDefinition,
@@ -10,83 +9,8 @@ import {
   MilestoneDefinition,
   StudyDefinition,
 } from "../astTypes";
+import { Action, defBuilderActions, File } from "./state";
 import { DocumentVisitor } from "./visitor";
-
-export interface DefBuilderState {
-  studyDefs: StudyDef[];
-  interfaceDefs: NamedDefMap<InterfaceDef>;
-  milestoneDefs: NamedDefMap<MilestoneDef>;
-  codelistDefs: NamedDefMap<CodelistDef>;
-  datasetDefs: NamedDefMap<DatasetDef>;
-}
-
-const initialState: DefBuilderState = {
-  studyDefs: [],
-  interfaceDefs: {},
-  milestoneDefs: {},
-  codelistDefs: {},
-  datasetDefs: {},
-};
-
-const { reducer, actions } = createSlice({
-  name: "defBuilder",
-  initialState,
-  reducers: {
-    addStudyDef: (state, action: PayloadAction<StudyDef>) => {
-      state.studyDefs.push(freeze(action.payload));
-    },
-    addInterfaceDef: (state, action: PayloadAction<InterfaceDef>) => {
-      state.interfaceDefs[action.payload.name] = action.payload;
-    },
-    addMilestoneDef: (state, action: PayloadAction<MilestoneDef>) => {
-      state.milestoneDefs[action.payload.name] = action.payload;
-    },
-    addCodelistDef: (state, action: PayloadAction<CodelistDef>) => {
-      state.codelistDefs[action.payload.name] = freeze(action.payload);
-    },
-    addDatasetDef: (state, action: PayloadAction<DatasetDef>) => {
-      state.datasetDefs[action.payload.name] = action.payload;
-    },
-  },
-});
-
-type Action = ReturnType<typeof actions[keyof typeof actions]>;
-
-export interface StudyDef {
-  ast: StudyDefinition;
-  file: File;
-}
-
-export interface InterfaceDef {
-  name: string;
-  ast: InterfaceDefinition;
-  file: File;
-}
-
-export interface MilestoneDef {
-  name: string;
-  ast: MilestoneDefinition;
-  file: File;
-}
-
-export interface CodelistDef {
-  name: string;
-  ast: CodelistDefinition;
-  file: File;
-}
-
-export interface DatasetDef {
-  name: string;
-  ast: DatasetDefinition;
-  file: File;
-}
-
-export type NamedDefMap<Def> = { [name: string]: Def | undefined };
-
-export interface File {
-  name: string;
-  ast: Document;
-}
 
 export class DefBuilder extends DocumentVisitor {
   private currentFile: File | null = null;
@@ -106,7 +30,7 @@ export class DefBuilder extends DocumentVisitor {
 
   visitStudyDefinition(node: StudyDefinition): Action[] {
     return [
-      actions.addStudyDef({
+      defBuilderActions.addStudyDef({
         ast: node,
         file: this.currentFile!,
       }),
@@ -115,7 +39,7 @@ export class DefBuilder extends DocumentVisitor {
 
   visitInterfaceDefinition(node: InterfaceDefinition): Action[] {
     return [
-      actions.addInterfaceDef({
+      defBuilderActions.addInterfaceDef({
         name: node.name.value,
         ast: node,
         file: this.currentFile!,
@@ -125,7 +49,7 @@ export class DefBuilder extends DocumentVisitor {
 
   visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
     return [
-      actions.addMilestoneDef({
+      defBuilderActions.addMilestoneDef({
         name: node.name.value,
         ast: node,
         file: this.currentFile!,
@@ -135,7 +59,7 @@ export class DefBuilder extends DocumentVisitor {
 
   visitCodelistDefinition(node: CodelistDefinition): Action[] {
     return [
-      actions.addCodelistDef({
+      defBuilderActions.addCodelistDef({
         name: node.name.value,
         ast: node,
         file: this.currentFile!,
@@ -149,7 +73,7 @@ export class DefBuilder extends DocumentVisitor {
 
   visitDatasetDefinition(node: DatasetDefinition): Action[] {
     return [
-      actions.addDatasetDef({
+      defBuilderActions.addDatasetDef({
         name: node.name.value,
         ast: node,
         file: this.currentFile!,
@@ -178,5 +102,3 @@ export class DefBuilder extends DocumentVisitor {
     );
   }
 }
-
-export { actions as defBuilderActions, reducer as defBuilderReducer };

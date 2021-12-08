@@ -23,6 +23,7 @@ import {
   DiagnosticCode,
   DiagnosticScope,
   DefinitionType,
+  Interface,
 } from ".";
 import {
   Args,
@@ -63,78 +64,10 @@ import {
   Window,
 } from "../astTypes";
 import { atLeastOne, nonNull, untab } from "../utils";
-import { CodelistDef, File, InterfaceDef, NamedDefMap } from "./defBuilder";
+import { CodelistDef, File, NamedDefMap } from "./state";
 import { DocumentVisitor } from "./visitor";
-
-export interface ConfigBuilderState {
-  result: CompilationResult;
-  interfaces: NamedDefMap<Interface>;
-  diagnostics: Diagnostic[];
-}
-
-const initialState: ConfigBuilderState = {
-  result: {
-    study: {
-      id: "",
-      name: "",
-    },
-    milestones: {},
-    codelists: {},
-    domains: {},
-  },
-  interfaces: {},
-  diagnostics: [],
-};
-
-const { reducer, actions } = createSlice({
-  initialState,
-  name: "configBuilder",
-  reducers: {
-    setStudy: (state, action: PayloadAction<StudyInfo>) => {
-      state.result.study = freeze(action.payload);
-    },
-    addMilestone: (state, action: PayloadAction<Milestone>) => {
-      state.result.milestones[action.payload.name!] = freeze(action.payload);
-    },
-    addInterface: (state, action: PayloadAction<Interface>) => {
-      state.interfaces[action.payload.name] = freeze(action.payload);
-    },
-    addCodelist: (state, action: PayloadAction<Codelist>) => {
-      state.result.codelists[action.payload.name] = freeze(action.payload);
-    },
-    addDomain: (state, action: PayloadAction<Domain>) => {
-      state.result.domains[action.payload.name] = freeze(action.payload);
-    },
-    addDatasetMapping: (
-      state,
-      action: PayloadAction<{
-        dataset: string;
-        mappings: DatasetMappingResult[];
-      }>
-    ) => {
-      const datasetName = action.payload.dataset;
-      const domainName = Object.entries(original(state)!.result.domains).find(
-        ([, value]) => datasetName in value.datasets
-      )?.[0];
-
-      if (domainName) {
-        state.result.domains[domainName].datasets[datasetName].mappings.push(
-          ...action.payload.mappings
-        );
-      }
-    },
-    addDiagnostic: (state, action: PayloadAction<Diagnostic>) => {
-      state.diagnostics.push(action.payload);
-    },
-  },
-});
-
-type Action = ReturnType<typeof actions[keyof typeof actions]>;
-
-interface Interface {
-  name: string;
-  columns: DatasetColumn[];
-}
+import { Action } from "./state";
+import { configBuilderActions } from "./state/configBuilder";
 
 interface StringValue {
   type: "string";
@@ -236,10 +169,14 @@ class BaseConfigBuilder extends DocumentVisitor {
 
   protected currentFile: File | null = null;
 
-  private diagnosticActions: ReturnType<typeof actions["addDiagnostic"]>[] = [];
+  private diagnosticActions: ReturnType<
+    typeof configBuilderActions["addDiagnostic"]
+  >[] = [];
 
   protected addDiagnostic(diagnostic: Diagnostic) {
-    return this.diagnosticActions.push(actions.addDiagnostic(diagnostic));
+    return this.diagnosticActions.push(
+      configBuilderActions.addDiagnostic(diagnostic)
+    );
   }
 
   private withFile<R>(file: File, fn: () => R): R {
@@ -539,7 +476,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
     assert(name.type === "string");
 
     return [
-      actions.setStudy({
+      configBuilderActions.setStudy({
         id: id.value,
         name: name.value,
       }),
@@ -553,7 +490,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
     );
 
     return [
-      actions.addMilestone(
+      configBuilderActions.addMilestone(
         ((): Milestone => {
           switch (timeconf.type) {
             case "time-list": {
@@ -604,7 +541,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
 
   visitCodelistDefinition(node: CodelistDefinition): Action[] {
     return [
-      actions.addCodelist({
+      configBuilderActions.addCodelist({
         name: node.name.accept(this).value,
         items: node.members.map((member) => member.accept(this)),
       }),
@@ -628,7 +565,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
 export class Phase2ConfigBuilder extends BaseConfigBuilder {
   visitInterfaceDefinition(node: InterfaceDefinition): Action[] {
     return [
-      actions.addInterface({
+      configBuilderActions.addInterface({
         name: node.name.accept(this).value,
         columns: node.columns.map((column) => column.accept(this)),
       }),
@@ -723,7 +660,7 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
     assert(abbr.args[0].type === "string");
 
     return [
-      actions.addDomain({
+      configBuilderActions.addDomain({
         name: node.name.accept(this).value,
         abbr: abbr.args[0].value,
         datasets: Object.fromEntries(
@@ -936,7 +873,7 @@ export class Phase4ConfigBuilder extends BaseConfigBuilder {
       .filter((mapping) => mapping.mappingLogic.code !== "");
 
     return [
-      actions.addDatasetMapping({
+      configBuilderActions.addDatasetMapping({
         dataset: datasetName,
         mappings: variables.flatMap((variable) =>
           (variable?.values ?? [null]).flatMap((value) =>
@@ -1044,5 +981,3 @@ export const configBuilders = [
 export type SuperAccessor = UnionToIntersection<
   ConstructorParameters<typeof configBuilders[number]>[1]
 >;
-
-export { actions as configBuilderActions, reducer as configBuilderReducer };

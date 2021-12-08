@@ -110,3 +110,8 @@ export interface CompilationResult {
   codelists: { [name: string]: Codelist };
   domains: { [name: string]: Domain };
 }
+
+export interface Interface {
+  name: string;
+  columns: DatasetColumn[];
+}
