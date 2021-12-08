@@ -1,17 +1,7 @@
-import { CompilationResult } from ".";
+import { CompilationResult, Dataset, DefinitionType, Domain } from ".";
 import { combineReducers } from "@reduxjs/toolkit";
 import { stringToAST } from "..";
 import {
-  CodelistDefinition,
-  Document,
-  DomainDefinition,
-  InterfaceDefinition,
-  MilestoneDefinition,
-  Node,
-  StudyDefinition,
-} from "../astTypes";
-import {
-  Phase1ConfigBuilder,
   configBuilderActions,
   configBuilderReducer,
   SuperAccessor,
@@ -23,11 +13,10 @@ import {
   defBuilderActions,
   defBuilderReducer,
   File,
-  InterfaceDef,
   NamedDefMap,
   StudyDef,
 } from "./defBuilder";
-import { CompilerError, CompilerErrorCode, CompilerErrorScope } from "./errors";
+import { Diagnostic, DiagnosticCode, DiagnosticScope } from "./diagnostics";
 import { ObjectValues } from "../utils";
 
 const reducer = combineReducers({
@@ -45,25 +34,32 @@ export interface AttributableAction {
   file: File;
 }
 
-export interface CompilerOptions {}
+export interface CompilerOptions {
+  scalarTypes: string[];
+}
 
-type ErrorsByCode<Code extends CompilerErrorCode> = Map<
+type ErrorsByCode<Code extends DiagnosticCode> = Map<
   Code,
-  (CompilerError & { code: Code })[]
+  (Diagnostic & { code: Code })[]
 >;
 
+type FileMap = { [filename: string]: string | null };
+
 export class Compiler {
+  private filesMap: FileMap = {};
   private state: ReducerState = this.getInitialState();
   private actions: AttributableAction[] = [];
 
-  public get errors(): CompilerError[] {
+  public options: CompilerOptions;
+
+  public get diagnostics(): Diagnostic[] {
     return Array.from(this.errorsByCode.values()).flat();
   }
   public get result(): CompilationResult {
     return this.state.configBuilder.result;
   }
 
-  private errorsByCode: ErrorsByCode<CompilerErrorCode> = new Map();
+  private errorsByCode: ErrorsByCode<DiagnosticCode> = new Map();
 
   private get studyDefs(): StudyDef[] {
     return this.state.defBuilder.studyDefs;
@@ -71,12 +67,25 @@ export class Compiler {
   private get codelistDefs(): NamedDefMap<CodelistDef> {
     return this.state.defBuilder.codelistDefs;
   }
-
   private get interfaceDefs(): ReducerState["configBuilder"]["interfaces"] {
     return this.state.configBuilder.interfaces;
   }
+  private get datasetDefs(): NamedDefMap<{ domain: Domain; dataset: Dataset }> {
+    return Object.fromEntries(
+      Object.values(this.result.domains).flatMap((domain) =>
+        Object.values(domain.datasets).map((dataset) => [
+          dataset.name,
+          { domain, dataset },
+        ])
+      )
+    );
+  }
 
-  constructor(public options: CompilerOptions) {
+  constructor(options: Partial<CompilerOptions>) {
+    this.options = {
+      scalarTypes: ["String", "Boolean", "Integer", "Float", "Null"],
+      ...options,
+    };
     this.checkForGlobalErrors();
   }
 
@@ -84,7 +93,7 @@ export class Compiler {
     return reducer(undefined, { type: "@@init" });
   }
 
-  private errorIf(predicate: boolean, error: CompilerError) {
+  private errorIf(predicate: boolean, error: Diagnostic) {
     if (predicate) {
       this.errorsByCode.set(error.code, [error]);
     } else {
@@ -94,8 +103,8 @@ export class Compiler {
 
   private checkForGlobalErrors() {
     this.errorIf(this.studyDefs.length === 0, {
-      code: CompilerErrorCode.MISSING_STUDY_DEF,
-      scope: CompilerErrorScope.GLOBAL,
+      code: DiagnosticCode.MISSING_STUDY_DEF,
+      scope: DiagnosticScope.GLOBAL,
       loc: null,
       message:
         "Missing study definition, e.g.:\n" +
@@ -124,7 +133,47 @@ export class Compiler {
     this.actions = [...this.actions, ...actions];
   }
 
-  updateFiles(filesMap: { [filename: string]: string | null }): void {
+  private recompileIfMissingDefsHaveBeenAdded() {
+    const {
+      configBuilder: {
+        diagnostics,
+        result: { codelists, milestones },
+        interfaces,
+      },
+    } = this.state;
+    const datasets = this.datasetDefs;
+    const defTypeToDef: { [T in DefinitionType]: NamedDefMap<unknown> } = {
+      [DefinitionType.CODELIST]: codelists,
+      [DefinitionType.DATASET]: datasets,
+      [DefinitionType.INTERFACE]: interfaces,
+      [DefinitionType.MILESTONE]: milestones,
+      [DefinitionType.STUDY]: {},
+    };
+    const filenamesToRebuild = new Set(
+      diagnostics.flatMap((diagnostic): string | never[] => {
+        if (diagnostic.code !== DiagnosticCode.NOT_FOUND) {
+          return [];
+        }
+
+        return diagnostic.name in defTypeToDef[diagnostic.defType]
+          ? diagnostic.loc.filename
+          : [];
+      })
+    );
+    const filesMap = Object.fromEntries(
+      Object.entries(this.filesMap).flatMap(([filename, source]) => {
+        if (filenamesToRebuild.has(filename) && source != null) {
+          return [[filename, source]];
+        }
+
+        return [];
+      })
+    );
+
+    this.compileFiles(filesMap);
+  }
+
+  private compileFiles(filesMap: FileMap) {
     const filenames = new Set(Object.keys(filesMap));
     const files = Object.entries(filesMap)
       .filter(([, value]) => value !== null)
@@ -134,20 +183,12 @@ export class Compiler {
           ast: stringToAST(value!),
         })
       );
-
     const accessors: SuperAccessor = {
+      getOptions: () => this.options,
       getCodelistDefs: () => this.codelistDefs,
       getInterfaceDefs: () => this.interfaceDefs,
       getMilestones: () => this.result.milestones,
-      getDatasets: () =>
-        Object.fromEntries(
-          Object.values(this.result.domains).flatMap((domain) =>
-            Object.values(domain.datasets).map((dataset) => [
-              dataset.name,
-              { domain, dataset },
-            ])
-          )
-        ),
+      getDatasets: () => this.datasetDefs,
     };
 
     // Clear out any actions for these files since we're updating them
@@ -160,7 +201,13 @@ export class Compiler {
     for (const ConfigBuilder of configBuilders) {
       this.applyActions(new ConfigBuilder(files, accessors).getActions());
     }
+  }
 
+  updateFiles(filesMap: FileMap): void {
+    this.filesMap = { ...this.filesMap, ...filesMap };
+
+    this.compileFiles(filesMap);
+    this.recompileIfMissingDefsHaveBeenAdded();
     this.checkForGlobalErrors();
   }
 }

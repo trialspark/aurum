@@ -1,15 +1,15 @@
-import { createSlice, PayloadAction, freeze, original } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, freeze } from "@reduxjs/toolkit";
 import assert from "assert";
-import { AttributableAction, CompilationResult, DatasetColumn } from ".";
+import { AttributableAction } from ".";
 import {
   CodelistDefinition,
+  DatasetDefinition,
   Document,
   DomainDefinition,
   InterfaceDefinition,
   MilestoneDefinition,
   StudyDefinition,
 } from "../astTypes";
-import { nonNull } from "../utils";
 import { DocumentVisitor } from "./visitor";
 
 export interface DefBuilderState {
@@ -17,7 +17,7 @@ export interface DefBuilderState {
   interfaceDefs: NamedDefMap<InterfaceDef>;
   milestoneDefs: NamedDefMap<MilestoneDef>;
   codelistDefs: NamedDefMap<CodelistDef>;
-  domainDefs: NamedDefMap<DomainDef>;
+  datasetDefs: NamedDefMap<DatasetDef>;
 }
 
 const initialState: DefBuilderState = {
@@ -25,7 +25,7 @@ const initialState: DefBuilderState = {
   interfaceDefs: {},
   milestoneDefs: {},
   codelistDefs: {},
-  domainDefs: {},
+  datasetDefs: {},
 };
 
 const { reducer, actions } = createSlice({
@@ -35,10 +35,18 @@ const { reducer, actions } = createSlice({
     addStudyDef: (state, action: PayloadAction<StudyDef>) => {
       state.studyDefs.push(freeze(action.payload));
     },
+    addInterfaceDef: (state, action: PayloadAction<InterfaceDef>) => {
+      state.interfaceDefs[action.payload.name] = action.payload;
+    },
+    addMilestoneDef: (state, action: PayloadAction<MilestoneDef>) => {
+      state.milestoneDefs[action.payload.name] = action.payload;
+    },
     addCodelistDef: (state, action: PayloadAction<CodelistDef>) => {
       state.codelistDefs[action.payload.name] = freeze(action.payload);
     },
-    noop: () => {},
+    addDatasetDef: (state, action: PayloadAction<DatasetDef>) => {
+      state.datasetDefs[action.payload.name] = action.payload;
+    },
   },
 });
 
@@ -67,13 +75,13 @@ export interface CodelistDef {
   file: File;
 }
 
-export interface DomainDef {
+export interface DatasetDef {
   name: string;
-  ast: DomainDefinition;
+  ast: DatasetDefinition;
   file: File;
 }
 
-export type NamedDefMap<Def> = { [name: string]: Def };
+export type NamedDefMap<Def> = { [name: string]: Def | undefined };
 
 export interface File {
   name: string;
@@ -97,48 +105,56 @@ export class DefBuilder extends DocumentVisitor {
   }
 
   visitStudyDefinition(node: StudyDefinition): Action[] {
-    assert(this.currentFile != null);
     return [
       actions.addStudyDef({
         ast: node,
-        file: this.currentFile,
+        file: this.currentFile!,
+      }),
+    ];
+  }
+
+  visitInterfaceDefinition(node: InterfaceDefinition): Action[] {
+    return [
+      actions.addInterfaceDef({
+        name: node.name.value,
+        ast: node,
+        file: this.currentFile!,
+      }),
+    ];
+  }
+
+  visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
+    return [
+      actions.addMilestoneDef({
+        name: node.name.value,
+        ast: node,
+        file: this.currentFile!,
       }),
     ];
   }
 
   visitCodelistDefinition(node: CodelistDefinition): Action[] {
-    assert(this.currentFile != null);
     return [
       actions.addCodelistDef({
         name: node.name.value,
         ast: node,
-        file: this.currentFile,
+        file: this.currentFile!,
       }),
     ];
   }
 
-  visitInterfaceDefinition(): null {
-    return null;
+  visitDomainDefinition(node: DomainDefinition): Action[] {
+    return node.children.flatMap((child) => child.accept(this));
   }
 
-  visitMilestoneDefinition(): null {
-    return null;
-  }
-
-  visitDomainDefinition(): null {
-    return null;
-  }
-
-  visitCodelistExtension(): null {
-    return null;
-  }
-
-  visitDomainExtension(): null {
-    return null;
-  }
-
-  visitDatasetMapping(): null {
-    return null;
+  visitDatasetDefinition(node: DatasetDefinition): Action[] {
+    return [
+      actions.addDatasetDef({
+        name: node.name.value,
+        ast: node,
+        file: this.currentFile!,
+      }),
+    ];
   }
 
   visit(node: Document): Action[] {

@@ -18,6 +18,11 @@ import {
   StudyInfo,
   DatasetColumnRole,
   AttributableAction,
+  Diagnostic,
+  CompilerOptions,
+  DiagnosticCode,
+  DiagnosticScope,
+  DefinitionType,
 } from ".";
 import {
   Args,
@@ -37,6 +42,7 @@ import {
   Identifier,
   InterfaceDefinition,
   KeyValuePair,
+  Loc,
   MilestoneDefinition,
   NegativeWindow,
   Path,
@@ -56,13 +62,14 @@ import {
   VariableMapping,
   Window,
 } from "../astTypes";
-import { atLeastOne, nonNull } from "../utils";
+import { atLeastOne, nonNull, untab } from "../utils";
 import { CodelistDef, File, InterfaceDef, NamedDefMap } from "./defBuilder";
 import { DocumentVisitor } from "./visitor";
 
 export interface ConfigBuilderState {
   result: CompilationResult;
   interfaces: NamedDefMap<Interface>;
+  diagnostics: Diagnostic[];
 }
 
 const initialState: ConfigBuilderState = {
@@ -76,6 +83,7 @@ const initialState: ConfigBuilderState = {
     domains: {},
   },
   interfaces: {},
+  diagnostics: [],
 };
 
 const { reducer, actions } = createSlice({
@@ -114,6 +122,9 @@ const { reducer, actions } = createSlice({
           ...action.payload.mappings
         );
       }
+    },
+    addDiagnostic: (state, action: PayloadAction<Diagnostic>) => {
+      state.diagnostics.push(action.payload);
     },
   },
 });
@@ -161,6 +172,7 @@ interface StudyDayWindow {
 interface MilestoneIdentifierValue {
   type: "milestone-identifier";
   milestoneName: string;
+  loc: Loc;
 }
 
 interface TimeRangeValue {
@@ -216,9 +228,36 @@ class BaseConfigBuilder extends DocumentVisitor {
     private files: File[],
     protected accessors: {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getOptions: () => CompilerOptions;
     }
   ) {
     super();
+  }
+
+  protected currentFile: File | null = null;
+
+  private diagnosticActions: ReturnType<typeof actions["addDiagnostic"]>[] = [];
+
+  protected addDiagnostic(diagnostic: Diagnostic) {
+    return this.diagnosticActions.push(actions.addDiagnostic(diagnostic));
+  }
+
+  private withFile<R>(file: File, fn: () => R): R {
+    try {
+      this.currentFile = file;
+      return fn();
+    } finally {
+      this.currentFile = null;
+    }
+  }
+
+  private withCleanDiagnostics<R>(fn: () => R): R {
+    try {
+      this.diagnosticActions = [];
+      return fn();
+    } finally {
+      this.diagnosticActions = [];
+    }
   }
 
   protected getAttributes(keyValuePairs: KeyValuePair[]) {
@@ -243,6 +282,7 @@ class BaseConfigBuilder extends DocumentVisitor {
         return {
           type: "milestone-identifier",
           milestoneName: value.accept(this).value,
+          loc: value.loc,
         };
       default:
         return value.accept(this);
@@ -301,14 +341,31 @@ class BaseConfigBuilder extends DocumentVisitor {
   }
 
   visitTypeExpressionMember(node: TypeExpressionMember): ColumnType[] {
+    const options = this.accessors.getOptions();
     const codelists = this.accessors.getCodelistDefs();
     const type = node.value.accept(this).value;
     const types: ColumnType[] = [];
 
     if (type in codelists) {
       types.push({ type: "codelist", value: type });
-    } else {
+    } else if (options.scalarTypes.includes(type)) {
       types.push({ type: "scalar", value: type });
+    } else {
+      // We can assume this is referencing a Codelist that has not yet been defined
+      this.addDiagnostic({
+        code: DiagnosticCode.NOT_FOUND,
+        scope: DiagnosticScope.LOCAL,
+        loc: { ...node.loc, filename: this.currentFile!.name },
+        message: untab(`
+          Could not find codelist with name "${type}". Please define it:
+
+          codelist ${type} {
+            EXAMPLE            @desc("An example member of the codelist")
+          }
+        `),
+        defType: DefinitionType.CODELIST,
+        name: type,
+      });
     }
 
     if (node.optional) {
@@ -445,9 +502,19 @@ class BaseConfigBuilder extends DocumentVisitor {
   }
 
   getActions(): AttributableAction[] {
-    return this.files.flatMap((file) =>
-      this.visit(file.ast).map((action) => ({ file, action }))
-    );
+    return this.files.flatMap((file) => {
+      return this.withCleanDiagnostics(() =>
+        this.withFile(file, () => {
+          const configActions = this.visit(file.ast);
+          return [...this.diagnosticActions, ...configActions].map(
+            (action) => ({
+              file,
+              action,
+            })
+          );
+        })
+      );
+    });
   }
 }
 
@@ -459,6 +526,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
     files: File[],
     protected accessors: {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getOptions: () => CompilerOptions;
     }
   ) {
     super(files, accessors);
@@ -578,6 +646,7 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
       getInterfaceDefs: () => NamedDefMap<Interface>;
       getMilestones: () => NamedDefMap<Milestone>;
+      getOptions: () => CompilerOptions;
     }
   ) {
     super(files, accessors);
@@ -596,9 +665,24 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
           },
         ];
       case "milestone-identifier": {
-        const milestone = milestones[dayValue.milestoneName] as
-          | Milestone
-          | undefined;
+        const milestone = milestones[dayValue.milestoneName];
+
+        if (!milestone) {
+          this.addDiagnostic({
+            code: DiagnosticCode.NOT_FOUND,
+            scope: DiagnosticScope.LOCAL,
+            loc: { ...dayValue.loc, filename: this.currentFile!.name },
+            message: untab(`
+              Could not find milestone with name "${dayValue.milestoneName}". Please add it:
+
+              milestone ${dayValue.milestoneName} {
+                at: t"d7 +-2"
+              }
+            `),
+            defType: DefinitionType.MILESTONE,
+            name: dayValue.milestoneName,
+          });
+        }
 
         return [
           {
@@ -655,10 +739,33 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
 
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
     const interfaceDefs = this.accessors.getInterfaceDefs();
-    const interfaceColumns =
-      node.interfaces
-        ?.accept(this)
-        .map(({ path }) => interfaceDefs[path].columns) ?? [];
+    const interfaceNames =
+      node.interfaces?.accept(this).map(({ path }) => path) ?? [];
+    const interfaceColumns = interfaceNames.map((name) => {
+      const interfaceDef = interfaceDefs[name];
+
+      if (!interfaceDef) {
+        this.addDiagnostic({
+          code: DiagnosticCode.NOT_FOUND,
+          scope: DiagnosticScope.LOCAL,
+          loc: { ...node.loc, filename: this.currentFile!.name },
+          message: untab(`
+            Could not find interface with name ${name}. Please define it:
+
+            interface ${name} {
+              COLUMN String       @label("Example column")
+                                  @desc("A definition of a column for illustrative purposes")
+            }
+          `),
+          defType: DefinitionType.INTERFACE,
+          name,
+        });
+
+        return [];
+      }
+
+      return interfaceDef.columns;
+    });
     const {
       milestone: {
         args: [timelist],
@@ -701,6 +808,7 @@ export class Phase4ConfigBuilder extends BaseConfigBuilder {
     protected accessors: {
       getCodelistDefs: () => NamedDefMap<CodelistDef>;
       getDatasets: () => NamedDefMap<{ domain: Domain; dataset: Dataset }>;
+      getOptions: () => CompilerOptions;
     }
   ) {
     super(files, accessors);
@@ -774,7 +882,29 @@ export class Phase4ConfigBuilder extends BaseConfigBuilder {
 
   visitDatasetMapping(node: DatasetMapping): Action[] {
     const datasetName = node.dataset.accept(this).path;
-    const { dataset } = this.accessors.getDatasets()[datasetName];
+    const { dataset } = this.accessors.getDatasets()[datasetName] ?? {};
+
+    if (!dataset) {
+      this.addDiagnostic({
+        code: DiagnosticCode.NOT_FOUND,
+        scope: DiagnosticScope.LOCAL,
+        loc: { ...node.loc, filename: this.currentFile!.name },
+        message: untab(`
+          Could not find dataset with name "${datasetName}". Please define it:
+
+          domain "MY DOMAIN" @abbr("MD") {
+            dataset ${datasetName} {
+              COLUMN String       @label("Example column")
+                                  @desc("A definition of a column for illustrative purposes")
+            }
+          }
+        `),
+        defType: DefinitionType.DATASET,
+        name: datasetName,
+      });
+      return [];
+    }
+
     const milestones = atLeastOne(dataset.milestones, null);
     const variables = atLeastOne(
       node.variables.map((variable) => variable.accept(this)),

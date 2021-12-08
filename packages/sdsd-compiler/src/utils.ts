@@ -42,3 +42,12 @@ export const atLeastOne = <A extends any[], D>(
 
 export const nonNull = <A>(array: A[]): NonNullable<A>[] =>
   array.filter((member): member is NonNullable<A> => member != null);
+
+export const untab = (string: string) => {
+  const leadingWhitespaces = string.matchAll(/^([ \t]*)[\S]/gm);
+  const minIndent = Math.min(
+    ...Array.from(leadingWhitespaces).map(([, whitespace]) => whitespace.length)
+  );
+
+  return string.replace(new RegExp(`^[ \t]{${minIndent}}`, "gm"), "").trim();
+};

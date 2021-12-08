@@ -1,4 +1,4 @@
-import { Compiler, CompilerErrorCode, CompilerErrorScope } from ".";
+import { Compiler, DiagnosticCode, DiagnosticScope } from ".";
 
 describe("Compiler", () => {
   let compiler: Compiler;
@@ -12,7 +12,7 @@ describe("Compiler", () => {
   });
 
   it("requires a study definition initially", () => {
-    expect(compiler.errors).toMatchSnapshot();
+    expect(compiler.diagnostics).toMatchSnapshot();
   });
 
   describe("when a study definition is added", () => {
@@ -28,13 +28,13 @@ describe("Compiler", () => {
     });
 
     it("compiles without error", () => {
-      expect(compiler.errors).toEqual([]);
+      expect(compiler.diagnostics).toEqual([]);
       expect(compiler.result).toMatchSnapshot();
     });
 
     it("errors when the study definition is removed", () => {
       compiler.updateFiles({ "study.sdsd": null });
-      expect(compiler.errors).toMatchSnapshot();
+      expect(compiler.diagnostics).toMatchSnapshot();
     });
 
     describe("and some milestones are added", () => {
@@ -69,7 +69,7 @@ describe("Compiler", () => {
       });
 
       it("compiles without error", () => {
-        expect(compiler.errors).toEqual([]);
+        expect(compiler.diagnostics).toEqual([]);
         expect(compiler.result).toMatchSnapshot();
       });
 
@@ -81,7 +81,7 @@ describe("Compiler", () => {
             }
           `,
         });
-        expect(compiler.errors).toEqual([]);
+        expect(compiler.diagnostics).toEqual([]);
         expect(compiler.result).toMatchSnapshot();
       });
 
@@ -93,7 +93,7 @@ describe("Compiler", () => {
             }
           `,
         });
-        expect(compiler.errors).toEqual([]);
+        expect(compiler.diagnostics).toEqual([]);
         expect(compiler.result).toMatchSnapshot();
       });
 
@@ -159,7 +159,7 @@ describe("Compiler", () => {
           });
 
           it("compiles without error", () => {
-            expect(compiler.errors).toEqual([]);
+            expect(compiler.diagnostics).toEqual([]);
             expect(compiler.result).toMatchSnapshot();
           });
 
@@ -246,7 +246,7 @@ describe("Compiler", () => {
             });
 
             it("compiles without error", () => {
-              expect(compiler.errors).toEqual([]);
+              expect(compiler.diagnostics).toEqual([]);
               expect(compiler.result).toMatchSnapshot();
             });
 
@@ -430,7 +430,7 @@ describe("Compiler", () => {
               });
 
               it("compiles without error", () => {
-                expect(compiler.errors).toEqual([]);
+                expect(compiler.diagnostics).toEqual([]);
                 expect(compiler.result).toMatchSnapshot();
               });
             });
@@ -441,6 +441,7 @@ describe("Compiler", () => {
   });
 
   describe("order definition", () => {
+    let inOrderCompiler: Compiler;
     let fileEntries: [string, string][];
 
     beforeEach(() => {
@@ -526,7 +527,7 @@ describe("Compiler", () => {
           `
             domain "VITAL SIGNS" @abbr("VS") {
               dataset vs implements base, visit_base @milestone(t"SCREENING, BASELINE, CLINIC_1, CLINIC_2, CLOSEOUT") {
-                VSORRES Int                      @label("Vital signs result")
+                VSORRES Integer                  @label("Vital signs result")
                                                  @desc("Result of the vital signs measurement")
                 VSBOSI  BodySide                 @label("Body side")
                                                  @desc("The side of the body the measurement was taken on")
@@ -567,11 +568,22 @@ describe("Compiler", () => {
           `,
         ],
       ];
+      inOrderCompiler = new Compiler({});
+      inOrderCompiler.updateFiles(Object.fromEntries(fileEntries));
     });
 
     it("allows an entire study to be defined out of order at the same time", () => {
       compiler.updateFiles(Object.fromEntries([...fileEntries].reverse()));
-      expect(compiler.result).toMatchSnapshot();
+      expect(compiler.result).toEqual(inOrderCompiler.result);
+      expect(compiler.diagnostics).toEqual([]);
+    });
+
+    it.only("allows an entire study to be defined out of order one file at a time", () => {
+      for (const [filename, source] of [...fileEntries].reverse()) {
+        compiler.updateFiles({ [filename]: source });
+      }
+      expect(compiler.result).toEqual(inOrderCompiler.result);
+      expect(compiler.diagnostics).toEqual([]);
     });
   });
 });

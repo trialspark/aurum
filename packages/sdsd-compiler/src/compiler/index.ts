@@ -1,3 +1,3 @@
 export * from "./compiler";
-export * from "./errors";
+export * from "./diagnostics";
 export * from "./result";
