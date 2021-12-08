@@ -1,12 +1,9 @@
-import { createSlice, freeze, PayloadAction, original } from "@reduxjs/toolkit";
 import { UnionToIntersection } from "utility-types";
 import assert from "assert";
 import { escapeRegExp, range } from "lodash";
 import {
-  Codelist,
   CodelistItem,
   ColumnType,
-  CompilationResult,
   Dataset,
   DatasetColumn,
   DatasetMappingColumn,
@@ -15,7 +12,6 @@ import {
   Domain,
   Milestone,
   RelativeMilestone,
-  StudyInfo,
   DatasetColumnRole,
   AttributableAction,
   Diagnostic,
@@ -64,7 +60,7 @@ import {
   Window,
 } from "../astTypes";
 import { atLeastOne, nonNull, untab } from "../utils";
-import { CodelistDef, File, NamedDefMap } from "./state";
+import { CodelistDef, File, NamedDefMap, ReducerState } from "./state";
 import { DocumentVisitor } from "./visitor";
 import { Action } from "./state";
 import { configBuilderActions } from "./state/configBuilder";
@@ -160,7 +156,7 @@ class BaseConfigBuilder extends DocumentVisitor {
   constructor(
     private files: File[],
     protected accessors: {
-      getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getState: () => ReducerState;
       getOptions: () => CompilerOptions;
     }
   ) {
@@ -195,6 +191,19 @@ class BaseConfigBuilder extends DocumentVisitor {
     } finally {
       this.diagnosticActions = [];
     }
+  }
+
+  protected getDatasets(): NamedDefMap<{ domain: Domain; dataset: Dataset }> {
+    return Object.fromEntries(
+      Object.values(
+        this.accessors.getState().configBuilder.result.domains
+      ).flatMap((domain) =>
+        Object.values(domain.datasets).map((dataset) => [
+          dataset.name,
+          { domain, dataset },
+        ])
+      )
+    );
   }
 
   protected getAttributes(keyValuePairs: KeyValuePair[]) {
@@ -279,7 +288,7 @@ class BaseConfigBuilder extends DocumentVisitor {
 
   visitTypeExpressionMember(node: TypeExpressionMember): ColumnType[] {
     const options = this.accessors.getOptions();
-    const codelists = this.accessors.getCodelistDefs();
+    const codelists = this.accessors.getState().defBuilder.codelistDefs;
     const type = node.value.accept(this).value;
     const types: ColumnType[] = [];
 
@@ -462,7 +471,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   constructor(
     files: File[],
     protected accessors: {
-      getCodelistDefs: () => NamedDefMap<CodelistDef>;
+      getState: () => ReducerState;
       getOptions: () => CompilerOptions;
     }
   ) {
@@ -580,9 +589,7 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
   constructor(
     files: File[],
     protected accessors: {
-      getCodelistDefs: () => NamedDefMap<CodelistDef>;
-      getInterfaceDefs: () => NamedDefMap<Interface>;
-      getMilestones: () => NamedDefMap<Milestone>;
+      getState: () => ReducerState;
       getOptions: () => CompilerOptions;
     }
   ) {
@@ -675,7 +682,7 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
-    const interfaceDefs = this.accessors.getInterfaceDefs();
+    const interfaceDefs = this.accessors.getState().configBuilder.interfaces;
     const interfaceNames =
       node.interfaces?.accept(this).map(({ path }) => path) ?? [];
     const interfaceColumns = interfaceNames.map((name) => {
@@ -708,7 +715,8 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
         args: [timelist],
       },
     } = this.getDirectives(node.directives);
-    const milestones = this.accessors.getMilestones();
+    const milestones =
+      this.accessors.getState().configBuilder.result.milestones;
 
     assert(timelist.type === "time-list");
 
@@ -743,8 +751,7 @@ export class Phase4ConfigBuilder extends BaseConfigBuilder {
   constructor(
     files: File[],
     protected accessors: {
-      getCodelistDefs: () => NamedDefMap<CodelistDef>;
-      getDatasets: () => NamedDefMap<{ domain: Domain; dataset: Dataset }>;
+      getState: () => ReducerState;
       getOptions: () => CompilerOptions;
     }
   ) {
@@ -819,7 +826,7 @@ export class Phase4ConfigBuilder extends BaseConfigBuilder {
 
   visitDatasetMapping(node: DatasetMapping): Action[] {
     const datasetName = node.dataset.accept(this).path;
-    const { dataset } = this.accessors.getDatasets()[datasetName] ?? {};
+    const { dataset } = this.getDatasets()[datasetName] ?? {};
 
     if (!dataset) {
       this.addDiagnostic({

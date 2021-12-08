@@ -5,8 +5,8 @@ import {
   InterfaceDefinition,
   MilestoneDefinition,
   StudyDefinition,
-  Document,
 } from "../../astTypes";
+import { File } from "./files";
 
 export interface DefBuilderState {
   studyDefs: StudyDef[];
@@ -78,10 +78,5 @@ export interface DatasetDef {
 }
 
 export type NamedDefMap<Def> = { [name: string]: Def | undefined };
-
-export interface File {
-  name: string;
-  ast: Document;
-}
 
 export { actions as defBuilderActions, reducer as defBuilderReducer };

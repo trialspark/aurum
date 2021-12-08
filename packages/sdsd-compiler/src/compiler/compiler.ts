@@ -169,10 +169,7 @@ export class Compiler {
       );
     const accessors: SuperAccessor = {
       getOptions: () => this.options,
-      getCodelistDefs: () => this.codelistDefs,
-      getInterfaceDefs: () => this.interfaceDefs,
-      getMilestones: () => this.result.milestones,
-      getDatasets: () => this.datasetDefs,
+      getState: () => this.state,
     };
 
     // Clear out any actions for these files since we're updating them
