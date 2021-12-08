@@ -3,15 +3,7 @@ import { stringToAST } from "..";
 import { SuperAccessor, configBuilders } from "./configBuilder";
 import { DefBuilder } from "./defBuilder";
 import { Diagnostic, DiagnosticCode, DiagnosticScope } from "./diagnostics";
-import {
-  Action,
-  CodelistDef,
-  NamedDefMap,
-  reducer,
-  ReducerState,
-  StudyDef,
-  File,
-} from "./state";
+import { Action, NamedDefMap, reducer, ReducerState, File } from "./state";
 
 export interface AttributableAction {
   action: Action;
@@ -45,26 +37,6 @@ export class Compiler {
 
   private errorsByCode: ErrorsByCode<DiagnosticCode> = new Map();
 
-  private get studyDefs(): StudyDef[] {
-    return this.state.defBuilder.studyDefs;
-  }
-  private get codelistDefs(): NamedDefMap<CodelistDef> {
-    return this.state.defBuilder.codelistDefs;
-  }
-  private get interfaceDefs(): ReducerState["configBuilder"]["interfaces"] {
-    return this.state.configBuilder.interfaces;
-  }
-  private get datasetDefs(): NamedDefMap<{ domain: Domain; dataset: Dataset }> {
-    return Object.fromEntries(
-      Object.values(this.result.domains).flatMap((domain) =>
-        Object.values(domain.datasets).map((dataset) => [
-          dataset.name,
-          { domain, dataset },
-        ])
-      )
-    );
-  }
-
   constructor(options: Partial<CompilerOptions>) {
     this.options = {
       scalarTypes: ["String", "Boolean", "Integer", "Float", "Null"],
@@ -86,7 +58,7 @@ export class Compiler {
   }
 
   private checkForGlobalErrors() {
-    this.errorIf(this.studyDefs.length === 0, {
+    this.errorIf(this.state.defBuilder.studyDefs.length === 0, {
       code: DiagnosticCode.MISSING_STUDY_DEF,
       scope: DiagnosticScope.GLOBAL,
       loc: null,
@@ -125,7 +97,7 @@ export class Compiler {
         interfaces,
       },
     } = this.state;
-    const datasets = this.datasetDefs;
+    const datasets = this.state.defBuilder.datasetDefs;
     const defTypeToDef: { [T in DefinitionType]: NamedDefMap<unknown> } = {
       [DefinitionType.CODELIST]: codelists,
       [DefinitionType.DATASET]: datasets,
