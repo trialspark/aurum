@@ -1,26 +1,25 @@
 {
-  "name": "sdsd-vscode",
-  "version": "0.0.0",
-  "description": "vscode tooling for sdsd DSL",
-  "author": "Josh Minzner <josh@minzner.org>",
-  "homepage": "https://github.com/trialspark/sdsd#readme",
-  "license": "UNLICENSED",
-  "main": "lib/sdsd-vscode.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/trialspark/sdsd.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/trialspark/sdsd/issues"
-  }
+    "name": "sdsd-vscode",
+    "displayName": "sdsd-vscode",
+    "description": "Language tooling for the study data schema definiation (sdsd) language",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.62.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "sdsd",
+            "aliases": ["study data schema definition", "sdsd"],
+            "extensions": [".sdsd"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "sdsd",
+            "scopeName": "source.sdsd",
+            "path": "./syntaxes/sdsd.tmLanguage.json"
+        }]
+    }
 }
