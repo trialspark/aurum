@@ -3,11 +3,18 @@ import { stringToAST } from "..";
 import { SuperAccessor, configBuilders } from "./configBuilder";
 import { DefBuilder } from "./defBuilder";
 import { Diagnostic, DiagnosticCode, DiagnosticScope } from "./diagnostics";
-import { Action, NamedDefMap, reducer, ReducerState, File } from "./state";
+import {
+  Action,
+  NamedDefMap,
+  reducer,
+  ReducerState,
+  File,
+  filesActions,
+} from "./state";
 
 export interface AttributableAction {
   action: Action;
-  file: File;
+  file: File | null;
 }
 
 export interface CompilerOptions {
@@ -22,7 +29,6 @@ type ErrorsByCode<Code extends DiagnosticCode> = Map<
 type FileMap = { [filename: string]: string | null };
 
 export class Compiler {
-  private filesMap: FileMap = {};
   private state: ReducerState = this.getInitialState();
   private actions: AttributableAction[] = [];
 
@@ -74,7 +80,7 @@ export class Compiler {
 
   private removeActionsForFiles(names: Set<string>) {
     const remainingActions = this.actions.filter(
-      ({ file }) => !names.has(file.name)
+      ({ file }) => !file || !names.has(file.name)
     );
 
     this.actions = [];
@@ -117,9 +123,9 @@ export class Compiler {
       })
     );
     const filesMap = Object.fromEntries(
-      Object.entries(this.filesMap).flatMap(([filename, source]) => {
-        if (filenamesToRebuild.has(filename) && source != null) {
-          return [[filename, source]];
+      Object.values(this.state.files).flatMap((file) => {
+        if (filenamesToRebuild.has(file.name)) {
+          return [[file.name, file.source]];
         }
 
         return [];
@@ -127,6 +133,25 @@ export class Compiler {
     );
 
     this.compileFiles(filesMap);
+  }
+
+  private updateFilesState(filesMap: FileMap) {
+    this.applyActions(
+      Object.entries(filesMap).map(([filename, source]): AttributableAction => {
+        if (source == null) {
+          return { action: filesActions.removeFile(filename), file: null };
+        }
+
+        return {
+          action: filesActions.addFile({
+            name: filename,
+            ast: stringToAST(source),
+            source,
+          }),
+          file: null,
+        };
+      })
+    );
   }
 
   private compileFiles(filesMap: FileMap) {
@@ -158,8 +183,8 @@ export class Compiler {
   }
 
   updateFiles(filesMap: FileMap): void {
-    this.filesMap = { ...this.filesMap, ...filesMap };
-
+    // Update map of all files the compiler is aware of
+    this.updateFilesState(filesMap);
     this.compileFiles(filesMap);
     this.recompileIfMissingDefsHaveBeenAdded();
     this.checkForGlobalErrors();

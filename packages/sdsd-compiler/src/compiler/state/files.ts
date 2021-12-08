@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, freeze } from "@reduxjs/toolkit";
 import { Document } from "../../astTypes";
 
 export interface FilesState {
-  [filename: string]: File | null;
+  [filename: string]: File;
 }
 
 const initialState: FilesState = {};
@@ -14,10 +14,8 @@ const { actions, reducer } = createSlice({
     addFile: (state, action: PayloadAction<File>) => {
       state[action.payload.name] = freeze(action.payload);
     },
-    addFiles: (state, action: PayloadAction<File[]>) => {
-      for (const file of action.payload) {
-        state[file.name] = freeze(file);
-      }
+    removeFile: (state, action: PayloadAction<string>) => {
+      delete state[action.payload];
     },
   },
 });
