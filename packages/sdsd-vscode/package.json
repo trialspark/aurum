@@ -1,25 +1,75 @@
 {
-    "name": "sdsd-vscode",
-    "displayName": "sdsd-vscode",
-    "description": "Language tooling for the study data schema definiation (sdsd) language",
-    "version": "0.0.1",
-    "engines": {
-        "vscode": "^1.62.0"
+  "name": "sdsd-vscode",
+  "displayName": "sdsd-vscode",
+  "description": "Language tooling for the study data schema definiation (sdsd) language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.62.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:sdsd"
+  ],
+  "main": "./build/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Example configuration",
+      "properties": {
+        "languageServerExample.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by the server."
+        },
+        "languageServerExample.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
     },
-    "categories": [
-        "Programming Languages"
+    "languages": [
+      {
+        "id": "sdsd",
+        "aliases": [
+          "study data schema definition",
+          "sdsd"
+        ],
+        "extensions": [
+          ".sdsd"
+        ],
+        "configuration": "./language-configuration.json"
+      }
     ],
-    "contributes": {
-        "languages": [{
-            "id": "sdsd",
-            "aliases": ["study data schema definition", "sdsd"],
-            "extensions": [".sdsd"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "sdsd",
-            "scopeName": "source.sdsd",
-            "path": "./syntaxes/sdsd.tmLanguage.json"
-        }]
-    }
+    "grammars": [
+      {
+        "language": "sdsd",
+        "scopeName": "source.sdsd",
+        "path": "./syntaxes/sdsd.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.0",
+    "typescript": "^4.4.4",
+    "@types/vscode": "^1.52.0",
+    "@vscode/test-electron": "^1.6.1"
+  }
 }

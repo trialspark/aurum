@@ -5,22 +5,28 @@
   "author": "Josh Minzner <josh@minzner.org>",
   "homepage": "https://github.com/trialspark/sdsd#readme",
   "license": "ISC",
-  "main": "lib/sdsd-server.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+  "engines": {
+    "node": "*"
   },
-  "files": [
-    "lib"
-  ],
+  "main": "build/server.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trialspark/sdsd.git"
   },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+  "dependencies": {
+    "vscode-languageserver": "^7.0.0",
+    "vscode-languageserver-textdocument": "^1.0.1"
   },
   "bugs": {
     "url": "https://github.com/trialspark/sdsd/issues"
+  },
+  "scripts": {
+    "compile": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.0",
+    "typescript": "^4.4.4",
+    "@types/vscode": "^1.52.0"
   }
 }
