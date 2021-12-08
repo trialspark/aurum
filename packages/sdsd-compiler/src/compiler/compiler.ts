@@ -164,6 +164,7 @@ export class Compiler {
       .map(
         ([filename, value]): File => ({
           name: filename,
+          source: value!,
           ast: stringToAST(value!),
         })
       );

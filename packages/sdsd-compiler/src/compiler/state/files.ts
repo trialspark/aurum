@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, freeze } from "@reduxjs/toolkit";
 import { Document } from "../../astTypes";
 
 export interface FilesState {
-  [filename: string]: File;
+  [filename: string]: File | null;
 }
 
 const initialState: FilesState = {};
@@ -10,12 +10,22 @@ const initialState: FilesState = {};
 const { actions, reducer } = createSlice({
   name: "files",
   initialState,
-  reducers: {},
+  reducers: {
+    addFile: (state, action: PayloadAction<File>) => {
+      state[action.payload.name] = freeze(action.payload);
+    },
+    addFiles: (state, action: PayloadAction<File[]>) => {
+      for (const file of action.payload) {
+        state[file.name] = freeze(file);
+      }
+    },
+  },
 });
 
 export interface File {
   name: string;
   ast: Document;
+  source: string;
 }
 
 export type FilesAction = ReturnType<typeof actions[keyof typeof actions]>;
