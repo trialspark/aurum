@@ -31,6 +31,7 @@ type FileMap = { [filename: string]: string | null };
 export class Compiler {
   private state: ReducerState = this.getInitialState();
   private actions: AttributableAction[] = [];
+  private compiledFilenames: Set<string> = new Set();
 
   public options: CompilerOptions;
 
@@ -76,6 +77,15 @@ export class Compiler {
         '  name: "Longer name for my study"\n' +
         "}",
     });
+  }
+
+  private withFreshCompiledFilenames<R>(fn: () => R): R {
+    try {
+      this.compiledFilenames = new Set();
+      return fn();
+    } finally {
+      this.compiledFilenames = new Set();
+    }
   }
 
   private removeActionsForFiles(names: Set<string>) {
@@ -147,6 +157,7 @@ export class Compiler {
             name: filename,
             ast: stringToAST(source),
             source,
+            dependencies: [],
           }),
           file: null,
         };
@@ -154,15 +165,32 @@ export class Compiler {
     );
   }
 
+  private recompileDependentFiles(files: File[]) {
+    const dependentFiles = files.flatMap((file) => file.dependencies);
+    const filesMap = Object.fromEntries(
+      dependentFiles.map((file) => [file.name, file.source])
+    );
+
+    if (dependentFiles.length === 0) {
+      return;
+    }
+
+    this.compileFiles(filesMap);
+  }
+
   private compileFiles(filesMap: FileMap) {
     const filenames = new Set(Object.keys(filesMap));
     const files = Object.entries(filesMap)
-      .filter(([, value]) => value !== null)
+      .filter(
+        ([filename, value]) =>
+          value !== null && !this.compiledFilenames.has(filename)
+      )
       .map(
         ([filename, value]): File => ({
           name: filename,
           source: value!,
           ast: stringToAST(value!),
+          dependencies: [],
         })
       );
     const accessors: SuperAccessor = {
@@ -180,13 +208,22 @@ export class Compiler {
     for (const ConfigBuilder of configBuilders) {
       this.applyActions(new ConfigBuilder(files, accessors).getActions());
     }
+
+    this.compiledFilenames = new Set([
+      ...Array.from(this.compiledFilenames),
+      ...Array.from(filenames),
+    ]);
+    this.recompileDependentFiles(
+      Array.from(files).map((file) => this.state.files[file.name])
+    );
   }
 
   updateFiles(filesMap: FileMap): void {
-    // Update map of all files the compiler is aware of
-    this.updateFilesState(filesMap);
-    this.compileFiles(filesMap);
-    this.recompileIfMissingDefsHaveBeenAdded();
-    this.checkForGlobalErrors();
+    this.withFreshCompiledFilenames(() => {
+      this.updateFilesState(filesMap);
+      this.compileFiles(filesMap);
+      this.recompileIfMissingDefsHaveBeenAdded();
+      this.checkForGlobalErrors();
+    });
   }
 }

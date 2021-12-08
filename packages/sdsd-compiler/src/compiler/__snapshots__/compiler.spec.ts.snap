@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Compiler order definition allows an entire study to be defined out of order one file at a time 1`] = `null`;
-
 exports[`Compiler requires a study definition initially 1`] = `
 Array [
   Object {

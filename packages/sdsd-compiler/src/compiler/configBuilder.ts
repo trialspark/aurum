@@ -19,7 +19,6 @@ import {
   DiagnosticCode,
   DiagnosticScope,
   DefinitionType,
-  Interface,
 } from ".";
 import {
   Args,
@@ -60,7 +59,13 @@ import {
   Window,
 } from "../astTypes";
 import { atLeastOne, nonNull, untab } from "../utils";
-import { CodelistDef, File, NamedDefMap, ReducerState } from "./state";
+import {
+  CodelistDef,
+  File,
+  filesActions,
+  NamedDefMap,
+  ReducerState,
+} from "./state";
 import { DocumentVisitor } from "./visitor";
 import { Action } from "./state";
 import { configBuilderActions } from "./state/configBuilder";
@@ -168,10 +173,18 @@ class BaseConfigBuilder extends DocumentVisitor {
   private diagnosticActions: ReturnType<
     typeof configBuilderActions["addDiagnostic"]
   >[] = [];
+  private filesActions: ReturnType<typeof filesActions["addDependency"]>[] = [];
 
   protected addDiagnostic(diagnostic: Diagnostic) {
-    return this.diagnosticActions.push(
-      configBuilderActions.addDiagnostic(diagnostic)
+    this.diagnosticActions.push(configBuilderActions.addDiagnostic(diagnostic));
+  }
+
+  protected addFileDependency(parent: File) {
+    this.filesActions.push(
+      filesActions.addDependency({
+        filename: parent.name,
+        dependencyFilename: this.currentFile!.name,
+      })
     );
   }
 
@@ -190,6 +203,15 @@ class BaseConfigBuilder extends DocumentVisitor {
       return fn();
     } finally {
       this.diagnosticActions = [];
+    }
+  }
+
+  private withCleanFiles<R>(fn: () => R): R {
+    try {
+      this.filesActions = [];
+      return fn();
+    } finally {
+      this.filesActions = [];
     }
   }
 
@@ -294,6 +316,7 @@ class BaseConfigBuilder extends DocumentVisitor {
 
     if (type in codelists) {
       types.push({ type: "codelist", value: type });
+      this.addFileDependency(codelists[type]!.file);
     } else if (options.scalarTypes.includes(type)) {
       types.push({ type: "scalar", value: type });
     } else {
@@ -448,19 +471,23 @@ class BaseConfigBuilder extends DocumentVisitor {
   }
 
   getActions(): AttributableAction[] {
-    return this.files.flatMap((file) => {
-      return this.withCleanDiagnostics(() =>
-        this.withFile(file, () => {
-          const configActions = this.visit(file.ast);
-          return [...this.diagnosticActions, ...configActions].map(
-            (action) => ({
+    return this.files.flatMap((file) =>
+      this.withCleanDiagnostics(() =>
+        this.withCleanFiles(() =>
+          this.withFile(file, () => {
+            const configActions = this.visit(file.ast);
+            return [
+              ...this.diagnosticActions,
+              ...this.filesActions,
+              ...configActions,
+            ].map((action) => ({
               file,
               action,
-            })
-          );
-        })
-      );
-    });
+            }));
+          })
+        )
+      )
+    );
   }
 }
 
@@ -597,8 +624,7 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
   }
 
   private getDatasetMilestonesFromTimeValue(
-    dayValue: ParsedTimeValue,
-    milestones: NamedDefMap<Milestone>
+    dayValue: ParsedTimeValue
   ): Omit<DatasetMilestone, "hour">[] {
     switch (dayValue.type) {
       case "study-day":
@@ -609,7 +635,18 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
           },
         ];
       case "milestone-identifier": {
-        const milestone = milestones[dayValue.milestoneName];
+        const milestone =
+          this.accessors.getState().configBuilder.result.milestones[
+            dayValue.milestoneName
+          ];
+        const milestoneDef =
+          this.accessors.getState().defBuilder.milestoneDefs[
+            dayValue.milestoneName
+          ];
+
+        if (milestoneDef) {
+          this.addFileDependency(milestoneDef.file);
+        }
 
         if (!milestone) {
           this.addDiagnostic({
@@ -637,14 +674,8 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
       }
       case "time-range": {
         const { start, end } = dayValue;
-        const startMilestones = this.getDatasetMilestonesFromTimeValue(
-          start,
-          milestones
-        );
-        const endMilestones = this.getDatasetMilestonesFromTimeValue(
-          end,
-          milestones
-        );
+        const startMilestones = this.getDatasetMilestonesFromTimeValue(start);
+        const endMilestones = this.getDatasetMilestonesFromTimeValue(end);
         const startDay =
           Math.max(...startMilestones.map((milestone) => milestone.day ?? 0)) +
           1;
@@ -682,13 +713,19 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitDatasetDefinition(node: DatasetDefinition): Dataset {
-    const interfaceDefs = this.accessors.getState().configBuilder.interfaces;
+    const interfaces = this.accessors.getState().configBuilder.interfaces;
+    const interfaceDefs = this.accessors.getState().defBuilder.interfaceDefs;
     const interfaceNames =
       node.interfaces?.accept(this).map(({ path }) => path) ?? [];
     const interfaceColumns = interfaceNames.map((name) => {
-      const interfaceDef = interfaceDefs[name];
+      const iface = interfaces[name];
+      const ifaceDef = interfaceDefs[name];
 
-      if (!interfaceDef) {
+      if (ifaceDef) {
+        this.addFileDependency(ifaceDef.file);
+      }
+
+      if (!iface) {
         this.addDiagnostic({
           code: DiagnosticCode.NOT_FOUND,
           scope: DiagnosticScope.LOCAL,
@@ -708,15 +745,13 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
         return [];
       }
 
-      return interfaceDef.columns;
+      return iface.columns;
     });
     const {
       milestone: {
         args: [timelist],
       },
     } = this.getDirectives(node.directives);
-    const milestones =
-      this.accessors.getState().configBuilder.result.milestones;
 
     assert(timelist.type === "time-list");
 
@@ -727,9 +762,7 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
         ...node.columns.map((column) => column.accept(this)),
       ],
       milestones: timelist.days
-        .flatMap((item) =>
-          this.getDatasetMilestonesFromTimeValue(item, milestones)
-        )
+        .flatMap((item) => this.getDatasetMilestonesFromTimeValue(item))
         .flatMap(
           (data): DatasetMilestone[] =>
             timelist.hours?.map(({ hour }) => ({ ...data, hour })) ?? [
@@ -827,6 +860,12 @@ export class Phase4ConfigBuilder extends BaseConfigBuilder {
   visitDatasetMapping(node: DatasetMapping): Action[] {
     const datasetName = node.dataset.accept(this).path;
     const { dataset } = this.getDatasets()[datasetName] ?? {};
+    const datasetDef =
+      this.accessors.getState().defBuilder.datasetDefs[datasetName];
+
+    if (datasetDef) {
+      this.addFileDependency(datasetDef.file);
+    }
 
     if (!dataset) {
       this.addDiagnostic({
