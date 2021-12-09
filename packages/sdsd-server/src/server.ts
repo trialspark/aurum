@@ -193,7 +193,10 @@ connection.onCompletion(
     // The pass parameter contains the position of the text document in
     // which code complete got requested. For the example we ignore this
     // info and always provide the same completion items.
-    const completionResults = compiler.getCompletionItems(textDocumentPosition.position.line, textDocumentPosition.position.character).map(item => ({...item, kind: CompletionItemKind.Text, detail: 'Hello' }));
+    const document = documents.get(textDocumentPosition.textDocument.uri);
+    if (!document) return [];
+    console.log(document.getText())
+    const completionResults = compiler.getCompletionItems(textDocumentPosition.position.line, textDocumentPosition.position.character, document.getText()).map(item => ({...item, kind: CompletionItemKind.Text, detail: 'Hello' }));
     connection.console.log(JSON.stringify(completionResults));
     return completionResults
   }

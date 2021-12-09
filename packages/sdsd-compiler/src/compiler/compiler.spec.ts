@@ -835,7 +835,7 @@ study {
     });
 
     it.skip("Gets autocomplete items", () => {
-      const result = compiler.getCompletionItems(1, 1);
+      const result = compiler.getCompletionItems(1, 1, '');
       expect(result).toEqual([
         { label: "id", data: 0 },
         { label: "MY-STUDY", data: 1 },

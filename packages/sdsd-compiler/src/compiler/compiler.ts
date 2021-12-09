@@ -1,3 +1,5 @@
+import grammar from "../sdsd.ne";
+import { Parser, Grammar } from "nearley";
 import {
   CompilationResult,
   Dataset,
@@ -278,7 +280,9 @@ export class Compiler {
     this.checkForGlobalErrors();
   }
 
-  getCompletionItems(line: number, character: number): CompletionItem[] {
+  getCompletionItems(line: number, character: number, source: string): CompletionItem[] {
+    // const parser = new Parser(Grammar.fromCompiled(grammar)).feed(source);
+
     const defBuilder = this.state.defBuilder;
     const autoCompleteResults = [
       ...Object.values(defBuilder.interfaceDefs).map((interfaceDef) => {
