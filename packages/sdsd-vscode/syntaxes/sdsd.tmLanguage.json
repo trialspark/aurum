@@ -13,6 +13,12 @@
     },
     {
       "include": "#property-names"
+    },
+    {
+      "include": "#@strings"
+    },
+    {
+      "include": "#types"
     }
   ],
   "repository": {
@@ -28,7 +34,15 @@
       "patterns": [
         {
           "name": "support.type.property-name.json.sdsd",
-          "match": "[a-zA-Z$_][a-zA-Z0-9$_]*"
+          "match": "[a-zA-Z$_][a-zA-Z0-9$_]*:"
+        }
+      ]
+    },
+    "@strings": {
+      "patterns": [
+        {
+          "name": "entity.name.function.sdsd",
+          "match": "@[a-zA-Z$_][a-zA-Z0-9$_]*"
         }
       ]
     },
@@ -61,6 +75,10 @@
           "match": "\\\\."
         }
       ]
+    },
+    "types": {
+      "name": "support.type.sdsd",
+      "match": "\\b(String|Integer|Float)\\b"
     }
   },
   "scopeName": "source.sdsd"
