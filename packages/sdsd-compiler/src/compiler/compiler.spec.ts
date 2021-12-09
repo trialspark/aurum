@@ -667,6 +667,46 @@ milestone BAD_MILESTONE {
       expect(compiler.result).toEqual(inOrderCompiler.result);
       expect(compiler.diagnostics).toEqual([]);
     });
+
+    it("compiles a cyclic dependency between two files", () => {
+      compiler.updateFiles({
+        "study.sdsd": 'study { id: "FOO" name: "BAR" }',
+        "milestone_and_map.sdsd": `
+          milestone FOO {
+            at: t"d0"
+          }
+
+          map dataset foo {
+            FOO from literal \`\`\`json "{{MILESTONE.NAME}}" \`\`\`
+          }
+        `,
+        "domain.sdsd": `
+          domain "FOO" @abbr("FOO") {
+            dataset foo @milestone(t"BAR") {
+              FOO String @label("Foo") @desc("Foo")
+            }
+          }
+        `,
+      });
+
+      expect(compiler.diagnostics.map(({ code }) => code)).toEqual(
+        expect.arrayContaining([DiagnosticCode.NOT_FOUND])
+      );
+
+      compiler.updateFiles({
+        "milestone_and_map.sdsd": `
+          milestone BAR {
+            at: t"d0"
+          }
+
+          map dataset foo {
+            FOO from literal \`\`\`json "{{MILESTONE.NAME}}" \`\`\`
+          }
+        `,
+      });
+      expect(compiler.diagnostics).toEqual([]);
+      expect(compiler.result).toMatchSnapshot();
+    });
   });
 
   describe("auto completion options", () => {

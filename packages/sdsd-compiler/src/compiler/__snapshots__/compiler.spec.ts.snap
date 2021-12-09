@@ -1,5 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Compiler order definition compiles a cyclic dependency between two files 1`] = `
+Object {
+  "codelists": Object {},
+  "domains": Object {
+    "FOO": Object {
+      "abbr": "FOO",
+      "datasets": Object {
+        "foo": Object {
+          "columns": Array [
+            Object {
+              "description": "Foo",
+              "label": "Foo",
+              "name": "FOO",
+              "role": null,
+              "type": Array [
+                Object {
+                  "type": "scalar",
+                  "value": "String",
+                },
+              ],
+            },
+          ],
+          "mappings": Array [
+            Object {
+              "columns": Object {
+                "FOO": Object {
+                  "mappingLogic": Object {
+                    "code": " \\"BAR\\" ",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "FOO",
+                  "variables": Array [],
+                },
+              },
+            },
+          ],
+          "milestones": Array [
+            Object {
+              "day": 0,
+              "hour": null,
+              "name": "BAR",
+            },
+          ],
+          "name": "foo",
+        },
+      },
+      "name": "FOO",
+    },
+  },
+  "milestones": Object {
+    "BAR": Object {
+      "day": 0,
+      "name": "BAR",
+      "type": "absolute",
+      "window": Object {
+        "after": 0,
+        "before": 0,
+      },
+    },
+  },
+  "study": Object {
+    "id": "FOO",
+    "name": "BAR",
+  },
+}
+`;
+
 exports[`Compiler requires a study definition initially 1`] = `
 Array [
   Object {
