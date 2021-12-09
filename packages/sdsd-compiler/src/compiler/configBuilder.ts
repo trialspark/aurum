@@ -583,8 +583,8 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   visitStudyDefinition(node: StudyDefinition): Action[] {
     const { id, name } = this.getAttributes(node.children);
 
-    assert(id.type === "string");
-    assert(name.type === "string");
+    assert(id?.type === "string");
+    assert(name?.type === "string");
 
     return [
       configBuilderActions.setStudy({
