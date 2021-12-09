@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, freeze, original } from "@reduxjs/toolkit";
+import { ParseDiagnostic } from "..";
 import { Document } from "../../astTypes";
 
 export interface FilesState {
@@ -39,9 +40,10 @@ const { actions, reducer } = createSlice({
 
 export interface File {
   name: string;
-  ast: Document;
+  ast: Document | null;
   source: string;
   dependencies: File[];
+  parseDiagnostics: ParseDiagnostic[];
 }
 
 export type FilesAction = ReturnType<typeof actions[keyof typeof actions]>;

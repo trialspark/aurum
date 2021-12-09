@@ -14,6 +14,7 @@ export type DiagnosticScope =
 export const DiagnosticCode = {
   MISSING_STUDY_DEF: "missing_study_def",
   NOT_FOUND: "not_found",
+  PARSE_FAILURE: "parse_failure",
 } as const;
 export type DiagnosticCode = typeof DiagnosticCode[keyof typeof DiagnosticCode];
 
@@ -51,4 +52,13 @@ export interface NotFoundDiagnostic
   name: string;
 }
 
-export type Diagnostic = MissingStudyDefDiagnostic | NotFoundDiagnostic;
+export interface ParseDiagnostic
+  extends BaseDiagnostic<
+    typeof DiagnosticCode["PARSE_FAILURE"],
+    typeof DiagnosticScope["LOCAL"]
+  > {}
+
+export type Diagnostic =
+  | MissingStudyDefDiagnostic
+  | NotFoundDiagnostic
+  | ParseDiagnostic;

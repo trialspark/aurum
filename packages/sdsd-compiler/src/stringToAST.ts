@@ -50,6 +50,8 @@ export class ParseError extends Error {
         "\n" +
         `Unexpected token: "${invalidChar}".`
     );
+    ParseError.captureStackTrace(this);
+    Object.setPrototypeOf(this, ParseError.prototype);
   }
 }
 

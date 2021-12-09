@@ -15,6 +15,48 @@ describe("Compiler", () => {
     expect(compiler.diagnostics).toMatchSnapshot();
   });
 
+  it("includes diagnostics for syntax errors", () => {
+    compiler.updateFiles({
+      "bad.sdsd": "sturdy {}",
+    });
+    expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "code": "parse_failure",
+    "loc": Object {
+      "end": Object {
+        "col": 6,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 1,
+        "line": 1,
+      },
+    },
+    "message": "Syntax error on line 1 col 1:
+
+sturdy {}
+^
+
+Unexpected token: \\"sturdy\\".",
+    "scope": "local",
+  },
+  Object {
+    "code": "missing_study_def",
+    "loc": null,
+    "message": "Missing study definition, e.g.:
+
+study {
+  id: \\"STUDY-ID\\"
+  name: \\"Longer name for my study\\"
+}",
+    "scope": "global",
+  },
+]
+`);
+  });
+
   describe("when a study definition is added", () => {
     beforeEach(() => {
       compiler.updateFiles({

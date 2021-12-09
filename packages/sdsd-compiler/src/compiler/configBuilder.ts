@@ -475,6 +475,9 @@ class BaseConfigBuilder extends DocumentVisitor {
       this.withCleanDiagnostics(() =>
         this.withCleanFiles(() =>
           this.withFile(file, () => {
+            if (!file.ast) {
+              return [];
+            }
             const configActions = this.visit(file.ast);
             return [
               ...this.diagnosticActions,

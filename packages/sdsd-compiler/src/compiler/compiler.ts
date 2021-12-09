@@ -1,5 +1,12 @@
-import { CompilationResult, Dataset, DefinitionType, Domain } from ".";
-import { stringToAST } from "..";
+import {
+  CompilationResult,
+  Dataset,
+  DefinitionType,
+  Domain,
+  ParseDiagnostic,
+} from ".";
+import { ParseError, stringToAST } from "../stringToAST";
+import { Document } from "../astTypes";
 import { SuperAccessor, configBuilders } from "./configBuilder";
 import { DefBuilder } from "./defBuilder";
 import { Diagnostic, DiagnosticCode, DiagnosticScope } from "./diagnostics";
@@ -37,6 +44,9 @@ export class Compiler {
 
   public get diagnostics(): Diagnostic[] {
     return [
+      ...Object.values(this.state.files).flatMap(
+        (file) => file.parseDiagnostics
+      ),
       ...Array.from(this.errorsByCode.values()).flat(),
       ...this.state.configBuilder.diagnostics,
     ];
@@ -148,6 +158,36 @@ export class Compiler {
     this.compileFiles(filesMap);
   }
 
+  private createFile(filename: string, source: string): File {
+    let ast: Document | null = null;
+    let parseDiagnostics: ParseDiagnostic[] = [];
+
+    try {
+      ast = stringToAST(source);
+    } catch (error) {
+      if (error instanceof ParseError) {
+        parseDiagnostics = [
+          {
+            code: DiagnosticCode.PARSE_FAILURE,
+            scope: DiagnosticScope.LOCAL,
+            loc: { ...error.loc, filename },
+            message: error.message,
+          },
+        ];
+      } else {
+        throw error;
+      }
+    }
+
+    return {
+      name: filename,
+      source,
+      ast,
+      parseDiagnostics,
+      dependencies: [],
+    };
+  }
+
   private updateFilesState(filesMap: FileMap) {
     this.applyActions(
       Object.entries(filesMap).map(([filename, source]): AttributableAction => {
@@ -156,12 +196,7 @@ export class Compiler {
         }
 
         return {
-          action: filesActions.addFile({
-            name: filename,
-            ast: stringToAST(source),
-            source,
-            dependencies: [],
-          }),
+          action: filesActions.addFile(this.createFile(filename, source)),
           file: null,
         };
       })
@@ -188,14 +223,7 @@ export class Compiler {
         ([filename, value]) =>
           value !== null && !this.compiledFilenames.has(filename)
       )
-      .map(
-        ([filename, value]): File => ({
-          name: filename,
-          source: value!,
-          ast: stringToAST(value!),
-          dependencies: [],
-        })
-      );
+      .map(([filename, value]) => this.createFile(filename, value!));
     const accessors: SuperAccessor = {
       getOptions: () => this.options,
       getState: () => this.state,

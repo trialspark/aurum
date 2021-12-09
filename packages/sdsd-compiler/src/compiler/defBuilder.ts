@@ -95,7 +95,13 @@ export class DefBuilder extends DocumentVisitor {
 
   getActions(): AttributableAction[] {
     return this.files.flatMap((file) =>
-      this.withFile(file, () => this.visit(file.ast)).map((action) => ({
+      this.withFile(file, () => {
+        if (!file.ast) {
+          return [];
+        }
+
+        return this.visit(file.ast);
+      }).map((action) => ({
         file,
         action,
       }))
