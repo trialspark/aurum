@@ -61,7 +61,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",
-    "watch": "tsc -b -w"
+    "dev": "tsc -b -w"
   },
   "dependencies": {
     "vscode-languageclient": "^7.0.0"

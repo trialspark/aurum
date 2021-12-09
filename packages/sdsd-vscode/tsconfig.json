@@ -1,4 +1,5 @@
 {
   "extends": "./tsconfig.base.json",
+  "references": [{ "path": "../sdsd-server" }],
   "include": ["./src/**/*.ts", "./typings.d.ts"]
 }

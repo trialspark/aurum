@@ -1,5 +1,10 @@
 {
   "extends": "./tsconfig.base.json",
-  "references": [{ "path": "./packages/sdsd-compiler" }],
+  "references": [
+    { "path": "./packages/sdsd-compiler" },
+    { "path": "./packages/sdsd-server" },
+    { "path": "./packages/sdsd-format" },
+    { "path": "./packages/sdsd-vscode" }
+  ],
   "compilerOptions": { "noEmit": true }
 }
