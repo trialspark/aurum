@@ -3,25 +3,25 @@
   "name": "study data schema definition",
   "patterns": [
     {
-      "include": "#keywords"
+      "include": "#keyword"
     },
     {
-      "include": "#strings"
+      "include": "#string"
     },
     {
-      "include": "#tstrings"
+      "include": "#tstring"
     },
     {
-      "include": "#property-names"
+      "include": "#property-name"
     },
     {
-      "include": "#@strings"
+      "include": "#@string"
     },
     {
-      "include": "#types"
+      "include": "#type"
     },
     {
-      "include": "#operators"
+      "include": "#operator"
     },
     {
       "include": "#sql"
@@ -37,7 +37,7 @@
     }
   ],
   "repository": {
-    "keywords": {
+    "keyword": {
       "patterns": [
         {
           "name": "keyword.control.sdsd",
@@ -45,7 +45,7 @@
         }
       ]
     },
-    "property-names": {
+    "property-name": {
       "patterns": [
         {
           "name": "support.type.property-name.json.sdsd",
@@ -53,7 +53,7 @@
         }
       ]
     },
-    "@strings": {
+    "@string": {
       "patterns": [
         {
           "name": "entity.name.function.sdsd",
@@ -61,7 +61,7 @@
         }
       ]
     },
-    "tstrings": {
+    "tstring": {
       "name": "variable.other.property.sdsd",
       "begin": "t\"",
       "end": "\"",
@@ -75,11 +75,11 @@
           "match": "d|h|m|s"
         },
         {
-          "include": "#operators"
+          "include": "#operator"
         }
       ]
     },
-    "strings": {
+    "string": {
       "name": "string.quoted.double.sdsd",
       "begin": "\"",
       "end": "\"",
@@ -90,11 +90,11 @@
         }
       ]
     },
-    "types": {
+    "type": {
       "name": "support.type.sdsd",
       "match": "\\b(String|Integer|Float|Boolean)\\b"
     },
-    "operators": {
+    "operator": {
       "name": "keyword.operator.quantifier.sdsd",
       "match": "\\+|\\-|>|<|=|\\?"
     },
