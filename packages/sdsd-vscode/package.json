@@ -54,7 +54,10 @@
       {
         "language": "sdsd",
         "scopeName": "source.sdsd",
-        "path": "./syntaxes/sdsd.tmLanguage.json"
+        "path": "./syntaxes/sdsd.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.sql": "sql"
+        }
       }
     ]
   },

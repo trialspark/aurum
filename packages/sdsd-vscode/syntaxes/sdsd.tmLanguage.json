@@ -22,6 +22,9 @@
     },
     {
       "include": "#operators"
+    },
+    {
+      "include": "#sql"
     }
   ],
   "repository": {
@@ -85,6 +88,12 @@
     "operators": {
       "name": "keyword.operator.quantifier.sdsd",
       "match": "\\+|\\-|>|<|=|\\?"
+    },
+    "sql": {
+      "name": "meta.embedded.block.sql",
+      "begin": "\\\\`\\\\`\\\\`sql",
+      "end": "\\\\`\\\\`\\\\`",
+      "patterns": [{ "include": "source.sql" }]
     }
   },
   "scopeName": "source.sdsd"
