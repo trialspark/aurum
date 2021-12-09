@@ -208,6 +208,12 @@ export class Compiler {
     );
   }
 
+  private removeFilesAsDependencies(files: Set<string>) {
+    this.applyActions([
+      { action: filesActions.removeAsDependencies(files), file: null },
+    ]);
+  }
+
   private getDependentFiles(filesMap: FileMap): FileMap {
     const files = Object.keys(filesMap).map(
       (filename) => this.state.files[filename]
@@ -251,6 +257,9 @@ export class Compiler {
 
     // Clear out any actions for these files since we're updating them
     this.removeActionsForFiles(filenames);
+
+    // Remove these files as dependencies of other since that will all get recalculated
+    this.removeFilesAsDependencies(filenames);
 
     // Build defs
     this.applyActions(new DefBuilder(files).getActions());

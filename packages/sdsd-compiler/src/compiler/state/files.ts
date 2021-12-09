@@ -34,6 +34,23 @@ const { actions, reducer } = createSlice({
         ]);
       }
     },
+    removeAsDependencies: (
+      state,
+      { payload: depsToRemove }: PayloadAction<Set<string>>
+    ) => {
+      const files = Object.values(state);
+
+      for (const file of files) {
+        if (file) {
+          const currentDependencies = original(file)!.dependencies;
+          file.dependencies = new Set(
+            Array.from(currentDependencies).filter(
+              (dependency) => !depsToRemove.has(dependency)
+            )
+          );
+        }
+      }
+    },
   },
 });
 
