@@ -19,6 +19,9 @@
     },
     {
       "include": "#types"
+    },
+    {
+      "include": "#operators"
     }
   ],
   "repository": {
@@ -26,7 +29,7 @@
       "patterns": [
         {
           "name": "keyword.control.sdsd",
-          "match": "\\b(study|milestone|interface|codelist|domain|dataset|extend|map)\\b"
+          "match": "\\b(study|milestone|interface|codelist|domain|dataset|extend|map|implements|with|as|from)\\b"
         }
       ]
     },
@@ -47,21 +50,20 @@
       ]
     },
     "tstrings": {
-      "name": "string.quoted.double.t.sdsd",
+      "name": "variable.other.property.sdsd",
       "begin": "t\"",
       "end": "\"",
       "patterns": [
         {
-          "name": "keywork.operator.start.sdsd",
-          "match": "t\""
+          "name": "keyword.control.sdsd",
+          "match": "\\b(at)\\b"
         },
         {
           "name": "constant.other.character_class.regex.sdsd",
-          "match": "d|m"
+          "match": "d|h|m|s"
         },
         {
-          "name": "keyword.operator.quantifier.sdsd",
-          "match": "\\+|\\-"
+          "include": "#operators"
         }
       ]
     },
@@ -78,7 +80,11 @@
     },
     "types": {
       "name": "support.type.sdsd",
-      "match": "\\b(String|Integer|Float)\\b"
+      "match": "\\b(String|Integer|Float|Boolean)\\b"
+    },
+    "operators": {
+      "name": "keyword.operator.quantifier.sdsd",
+      "match": "\\+|\\-|>|<|=|\\?"
     }
   },
   "scopeName": "source.sdsd"
