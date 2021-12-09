@@ -36,7 +36,10 @@ export class Compiler {
   public options: CompilerOptions;
 
   public get diagnostics(): Diagnostic[] {
-    return Array.from(this.errorsByCode.values()).flat();
+    return [
+      ...Array.from(this.errorsByCode.values()).flat(),
+      ...this.state.configBuilder.diagnostics,
+    ];
   }
   public get result(): CompilationResult {
     return this.state.configBuilder.result;

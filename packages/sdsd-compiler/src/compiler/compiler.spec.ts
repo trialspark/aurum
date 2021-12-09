@@ -37,6 +37,38 @@ describe("Compiler", () => {
       expect(compiler.diagnostics).toMatchSnapshot();
     });
 
+    it("includes diagnostics if an undefined milestone is referenced", () => {
+      compiler.updateFiles({
+        "bad.sdsd": `domain "MY DOMAIN" @abbr("MY") { dataset some_dataset @milestone(t"BAD_MILESTONE") {} }`,
+      });
+      expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "code": "not_found",
+    "defType": "milestone",
+    "loc": Object {
+      "end": Object {
+        "col": 80,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 68,
+        "line": 1,
+      },
+    },
+    "message": "Could not find milestone with name \\"BAD_MILESTONE\\". Please add it:
+
+milestone BAD_MILESTONE {
+  at: t\\"d7 +-2\\"
+}",
+    "name": "BAD_MILESTONE",
+    "scope": "local",
+  },
+]
+`);
+    });
+
     describe("and some milestones are added", () => {
       beforeEach(() => {
         compiler.updateFiles({

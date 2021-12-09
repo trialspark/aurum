@@ -13,6 +13,7 @@ const config: InitialOptionsTsJest = {
   transform: {
     "^.+\\.ne$": "<rootDir>/nearley-jest-ts.js",
   },
+  testPathIgnorePatterns: ["/node_modules/", "/build/"],
 };
 
 export default config;
