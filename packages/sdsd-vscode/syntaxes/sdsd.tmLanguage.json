@@ -28,6 +28,9 @@
     },
     {
       "include": "#json"
+    },
+    {
+      "include": "#python"
     }
   ],
   "repository": {
@@ -103,6 +106,12 @@
       "begin": "```json",
       "end": "```",
       "patterns": [{ "include": "source.json" }]
+    },
+    "python": {
+      "name": "meta.embedded.block.python",
+      "begin": "```python",
+      "end": "```",
+      "patterns": [{ "include": "source.python" }]
     }
   },
   "scopeName": "source.sdsd"

@@ -57,7 +57,8 @@
         "path": "./syntaxes/sdsd.tmLanguage.json",
         "embeddedLanguages": {
           "meta.embedded.block.sql": "sql",
-          "meta.embedded.block.json": "json"
+          "meta.embedded.block.json": "json",
+          "meta.embedded.block.python": "python"
         }
       }
     ]
