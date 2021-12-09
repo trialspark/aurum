@@ -18,7 +18,7 @@ import {
   File,
   filesActions,
 } from "./state";
-import { AutocompleteBuilder, CompletionItem } from './autoCompleteBuilder'
+import { AutocompleteBuilder, CompletionItem } from "./autocompleteBuilder";
 
 export interface AttributableAction {
   action: Action;
@@ -148,7 +148,7 @@ export class Compiler {
     );
     const filesMap = Object.fromEntries(
       Object.values(this.state.files).flatMap((file) => {
-        if (filenamesToRebuild.has(file.name)) {
+        if (file && filenamesToRebuild.has(file.name)) {
           return [[file.name, file.source]];
         }
 
@@ -204,6 +204,34 @@ export class Compiler {
     );
   }
 
+  private getDependentFiles(filesMap: FileMap): FileMap {
+    const files = Object.keys(filesMap).map(
+      (filename) => this.state.files[filename]
+    );
+    const filesToCheck = Array.from(
+      new Set(files.flatMap((file) => Array.from(file?.dependencies ?? [])))
+    );
+    const dependentFiles: FileMap = {};
+
+    while (filesToCheck.length > 0) {
+      const filename = filesToCheck.shift()!;
+
+      if (filename in dependentFiles) {
+        // We already checked this file
+        continue;
+      }
+
+      // Add the file and check its children
+      const file = this.state.files[filename];
+      if (file) {
+        dependentFiles[file.name] = file.source;
+        filesToCheck.push(...file.dependencies);
+      }
+    }
+
+    return dependentFiles;
+  }
+
   private compileFiles(filesMap: FileMap) {
     const filenames = new Set(Object.keys(filesMap));
     const files = Object.entries(filesMap)
@@ -230,26 +258,27 @@ export class Compiler {
   }
 
   updateFiles(filesMap: FileMap): void {
-    this.withFreshCompiledFilenames(() => {
-      this.updateFilesState(filesMap);
-      this.compileFiles(filesMap);
-      this.recompileIfMissingDefsHaveBeenAdded();
-      this.checkForGlobalErrors();
-    });
+    this.updateFilesState(filesMap);
+    this.compileFiles(filesMap);
+    this.recompileIfMissingDefsHaveBeenAdded();
+    this.compileFiles(this.getDependentFiles(filesMap));
+    this.checkForGlobalErrors();
   }
 
   getCompletionItems(line: number, character: number): CompletionItem[] {
-    const autoCompleteResults = new AutocompleteBuilder(Object.values(this.state.files)).getAutocompleteResults();
-    // console.log('ast: ', this.state.files['study.sdsd'].ast); // TODO: Delete 
+    const autoCompleteResults = new AutocompleteBuilder(
+      Object.values(this.state.files)
+    ).getAutocompleteResults();
+    // console.log('ast: ', this.state.files['study.sdsd'].ast); // TODO: Delete
     return [
       {
-        label: 'TypeScript',
-        data: 1
+        label: "TypeScript",
+        data: 1,
       },
       {
-        label: 'JavaScript',
-        data: 2
-      }
+        label: "JavaScript",
+        data: 2,
+      },
     ];
   }
 }

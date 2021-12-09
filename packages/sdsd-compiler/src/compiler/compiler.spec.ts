@@ -690,13 +690,12 @@ milestone BAD_MILESTONE {
 
     it("Gives autocomplete items", () => {
       const result = compiler.getCompletionItems(1, 1);
-      // console.log('result: ', result); // TODO: Delete 
+      // console.log('result: ', result); // TODO: Delete
       // expect(result)
-      // console.log('compiler.result: ', compiler.result); // TODO: Delete 
-      // console.log('compiler.state: ', compiler.state); // TODO: Delete 
+      // console.log('compiler.result: ', compiler.result); // TODO: Delete
+      // console.log('compiler.state: ', compiler.state); // TODO: Delete
       // expect(compiler.result).toEqual(compiler.result);
       expect(compiler.diagnostics).toEqual([]);
     });
-
   });
 });

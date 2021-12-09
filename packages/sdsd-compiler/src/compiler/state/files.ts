@@ -3,7 +3,7 @@ import { ParseDiagnostic } from "..";
 import { Document } from "../../astTypes";
 
 export interface FilesState {
-  [filename: string]: File;
+  [filename: string]: File | undefined;
 }
 
 const initialState: FilesState = {};
@@ -27,7 +27,7 @@ const { actions, reducer } = createSlice({
       const file = state[filename];
       const dependsOnSelf = filename === dependencyFilename;
 
-      if (!dependsOnSelf) {
+      if (file && !dependsOnSelf) {
         file.dependencies = new Set([
           ...Array.from(file.dependencies),
           dependencyFilename,
