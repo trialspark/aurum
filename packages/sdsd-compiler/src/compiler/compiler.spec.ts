@@ -773,8 +773,8 @@ milestone BAD_MILESTONE {
           `,
         ],
         [
-        "interfaces.sdsd",
-        `
+          "interfaces.sdsd",
+          `
           interface base {
             USUBJID String   @subject.uuid
                              @label("Unique Subject Identifier")
@@ -797,11 +797,11 @@ milestone BAD_MILESTONE {
             VISITDY Integer  @milestone.study_day
                              @label("Planned Study Day of Visit")
                              @desc("Planned study day of the visit based upon RFSTDTC in Demographics.")
-          }`
-          ],
-          [
-            "domains/vs_map.sdsd",
-            `
+          }`,
+        ],
+        [
+          "domains/vs_map.sdsd",
+          `
               map dataset vs {
                 VISTYP from literal as VISIT_NAME \`\`\`json
                   "{{MILESTONE.NAME}}"
@@ -828,32 +828,32 @@ milestone BAD_MILESTONE {
                 \`\`\`
               }
             `,
-          ],
+        ],
       ];
       compiler = new Compiler({});
       compiler.updateFiles(Object.fromEntries(fileEntries));
     });
 
-    it.only("Gets autocomplete items", () => {
+    it("Gets autocomplete items", () => {
       const result = compiler.getCompletionItems(1, 1);
       expect(result).toEqual([
-        { label: 'id', data: 0 },
-        { label: 'MY-STUDY', data: 1 },
-        { label: 'name', data: 0 },
-        { label: 'This is my study', data: 1 },
-        { data: 0, label: "SCREENING", },
-        { data: 0, label: "BASELINE", },
-        { data: 0, label: "CLINIC_1", },
-        { data: 0, label: "CLINIC_2", },
-        { data: 0, label: "CLOSEOUT", },
-        { data: 0, label: "EARLY_TERM", },
-        { data: 0, label: "base", },
-        { data: 0, label: "USUBJID", },
-        { data: 0, label: "SUBJID", },
-        { data: 0, label: "visit_base", },
-        { data: 0, label: "VISITNUM", },
-        { data: 0, label: "VISIT", },
-        { data: 0, label: "VISITDY", },
+        { label: "id", data: 0 },
+        { label: "MY-STUDY", data: 1 },
+        { label: "name", data: 0 },
+        { label: "This is my study", data: 1 },
+        { data: 0, label: "SCREENING" },
+        { data: 0, label: "BASELINE" },
+        { data: 0, label: "CLINIC_1" },
+        { data: 0, label: "CLINIC_2" },
+        { data: 0, label: "CLOSEOUT" },
+        { data: 0, label: "EARLY_TERM" },
+        { data: 0, label: "base" },
+        { data: 0, label: "USUBJID" },
+        { data: 0, label: "SUBJID" },
+        { data: 0, label: "visit_base" },
+        { data: 0, label: "VISITNUM" },
+        { data: 0, label: "VISIT" },
+        { data: 0, label: "VISITDY" },
       ]);
     });
   });
