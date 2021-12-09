@@ -843,56 +843,39 @@ study {
       compiler.updateFiles(Object.fromEntries(fileEntries));
     });
 
-    it.skip("Gets autocomplete items", () => {
+    it("Gets autocomplete items", () => {
       const result = compiler.getCompletionItems(
         1,
         1,
         `
-          map dataset vs {
-            VISTYP from literal as VISIT_NAME \`\`\`json
-              "{{MILESTONE.NAME}}"
-            \`\`\` => \`\`\`python
-              if VISIT_NAME == 'SCREENING':
-                  return 'SCREENING'
-              if VISIT_NAME == 'BASELINE':
-                  return 'BASELINE'
-              if VISIT_NAME == 'EARLY_TERM':
-                  return 'EARLY_WITHDRAWAL'
-              return 'TREATMENT'
-            \`\`\`
+INVAL
+codelist BodySide {
+    LEFT        @desc("Left side of the body")
+    RIGHT       @desc("Right side of the body")
+}
 
-            VSORRES from esource \`\`\`path
-              {{MILESTONE.NAME}}.VS.VSORRES
-            \`\`\`
+codelist ArmPosition {
+    UPPER       @desc("Upper arm position")
+    LOWER       @desc("Lower arm position")
+}
 
-            VSBOSI from esource \`\`\`path
-              {{MILESTONE.NAME}}.VS.VSBOSI
-            \`\`\`
-
-            VSPOS from esource \`\`\`path
-              {{MILESTONE.NAME}}.VS.VSPOS
-            \`\`\`
-          }
+codelist VisitType {
+    SCREENING        @desc("A screening visit")
+    BASELINE         @desc("A baseline visit")
+    TREATMENT        @desc("A visit that occurs during the course of treatment")
+    EARLY_WITHDRAWAL @desc("A visit that occurs when the subject exits the study early")
+}
         `
       );
       expect(result).toEqual([
-        { label: "id", data: 0 },
-        { label: "MY-STUDY", data: 1 },
-        { label: "name", data: 0 },
-        { label: "This is my study", data: 1 },
-        { data: 0, label: "SCREENING" },
-        { data: 0, label: "BASELINE" },
-        { data: 0, label: "CLINIC_1" },
-        { data: 0, label: "CLINIC_2" },
-        { data: 0, label: "CLOSEOUT" },
-        { data: 0, label: "EARLY_TERM" },
-        { data: 0, label: "base" },
-        { data: 0, label: "USUBJID" },
-        { data: 0, label: "SUBJID" },
-        { data: 0, label: "visit_base" },
-        { data: 0, label: "VISITNUM" },
-        { data: 0, label: "VISIT" },
-        { data: 0, label: "VISITDY" },
+        { label: 'study' },
+        { label: 'milestone' },
+        { label: 'codelist' },
+        { label: 'extend' },
+        { label: 'interface' },
+        { label: 'domain' },
+        { label: 'extend' },
+        { label: 'map' }
       ]);
     });
   });
