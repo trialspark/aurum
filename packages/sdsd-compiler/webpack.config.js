@@ -23,7 +23,15 @@ const config = {
     rules: [
       {
         test: /\.ne$/,
-        use: ["ts-loader", "nearley-loader"],
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          },
+          "nearley-loader",
+        ],
       },
       {
         test: /\.ts$/,
