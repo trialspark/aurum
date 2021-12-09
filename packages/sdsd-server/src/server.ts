@@ -18,6 +18,8 @@ import {
 } from "vscode-languageserver/node";
 
 import { TextDocument } from "vscode-languageserver-textdocument";
+import nearley from "nearley";
+const grammar = nearley.Grammar.fromCompiled(require("../grammar.js"));
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -32,7 +34,6 @@ let hasDiagnosticRelatedInformationCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
   const capabilities = params.capabilities;
-  connection.console.log(JSON.stringify(params.capabilities));
 
   // Does the client support the `workspace/configuration` request?
   // If not, we fall back using global settings.
@@ -147,6 +148,32 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
   // The validator creates diagnostics for all uppercase words length 2 and more
   const text = textDocument.getText();
+
+  const parser = new nearley.Parser(grammar, { keepHistory: true });
+  try {
+    const parseResult = parser.feed(text);
+    connection.console.log(JSON.stringify(parseResult.results));
+  } catch (err: any) {
+    connection.console.log(err.offset);
+    // connection.console.log(
+    //   JSON.stringify(
+    //     (parser as any).table.map((el: any) =>
+    //       [
+    //         "index",
+    //         "states",
+    //         "wants",
+    //         "scannable",
+    //         "completed",
+    //         "lexerState",
+    //       ].map((x) => el[x])
+    //     )
+    //   )
+    // );
+    connection.console.log(JSON.stringify(err.token));
+    // connection.console.log(JSON.stringify(Object.keys(err)));
+    connection.console.error(err.toString());
+  }
+
   const pattern = /\b[A-Z]{2,}\b/g;
   let m: RegExpExecArray | null;
 
