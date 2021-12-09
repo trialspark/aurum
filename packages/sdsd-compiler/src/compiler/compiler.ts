@@ -18,6 +18,7 @@ import {
   File,
   filesActions,
 } from "./state";
+import { AutocompleteBuilder, CompletionItem } from './autoCompleteBuilder'
 
 export interface AttributableAction {
   action: Action;
@@ -256,5 +257,20 @@ export class Compiler {
       this.recompileIfMissingDefsHaveBeenAdded();
       this.checkForGlobalErrors();
     });
+  }
+
+  getCompletionItems(line: number, character: number): CompletionItem[] {
+    const autoCompleteResults = new AutocompleteBuilder(Object.values(this.state.files)).getAutocompleteResults();
+    // console.log('ast: ', this.state.files['study.sdsd'].ast); // TODO: Delete 
+    return [
+      {
+        label: 'TypeScript',
+        data: 1
+      },
+      {
+        label: 'JavaScript',
+        data: 2
+      }
+    ];
   }
 }
