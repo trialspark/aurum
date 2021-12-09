@@ -14,12 +14,12 @@
       "patterns": [
         {
           "name": "keyword.control.sdsd",
-          "match": "\\b(if|whilez|for|return)\\b"
+          "match": "\\b(study|milestone|interface|codelist|domain|dataset|extend|map)\\b"
         }
       ]
     },
-    "strings": {
-      "name": "string.quoted.double.sdsd",
+    "tstrings": {
+      "name": "tstring.quoted.double.sdsd",
       "begin": "t\"",
       "end": "\"",
       "patterns": [
@@ -28,7 +28,18 @@
           "match": "\\\\."
         }
       ]
-    }
+    },
+	"strings": {
+		"name": "string.quoted.double.sdsd",
+		"begin": "\"",
+		"end": "\"",
+		"patterns": [
+		  {
+			"name": "constant.character.escape.sdsd",
+			"match": "\\\\."
+		  }
+		]
+	}
   },
   "scopeName": "source.sdsd"
 }
