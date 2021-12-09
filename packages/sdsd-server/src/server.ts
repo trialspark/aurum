@@ -18,12 +18,16 @@ import {
 } from "vscode-languageserver/node";
 
 import { TextDocument } from "vscode-languageserver-textdocument";
+//@ts-ignore
+// import { Compiler } from "sdsd-compiler";
 import nearley from "nearley";
+
 const grammar = nearley.Grammar.fromCompiled(require("../grammar.js"));
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all);
+// connection.console.log(Compiler);
 
 // Create a simple text document manager.
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
@@ -148,6 +152,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
   // The validator creates diagnostics for all uppercase words length 2 and more
   const text = textDocument.getText();
+  const diagnostics: Diagnostic[] = [];
 
   const parser = new nearley.Parser(grammar, { keepHistory: true });
   try {
@@ -155,30 +160,22 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     connection.console.log(JSON.stringify(parseResult.results));
   } catch (err: any) {
     connection.console.log(err.offset);
-    // connection.console.log(
-    //   JSON.stringify(
-    //     (parser as any).table.map((el: any) =>
-    //       [
-    //         "index",
-    //         "states",
-    //         "wants",
-    //         "scannable",
-    //         "completed",
-    //         "lexerState",
-    //       ].map((x) => el[x])
-    //     )
-    //   )
-    // );
-    connection.console.log(JSON.stringify(err.token));
-    // connection.console.log(JSON.stringify(Object.keys(err)));
-    connection.console.error(err.toString());
+    const diagnostic: Diagnostic = {
+      severity: DiagnosticSeverity.Warning,
+      range: {
+        start: textDocument.positionAt(err.offset),
+        end: textDocument.positionAt(err.offset),
+      },
+      message: err.toString(),
+      source: "ex",
+    };
+    diagnostics.push(diagnostic);
   }
 
   const pattern = /\b[A-Z]{2,}\b/g;
   let m: RegExpExecArray | null;
 
   let problems = 0;
-  const diagnostics: Diagnostic[] = [];
   while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
     problems++;
     const diagnostic: Diagnostic = {
