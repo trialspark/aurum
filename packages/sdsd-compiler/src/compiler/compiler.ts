@@ -300,8 +300,11 @@ export class Compiler {
     stateStacks.forEach(function(stateStack: any) {
         const state = stateStack[0];
         const nextSymbol = state.rule.symbols[state.dot];
-        const symbolDisplay = parser.getSymbolDisplay(nextSymbol);
-        completionItems.push({label: symbolDisplay.replace(/\W/g, '')});
+        // console.log('nextSymbol: ', nextSymbol); // TODO: Delete 
+        const symbolDisplay = parser.getSymbolDisplay(nextSymbol).replace(/\W/g, '');
+        if (!symbolDisplay.endsWith('token')) {
+          completionItems.push({label: symbolDisplay});
+        }
     }, this);
     return completionItems;
   }
@@ -320,7 +323,6 @@ export class Compiler {
     const nextExpectedSymbols = this.getNextExpectedSymbols(parser);
     // console.log('nextExpectedSymbols: ', nextExpectedSymbols); // TODO: Delete 
 
-    // console.log('parser.lexerState: ', parser.lexerState); // TODO: Delete 
     const defBuilder = this.state.defBuilder;
     // console.log("defBuilder: ", defBuilder); // TODO: Delete
     const autoCompleteResults = [

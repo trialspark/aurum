@@ -918,7 +918,7 @@ Array [
     });
   });
 
-  describe("auto completion options", () => {
+  describe("auto completion options for keywords", () => {
     let fileEntries: [string, string][];
 
     beforeEach(() => {
@@ -1043,7 +1043,7 @@ Array [
       compiler.updateFiles(Object.fromEntries(fileEntries));
     });
 
-    it("Gets autocomplete items", () => {
+    it("Gets autocomplete items for keywords", () => {
       const result = compiler.getCompletionItems(
         1,
         1,

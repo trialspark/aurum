@@ -195,6 +195,7 @@ connection.onCompletion(
     // info and always provide the same completion items.
     const document = documents.get(textDocumentPosition.textDocument.uri);
     if (!document) return [];
+    connection.console.log(JSON.stringify(textDocumentPosition.position)); // TODO: Delete 
     const slicedText = document.getText({start: {line: 0, character: 0}, end: textDocumentPosition.position});
     const completionResults = compiler.getCompletionItems(textDocumentPosition.position.line, textDocumentPosition.position.character, slicedText) // .map(item => ({...item, kind: CompletionItemKind.Text, detail: 'Hello' }));
     console.log('completionResults: ', completionResults); // TODO: Delete 
@@ -205,14 +206,14 @@ connection.onCompletion(
 // This handler resolves additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
-  console.log("onCompletionResolve");
-  if (item.label === "foo") {
-    item.detail = "foo details";
-    item.documentation = "foo documentation";
-  } else if (item.label === "fooz") {
-    item.detail = "fooz details";
-    item.documentation = "fooz documentation";
-  }
+  // console.log("onCompletionResolve");
+  // if (item.label === "foo") {
+  //   item.detail = "foo details";
+  //   item.documentation = "foo documentation";
+  // } else if (item.label === "fooz") {
+  //   item.detail = "fooz details";
+  //   item.documentation = "fooz documentation";
+  // }
   return item;
 });
 
