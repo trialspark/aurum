@@ -181,6 +181,8 @@ export class Compiler {
             message: error.message,
           },
         ];
+        // Use last successful parse of file if parsing fails
+        ast = this.state.files[filename]?.ast ?? null;
       } else {
         throw error;
       }
@@ -280,11 +282,15 @@ export class Compiler {
     this.checkForGlobalErrors();
   }
 
-  getCompletionItems(line: number, character: number, source: string): CompletionItem[] {
+  getCompletionItems(
+    line: number,
+    character: number,
+    source: string
+  ): CompletionItem[] {
     // const parser = new Parser(Grammar.fromCompiled(grammar)).feed(source);
 
     const defBuilder = this.state.defBuilder;
-    console.log('defBuilder: ', defBuilder); // TODO: Delete 
+    console.log("defBuilder: ", defBuilder); // TODO: Delete
     const autoCompleteResults = [
       ...Object.keys(defBuilder.interfaceDefs).map((interfaceDef) => ({
         label: interfaceDef,

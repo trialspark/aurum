@@ -668,6 +668,15 @@ study {
       expect(compiler.diagnostics).toEqual([]);
     });
 
+    it("keeps the old results of a file around if parsing fails", () => {
+      const prevResult = inOrderCompiler.result;
+
+      // Replace file with invalid parsing
+      inOrderCompiler.updateFiles({ "codelists.sdsd": "blah blah blah" });
+
+      expect(inOrderCompiler.result.codelists).toEqual(prevResult.codelists);
+    });
+
     it("compiles a cyclic dependency between two files", () => {
       compiler.updateFiles({
         "study.sdsd": 'study { id: "FOO" name: "BAR" }',
@@ -834,10 +843,11 @@ study {
       compiler.updateFiles(Object.fromEntries(fileEntries));
     });
 
-
     it.skip("Gets autocomplete items", () => {
-      const result = compiler.getCompletionItems(1, 1,
-      `
+      const result = compiler.getCompletionItems(
+        1,
+        1,
+        `
           map dataset vs {
             VISTYP from literal as VISIT_NAME \`\`\`json
               "{{MILESTONE.NAME}}"
@@ -863,7 +873,8 @@ study {
               {{MILESTONE.NAME}}.VS.VSPOS
             \`\`\`
           }
-        `)
+        `
+      );
       expect(result).toEqual([
         { label: "id", data: 0 },
         { label: "MY-STUDY", data: 1 },
