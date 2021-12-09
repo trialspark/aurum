@@ -188,20 +188,14 @@ connection.onDidChangeWatchedFiles((_change) => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
-  (textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+  (textDocumentPosition: TextDocumentPositionParams): any[] => {
     // connection.console.log(JSON.stringify(documents.keys()));
-    // connection.console.log(documents.get(textDocumentPosition.textDocument));
     // The pass parameter contains the position of the text document in
     // which code complete got requested. For the example we ignore this
     // info and always provide the same completion items.
-    return [
-      {
-        label: "foo",
-      },
-      {
-        label: "fooz",
-      },
-    ];
+    const completionResults = compiler.getCompletionItems(textDocumentPosition.position.line, textDocumentPosition.position.character).map(item => ({...item, kind: CompletionItemKind.Text, detail: 'Hello' }));
+    connection.console.log(JSON.stringify(completionResults));
+    return completionResults
   }
 );
 

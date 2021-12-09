@@ -18,7 +18,6 @@ import {
   File,
   filesActions,
 } from "./state";
-import { AutocompleteBuilder, CompletionItem } from "./autocompleteBuilder";
 
 export interface AttributableAction {
   action: Action;
@@ -27,6 +26,11 @@ export interface AttributableAction {
 
 export interface CompilerOptions {
   scalarTypes: string[];
+}
+
+export interface CompletionItem {
+  label: string;
+  // data: number; // TODO: Add
 }
 
 type ErrorsByCode<Code extends DiagnosticCode> = Map<
@@ -266,19 +270,13 @@ export class Compiler {
   }
 
   getCompletionItems(line: number, character: number): CompletionItem[] {
-    const autoCompleteResults = new AutocompleteBuilder(
-      Object.values(this.state.files)
-    ).getAutocompleteResults();
-    // console.log('ast: ', this.state.files['study.sdsd'].ast); // TODO: Delete
-    return [
-      {
-        label: "TypeScript",
-        data: 1,
-      },
-      {
-        label: "JavaScript",
-        data: 2,
-      },
-    ];
+    const defBuilder = this.state.defBuilder;
+    const autoCompleteResults = [
+      ...Object.values(defBuilder.interfaceDefs).map(interfaceDef => {label: interfaceDef?.name}),
+      ...Object.values(defBuilder.milestoneDefs).map(milestoneDef => {label: milestoneDef?.name}),
+      ...Object.values(defBuilder.codelistDefs).map(codelistDef => {label: codelistDef?.name}),
+      ...Object.values(defBuilder.datasetDefs).map(datasetDef => {label: datasetDef?.name}),
+    ]
+    return autoCompleteResults as any as CompletionItem[]; // TODO: Fix typing
   }
 }

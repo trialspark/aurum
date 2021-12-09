@@ -683,19 +683,138 @@ milestone BAD_MILESTONE {
             }
           `,
         ],
+        [
+          "milestones.sdsd",
+          `
+            milestone SCREENING {
+              at: t"d-14"
+            }
+
+            milestone BASELINE {
+              at: t"d0"
+            }
+
+            milestone CLINIC_1 {
+              at: t"d7"
+            }
+
+            milestone CLINIC_2 {
+              at: t"d14"
+            }
+
+            milestone CLOSEOUT {
+              at: t"d21"
+            }
+
+            milestone EARLY_TERM {
+              at: t"> BASELINE"
+            }
+          `,
+        ],
+        [
+          "codelists.sdsd",
+          `
+            codelist BodySide {
+              LEFT        @desc("Left side of the body")
+              RIGHT       @desc("Right side of the body")
+            }
+
+            codelist ArmPosition {
+              UPPER       @desc("Upper arm position")
+              LOWER       @desc("Lower arm position")
+            }
+
+            codelist VisitType {
+              SCREENING        @desc("A screening visit")
+              BASELINE         @desc("A baseline visit")
+              TREATMENT        @desc("A visit that occurs during the course of treatment")
+              EARLY_WITHDRAWAL @desc("A visit that occurs when the subject exits the study early")
+            }
+          `,
+        ],
+        [
+        "interfaces.sdsd",
+        `
+          interface base {
+            USUBJID String   @subject.uuid
+                             @label("Unique Subject Identifier")
+                             @desc("Identifier used to uniquely identify a subject across all studies.")
+        
+            SUBJID String    @subject.id
+                             @label("Subject Identifier for the Study")
+                             @desc("Subject identifier, which is unique within the study.")
+          }
+        
+          interface visit_base {
+            VISITNUM Integer @milestone.number
+                             @label("Visit Number")
+                             @desc("Clinical encounter number.")
+                             
+            VISIT String     @milestone.name
+                             @label("Visit Name")
+                             @desc("Protocol-defined description of clinical encounter.")
+                          
+            VISITDY Integer  @milestone.study_day
+                             @label("Planned Study Day of Visit")
+                             @desc("Planned study day of the visit based upon RFSTDTC in Demographics.")
+          }`
+          ],
+          [
+            "domains/vs_map.sdsd",
+            `
+              map dataset vs {
+                VISTYP from literal as VISIT_NAME \`\`\`json
+                  "{{MILESTONE.NAME}}"
+                \`\`\` => \`\`\`python
+                  if VISIT_NAME == 'SCREENING':
+                      return 'SCREENING'
+                  if VISIT_NAME == 'BASELINE':
+                      return 'BASELINE'
+                  if VISIT_NAME == 'EARLY_TERM':
+                      return 'EARLY_WITHDRAWAL'
+                  return 'TREATMENT'
+                \`\`\`
+
+                VSORRES from esource \`\`\`path
+                  {{MILESTONE.NAME}}.VS.VSORRES
+                \`\`\`
+
+                VSBOSI from esource \`\`\`path
+                  {{MILESTONE.NAME}}.VS.VSBOSI
+                \`\`\`
+
+                VSPOS from esource \`\`\`path
+                  {{MILESTONE.NAME}}.VS.VSPOS
+                \`\`\`
+              }
+            `,
+          ],
       ];
       compiler = new Compiler({});
       compiler.updateFiles(Object.fromEntries(fileEntries));
     });
 
-    it("Gives autocomplete items", () => {
+    it.only("Gets autocomplete items", () => {
       const result = compiler.getCompletionItems(1, 1);
-      // console.log('result: ', result); // TODO: Delete
-      // expect(result)
-      // console.log('compiler.result: ', compiler.result); // TODO: Delete
-      // console.log('compiler.state: ', compiler.state); // TODO: Delete
-      // expect(compiler.result).toEqual(compiler.result);
-      expect(compiler.diagnostics).toEqual([]);
+      expect(result).toEqual([
+        { label: 'id', data: 0 },
+        { label: 'MY-STUDY', data: 1 },
+        { label: 'name', data: 0 },
+        { label: 'This is my study', data: 1 },
+        { data: 0, label: "SCREENING", },
+        { data: 0, label: "BASELINE", },
+        { data: 0, label: "CLINIC_1", },
+        { data: 0, label: "CLINIC_2", },
+        { data: 0, label: "CLOSEOUT", },
+        { data: 0, label: "EARLY_TERM", },
+        { data: 0, label: "base", },
+        { data: 0, label: "USUBJID", },
+        { data: 0, label: "SUBJID", },
+        { data: 0, label: "visit_base", },
+        { data: 0, label: "VISITNUM", },
+        { data: 0, label: "VISIT", },
+        { data: 0, label: "VISITDY", },
+      ]);
     });
   });
 });
