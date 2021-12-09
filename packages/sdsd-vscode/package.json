@@ -58,7 +58,8 @@
         "embeddedLanguages": {
           "meta.embedded.block.sql": "sql",
           "meta.embedded.block.json": "json",
-          "meta.embedded.block.python": "python"
+          "meta.embedded.block.python": "python",
+          "meta.embedded.block.r": "r"
         }
       }
     ]
