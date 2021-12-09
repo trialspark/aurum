@@ -59,9 +59,9 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -b",
-    "dev": "tsc -b -w"
+    "build": "tsc -b",
+    "dev": "tsc -b -w",
+    "vscode:prepublish": "npm run build"
   },
   "dependencies": {
     "sdsd-server": "^0.0.0",

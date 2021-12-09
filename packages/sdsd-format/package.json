@@ -18,8 +18,7 @@
     "url": "git+https://github.com/trialspark/sdsd.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
-    "dev": "tsc -b -w"
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
     "url": "https://github.com/trialspark/sdsd/issues"
