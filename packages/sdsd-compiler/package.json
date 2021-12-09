@@ -13,6 +13,7 @@
   "files": [
     "build"
   ],
+  "types": "build/src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trialspark/sdsd.git"
@@ -34,7 +35,6 @@
     "jest-transform-nearley": "^2.0.0",
     "nearley-loader": "^2.0.0",
     "ts-loader": "^9.2.6",
-    "types-webpack-bundler": "^1.0.2",
     "utility-types": "^3.10.0",
     "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
