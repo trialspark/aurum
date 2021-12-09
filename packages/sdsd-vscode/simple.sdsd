@@ -1,0 +1,16 @@
+codelist BodySide {
+    LEFT        @desc("Left side of the body")
+    RIGHT       @desc("Right side of the body")
+}
+
+codelist ArmPosition {
+    UPPER       @desc("Upper arm position")
+    LOWER       @desc("Lower arm position")
+}
+
+codelist VisitType {
+    SCREENING        @desc("A screening visit")
+    BASELINE         @desc("A baseline visit")
+    TREATMENT        @desc("A visit that occurs during the course of treatment")
+    EARLY_WITHDRAWAL @desc("A visit that occurs when the subject exits the study early")
+}

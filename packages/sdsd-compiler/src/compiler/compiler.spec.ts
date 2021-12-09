@@ -834,8 +834,36 @@ study {
       compiler.updateFiles(Object.fromEntries(fileEntries));
     });
 
+
     it.skip("Gets autocomplete items", () => {
-      const result = compiler.getCompletionItems(1, 1, '');
+      const result = compiler.getCompletionItems(1, 1,
+      `
+          map dataset vs {
+            VISTYP from literal as VISIT_NAME \`\`\`json
+              "{{MILESTONE.NAME}}"
+            \`\`\` => \`\`\`python
+              if VISIT_NAME == 'SCREENING':
+                  return 'SCREENING'
+              if VISIT_NAME == 'BASELINE':
+                  return 'BASELINE'
+              if VISIT_NAME == 'EARLY_TERM':
+                  return 'EARLY_WITHDRAWAL'
+              return 'TREATMENT'
+            \`\`\`
+
+            VSORRES from esource \`\`\`path
+              {{MILESTONE.NAME}}.VS.VSORRES
+            \`\`\`
+
+            VSBOSI from esource \`\`\`path
+              {{MILESTONE.NAME}}.VS.VSBOSI
+            \`\`\`
+
+            VSPOS from esource \`\`\`path
+              {{MILESTONE.NAME}}.VS.VSPOS
+            \`\`\`
+          }
+        `)
       expect(result).toEqual([
         { label: "id", data: 0 },
         { label: "MY-STUDY", data: 1 },

@@ -284,19 +284,20 @@ export class Compiler {
     // const parser = new Parser(Grammar.fromCompiled(grammar)).feed(source);
 
     const defBuilder = this.state.defBuilder;
+    console.log('defBuilder: ', defBuilder); // TODO: Delete 
     const autoCompleteResults = [
-      ...Object.values(defBuilder.interfaceDefs).map((interfaceDef) => {
-        label: interfaceDef?.name;
-      }),
-      ...Object.values(defBuilder.milestoneDefs).map((milestoneDef) => {
-        label: milestoneDef?.name;
-      }),
-      ...Object.values(defBuilder.codelistDefs).map((codelistDef) => {
-        label: codelistDef?.name;
-      }),
-      ...Object.values(defBuilder.datasetDefs).map((datasetDef) => {
-        label: datasetDef?.name;
-      }),
+      ...Object.keys(defBuilder.interfaceDefs).map((interfaceDef) => ({
+        label: interfaceDef,
+      })),
+      ...Object.keys(defBuilder.milestoneDefs).map((milestoneDef) => ({
+        label: milestoneDef,
+      })),
+      ...Object.keys(defBuilder.codelistDefs).map((codelistDef) => ({
+        label: codelistDef,
+      })),
+      ...Object.keys(defBuilder.datasetDefs).map((datasetDef) => ({
+        label: datasetDef,
+      })),
     ];
     return autoCompleteResults as any as CompletionItem[]; // TODO: Fix typing
   }
