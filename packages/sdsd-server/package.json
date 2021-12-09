@@ -23,8 +23,9 @@
     "url": "https://github.com/trialspark/sdsd/issues"
   },
   "scripts": {
-    "compile": "tsc -b",
-    "dev": "tsc -b -w"
+    "build": "tsc -b",
+    "dev": "tsc -b -w",
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "devDependencies": {
     "@types/node": "^12.12.0",

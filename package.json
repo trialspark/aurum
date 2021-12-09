@@ -13,8 +13,9 @@
     "lerna": "^4.0.0"
   },
   "scripts": {
-    "test": "jest",
+    "build": "npx lerna run build",
     "dev": "npx lerna run --parallel dev",
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "test": "jest"
   }
 }
