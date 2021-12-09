@@ -21,6 +21,7 @@ import {
   DefinitionType,
   Loc,
   ExtraAttributeDiagnostic,
+  MissingAttributeDiagnostic,
 } from ".";
 import {
   Args,
@@ -272,6 +273,82 @@ class BaseConfigBuilder extends DocumentVisitor {
       `),
       actualType,
       expectedType,
+    });
+  }
+
+  protected addMissingAttributeDiagnostic(
+    attribute: string,
+    parentLoc: Loc,
+    defType: MissingAttributeDiagnostic["defType"],
+    example: string
+  ) {
+    this.addDiagnostic({
+      code: DiagnosticCode.MISSING_ATTRIBUTE,
+      scope: DiagnosticScope.LOCAL,
+      loc: parentLoc,
+      message: untab(`
+        ${defType} must have an "${attribute}" attribute. Please add one:
+
+        ${example}
+      `),
+      attributeName: attribute,
+      defType,
+    });
+  }
+
+  protected getStringAttributes(
+    attributes: ReturnType<BaseConfigBuilder["getAttributes"]>,
+    keys: string[],
+    parentLoc: Loc,
+    defType: MissingAttributeDiagnostic["defType"],
+    example: string
+  ): (StringValue | null)[] {
+    return keys.map((key) => {
+      const value = attributes[key];
+
+      if (value == null) {
+        this.addMissingAttributeDiagnostic(key, parentLoc, defType, example);
+        return null;
+      }
+
+      if (value.type !== "string") {
+        this.addTypeError(
+          { expectedType: "string", actualType: value.type },
+          '"hello"',
+          value.loc
+        );
+        return null;
+      }
+
+      return value;
+    });
+  }
+
+  protected getTimeconfAttributes(
+    attributes: ReturnType<BaseConfigBuilder["getAttributes"]>,
+    keys: string[],
+    parentLoc: Loc,
+    defType: MissingAttributeDiagnostic["defType"],
+    example: string
+  ): (ParsedTimeconfValue | null)[] {
+    return keys.map((key) => {
+      const value = attributes[key];
+
+      if (value == null) {
+        this.addMissingAttributeDiagnostic(key, parentLoc, defType, example);
+        return null;
+      }
+
+      if (value.type !== "time-expression" && value.type !== "time-list") {
+        this.addTypeError(
+          { expectedType: "t-string", actualType: value.type },
+          't"d0"',
+          value.loc
+        );
+        return null;
+      }
+
+      return value;
     });
   }
 
@@ -581,40 +658,47 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitStudyDefinition(node: StudyDefinition): Action[] {
-    const { id, name } = this.getAttributes(node.children);
+    const attributes = this.getAttributes(node.children);
+    const [id, name] = this.getStringAttributes(
+      attributes,
+      ["id", "name"],
+      { ...node.loc, filename: this.currentFile!.name },
+      DefinitionType.STUDY,
+      untab(`
+        study {
+          id: "STUDY-ID"
+          name: "Name of study"
+        }
+      `)
+    );
 
-    assert(id?.type === "string");
-    assert(name?.type === "string");
+    this.checkForExtraAttributes(
+      attributes,
+      new Set(["id", "name"]),
+      DefinitionType.STUDY
+    );
 
     return [
       configBuilderActions.setStudy({
-        id: id.value,
-        name: name.value,
+        id: id?.value ?? "",
+        name: name?.value ?? "",
       }),
     ];
   }
 
   visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
     const attributes = this.getAttributes(node.children);
-    const { at: timeconf } = attributes;
-
-    if (!timeconf) {
-      this.addDiagnostic({
-        code: DiagnosticCode.MISSING_ATTRIBUTE,
-        scope: DiagnosticScope.LOCAL,
-        loc: { ...node.loc, filename: this.currentFile!.name },
-        message: untab(`
-          Milestones must have an "at" attribute. Please add one:
-
-          milestone ${node.name.accept(this).value} {
-            at: t"d0"
-          }
-        `),
-        attributeName: "at",
-        defType: DefinitionType.MILESTONE,
-      });
-      return [];
-    }
+    const [timeconf] = this.getTimeconfAttributes(
+      attributes,
+      ["at"],
+      { ...node.loc, filename: this.currentFile!.name },
+      DefinitionType.MILESTONE,
+      untab(`
+        milestone ${node.name.accept(this).value} {
+          at: t"d0"
+        }
+      `)
+    );
 
     this.checkForExtraAttributes(
       attributes,
@@ -622,14 +706,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
       DefinitionType.MILESTONE
     );
 
-    if (
-      !(timeconf.type === "time-list" || timeconf.type === "time-expression")
-    ) {
-      this.addTypeError(
-        { expectedType: "t-string", actualType: timeconf.type },
-        't"d0"',
-        timeconf.loc
-      );
+    if (!timeconf) {
       return [];
     }
 

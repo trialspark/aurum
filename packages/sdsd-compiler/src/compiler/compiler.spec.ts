@@ -79,6 +79,132 @@ study {
       expect(compiler.diagnostics).toMatchSnapshot();
     });
 
+    it("errors if the id/name are not strings", () => {
+      compiler.updateFiles({ "study.sdsd": 'study { id: t"d0" name: t"d1" }' });
+      expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actualType": "time-list",
+    "code": "invalid_type",
+    "expectedType": "string",
+    "loc": Object {
+      "end": Object {
+        "col": 16,
+        "line": 1,
+      },
+      "filename": "study.sdsd",
+      "start": Object {
+        "col": 15,
+        "line": 1,
+      },
+    },
+    "message": "Invalid type: time-list, should be a string. (e.g. \\"hello\\")",
+    "scope": "local",
+  },
+  Object {
+    "actualType": "time-list",
+    "code": "invalid_type",
+    "expectedType": "string",
+    "loc": Object {
+      "end": Object {
+        "col": 28,
+        "line": 1,
+      },
+      "filename": "study.sdsd",
+      "start": Object {
+        "col": 27,
+        "line": 1,
+      },
+    },
+    "message": "Invalid type: time-list, should be a string. (e.g. \\"hello\\")",
+    "scope": "local",
+  },
+]
+`);
+    });
+
+    it("errors if the id/name are missing", () => {
+      compiler.updateFiles({ "study.sdsd": "study {}" });
+      expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "attributeName": "id",
+    "code": "missing_attribute",
+    "defType": "study",
+    "loc": Object {
+      "end": Object {
+        "col": 8,
+        "line": 1,
+      },
+      "filename": "study.sdsd",
+      "start": Object {
+        "col": 1,
+        "line": 1,
+      },
+    },
+    "message": "study must have an \\"id\\" attribute. Please add one:
+
+        study {
+  id: \\"STUDY-ID\\"
+  name: \\"Name of study\\"
+}",
+    "scope": "local",
+  },
+  Object {
+    "attributeName": "name",
+    "code": "missing_attribute",
+    "defType": "study",
+    "loc": Object {
+      "end": Object {
+        "col": 8,
+        "line": 1,
+      },
+      "filename": "study.sdsd",
+      "start": Object {
+        "col": 1,
+        "line": 1,
+      },
+    },
+    "message": "study must have an \\"name\\" attribute. Please add one:
+
+        study {
+  id: \\"STUDY-ID\\"
+  name: \\"Name of study\\"
+}",
+    "scope": "local",
+  },
+]
+`);
+    });
+
+    it("errors if the study has extra attributes", () => {
+      compiler.updateFiles({
+        "study.sdsd": `study { id: "ID" name: "name" foo: "bar"}`,
+      });
+      expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "attributeName": "foo",
+    "code": "extra_attribute",
+    "defType": "study",
+    "loc": Object {
+      "end": Object {
+        "col": 40,
+        "line": 1,
+      },
+      "filename": "study.sdsd",
+      "start": Object {
+        "col": 36,
+        "line": 1,
+      },
+    },
+    "message": "Extra attribute \\"foo\\"",
+    "scope": "local",
+  },
+]
+`);
+    });
+
     describe("and some milestones are added", () => {
       beforeEach(() => {
         compiler.updateFiles({
@@ -164,9 +290,9 @@ Array [
         "line": 1,
       },
     },
-    "message": "Milestones must have an \\"at\\" attribute. Please add one:
+    "message": "milestone must have an \\"at\\" attribute. Please add one:
 
-milestone BAD {
+        milestone BAD {
   at: t\\"d0\\"
 }",
     "scope": "local",
@@ -1068,14 +1194,14 @@ codelist VisitType {
         `
       );
       expect(result).toEqual([
-        { label: 'study' },
-        { label: 'milestone' },
-        { label: 'codelist' },
-        { label: 'extend' },
-        { label: 'interface' },
-        { label: 'domain' },
-        { label: 'extend' },
-        { label: 'map' }
+        { label: "study" },
+        { label: "milestone" },
+        { label: "codelist" },
+        { label: "extend" },
+        { label: "interface" },
+        { label: "domain" },
+        { label: "extend" },
+        { label: "map" },
       ]);
     });
   });
