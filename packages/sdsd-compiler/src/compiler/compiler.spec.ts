@@ -578,7 +578,7 @@ describe("Compiler", () => {
       expect(compiler.diagnostics).toEqual([]);
     });
 
-    it.only("allows an entire study to be defined out of order one file at a time", () => {
+    it("allows an entire study to be defined out of order one file at a time", () => {
       for (const [filename, source] of [...fileEntries].reverse()) {
         compiler.updateFiles({ [filename]: source });
       }
