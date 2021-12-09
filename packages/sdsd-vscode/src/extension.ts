@@ -40,8 +40,8 @@ export function activate(context: ExtensionContext) {
   };
 
   client = new LanguageClient(
-    "languageServerExample",
-    "Language Server Example",
+    "sdsdServerLanguage",
+    "SDSD Server Language",
     serverOptions,
     clientOptions
   );
