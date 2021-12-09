@@ -315,10 +315,6 @@ export class Compiler {
     try {
       parser.feed(source);
     } catch (error) {
-      const completionItems: CompletionItem[] = []
-      // ALL CODE AFTER THIS POINT SUCKS AND IS STOLEN FROM HERE:
-      // node_modules/nearley/lib/nearley.js
-      // From Parser.prototype.reportErrorCommon, line 388
       return this.getNextExpectedSymbols(parser);
     }
     const nextExpectedSymbols = this.getNextExpectedSymbols(parser);
