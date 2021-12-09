@@ -50,7 +50,7 @@ export class Compiler {
   public get diagnostics(): Diagnostic[] {
     return [
       ...Object.values(this.state.files).flatMap(
-        (file) => file.parseDiagnostics
+        (file) => file?.parseDiagnostics ?? []
       ),
       ...Array.from(this.errorsByCode.values()).flat(),
       ...this.state.configBuilder.diagnostics,
@@ -272,11 +272,19 @@ export class Compiler {
   getCompletionItems(line: number, character: number): CompletionItem[] {
     const defBuilder = this.state.defBuilder;
     const autoCompleteResults = [
-      ...Object.values(defBuilder.interfaceDefs).map(interfaceDef => {label: interfaceDef?.name}),
-      ...Object.values(defBuilder.milestoneDefs).map(milestoneDef => {label: milestoneDef?.name}),
-      ...Object.values(defBuilder.codelistDefs).map(codelistDef => {label: codelistDef?.name}),
-      ...Object.values(defBuilder.datasetDefs).map(datasetDef => {label: datasetDef?.name}),
-    ]
+      ...Object.values(defBuilder.interfaceDefs).map((interfaceDef) => {
+        label: interfaceDef?.name;
+      }),
+      ...Object.values(defBuilder.milestoneDefs).map((milestoneDef) => {
+        label: milestoneDef?.name;
+      }),
+      ...Object.values(defBuilder.codelistDefs).map((codelistDef) => {
+        label: codelistDef?.name;
+      }),
+      ...Object.values(defBuilder.datasetDefs).map((datasetDef) => {
+        label: datasetDef?.name;
+      }),
+    ];
     return autoCompleteResults as any as CompletionItem[]; // TODO: Fix typing
   }
 }
