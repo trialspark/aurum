@@ -1,5 +1,6 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
+const DeclarationBundlerPlugin = require("types-webpack-bundler");
 
 /** @type {import('webpack').Configuration}*/
 const config = {
@@ -12,6 +13,7 @@ const config = {
       type: "commonjs",
     },
   },
+  devtool: "inline-source-map",
   optimization: {
     minimize: false,
   },
@@ -39,6 +41,12 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new DeclarationBundlerPlugin({
+      moduleName: '"sdsd-compiler"',
+      out: "sdsd-compiler.d.ts",
+    }),
+  ],
 };
 
 module.exports = config;

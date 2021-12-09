@@ -18,7 +18,6 @@ import {
 } from "vscode-languageserver/node";
 
 import { TextDocument } from "vscode-languageserver-textdocument";
-//@ts-ignore
 // import { Compiler } from "sdsd-compiler";
 import nearley from "nearley";
 
