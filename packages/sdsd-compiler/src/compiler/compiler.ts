@@ -287,10 +287,32 @@ export class Compiler {
     character: number,
     source: string
   ): CompletionItem[] {
+    const parser = new Parser(Grammar.fromCompiled(grammar))
     try {
-      const parser = new Parser(Grammar.fromCompiled(grammar)).feed(source);
+      const parsedResult = parser.feed(source);
     } catch (error) {
-      // console.log('error: ', error); // TODO: Delete 
+      const completionItems: CompletionItem[] = []
+      // ALL CODE AFTER THIS POINT SUCKS AND IS STOLEN FROM HERE:
+      // node_modules/nearley/lib/nearley.js
+      // From Parser.prototype.reportErrorCommon, line 388
+      const anyParser = parser as any
+      const lastColumn = anyParser.table[anyParser.table.length - 2];
+      const expectantStates = lastColumn.states
+          .filter(function(state: any) {
+              var nextSymbol = state.rule.symbols[state.dot];
+              return nextSymbol && typeof nextSymbol !== "string";
+          });
+      const stateStacks = expectantStates
+          .map(function(state: any) {
+              return anyParser.buildFirstStateStack(state, []) || [state];
+          }, anyParser);
+      stateStacks.forEach(function(stateStack: any) {
+          const state = stateStack[0];
+          const nextSymbol = state.rule.symbols[state.dot];
+          const symbolDisplay = anyParser.getSymbolDisplay(nextSymbol);
+          completionItems.push({label: symbolDisplay.replace(/\W/g, '')});
+      }, this);
+      return completionItems;
     }
 
     const defBuilder = this.state.defBuilder;
