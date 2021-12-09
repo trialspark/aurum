@@ -195,7 +195,7 @@ connection.onCompletion(
     // info and always provide the same completion items.
     const document = documents.get(textDocumentPosition.textDocument.uri);
     if (!document) return [];
-    const slicedText = document.getText({start: {line: 1, character: 1}, end: textDocumentPosition.position});
+    const slicedText = document.getText({start: {line: 0, character: 0}, end: textDocumentPosition.position});
     const completionResults = compiler.getCompletionItems(textDocumentPosition.position.line, textDocumentPosition.position.character, slicedText) // .map(item => ({...item, kind: CompletionItemKind.Text, detail: 'Hello' }));
     console.log('completionResults: ', completionResults); // TODO: Delete 
     return completionResults;

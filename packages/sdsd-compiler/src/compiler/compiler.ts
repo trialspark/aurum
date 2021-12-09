@@ -287,7 +287,11 @@ export class Compiler {
     character: number,
     source: string
   ): CompletionItem[] {
-    // const parser = new Parser(Grammar.fromCompiled(grammar)).feed(source);
+    try {
+      const parser = new Parser(Grammar.fromCompiled(grammar)).feed(source);
+    } catch (error) {
+      // console.log('error: ', error); // TODO: Delete 
+    }
 
     const defBuilder = this.state.defBuilder;
     console.log("defBuilder: ", defBuilder); // TODO: Delete
