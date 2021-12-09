@@ -7,6 +7,12 @@
     },
     {
       "include": "#strings"
+    },
+    {
+      "include": "#tstrings"
+    },
+    {
+      "include": "#property-names"
     }
   ],
   "repository": {
@@ -18,9 +24,36 @@
         }
       ]
     },
+    "property-names": {
+      "patterns": [
+        {
+          "name": "support.type.property-name.json.sdsd",
+          "match": "[a-zA-Z$_][a-zA-Z0-9$_]*"
+        }
+      ]
+    },
     "tstrings": {
-      "name": "tstring.quoted.double.sdsd",
+      "name": "string.quoted.double.t.sdsd",
       "begin": "t\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "keywork.operator.start.sdsd",
+          "match": "t\""
+        },
+        {
+          "name": "constant.other.character_class.regex.sdsd",
+          "match": "d|m"
+        },
+        {
+          "name": "keyword.operator.quantifier.sdsd",
+          "match": "\\+|\\-"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.sdsd",
+      "begin": "\"",
       "end": "\"",
       "patterns": [
         {
@@ -28,18 +61,7 @@
           "match": "\\\\."
         }
       ]
-    },
-	"strings": {
-		"name": "string.quoted.double.sdsd",
-		"begin": "\"",
-		"end": "\"",
-		"patterns": [
-		  {
-			"name": "constant.character.escape.sdsd",
-			"match": "\\\\."
-		  }
-		]
-	}
+    }
   },
   "scopeName": "source.sdsd"
 }
