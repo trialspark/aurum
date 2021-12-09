@@ -282,6 +282,30 @@ export class Compiler {
     this.checkForGlobalErrors();
   }
 
+  getNextExpectedSymbols(parser: any): CompletionItem[] {
+    const completionItems: CompletionItem[] = []
+    // ALL CODE AFTER THIS POINT SUCKS AND IS STOLEN FROM HERE:
+    // node_modules/nearley/lib/nearley.js
+    // From Parser.prototype.reportErrorCommon, line 388
+    const lastColumn = parser.table[parser.table.length - 2];
+    const expectantStates = lastColumn.states
+        .filter(function(state: any) {
+            var nextSymbol = state.rule.symbols[state.dot];
+            return nextSymbol && typeof nextSymbol !== "string";
+        });
+    const stateStacks = expectantStates
+        .map(function(state: any) {
+            return parser.buildFirstStateStack(state, []) || [state];
+        }, parser);
+    stateStacks.forEach(function(stateStack: any) {
+        const state = stateStack[0];
+        const nextSymbol = state.rule.symbols[state.dot];
+        const symbolDisplay = parser.getSymbolDisplay(nextSymbol);
+        completionItems.push({label: symbolDisplay.replace(/\W/g, '')});
+    }, this);
+    return completionItems;
+  }
+
   getCompletionItems(
     line: number,
     character: number,
@@ -289,34 +313,20 @@ export class Compiler {
   ): CompletionItem[] {
     const parser = new Parser(Grammar.fromCompiled(grammar))
     try {
-      const parsedResult = parser.feed(source);
+      parser.feed(source);
     } catch (error) {
       const completionItems: CompletionItem[] = []
       // ALL CODE AFTER THIS POINT SUCKS AND IS STOLEN FROM HERE:
       // node_modules/nearley/lib/nearley.js
       // From Parser.prototype.reportErrorCommon, line 388
-      const anyParser = parser as any
-      const lastColumn = anyParser.table[anyParser.table.length - 2];
-      const expectantStates = lastColumn.states
-          .filter(function(state: any) {
-              var nextSymbol = state.rule.symbols[state.dot];
-              return nextSymbol && typeof nextSymbol !== "string";
-          });
-      const stateStacks = expectantStates
-          .map(function(state: any) {
-              return anyParser.buildFirstStateStack(state, []) || [state];
-          }, anyParser);
-      stateStacks.forEach(function(stateStack: any) {
-          const state = stateStack[0];
-          const nextSymbol = state.rule.symbols[state.dot];
-          const symbolDisplay = anyParser.getSymbolDisplay(nextSymbol);
-          completionItems.push({label: symbolDisplay.replace(/\W/g, '')});
-      }, this);
-      return completionItems;
+      return this.getNextExpectedSymbols(parser);
     }
+    const nextExpectedSymbols = this.getNextExpectedSymbols(parser);
+    // console.log('nextExpectedSymbols: ', nextExpectedSymbols); // TODO: Delete 
 
+    // console.log('parser.lexerState: ', parser.lexerState); // TODO: Delete 
     const defBuilder = this.state.defBuilder;
-    console.log("defBuilder: ", defBuilder); // TODO: Delete
+    // console.log("defBuilder: ", defBuilder); // TODO: Delete
     const autoCompleteResults = [
       ...Object.keys(defBuilder.interfaceDefs).map((interfaceDef) => ({
         label: interfaceDef,
