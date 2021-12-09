@@ -19,6 +19,8 @@ import {
   DiagnosticCode,
   DiagnosticScope,
   DefinitionType,
+  Loc,
+  ExtraAttributeDiagnostic,
 } from ".";
 import {
   Args,
@@ -38,7 +40,6 @@ import {
   Identifier,
   InterfaceDefinition,
   KeyValuePair,
-  Loc,
   MilestoneDefinition,
   NegativeWindow,
   Path,
@@ -59,13 +60,7 @@ import {
   Window,
 } from "../astTypes";
 import { atLeastOne, nonNull, untab } from "../utils";
-import {
-  CodelistDef,
-  File,
-  filesActions,
-  NamedDefMap,
-  ReducerState,
-} from "./state";
+import { File, filesActions, NamedDefMap, ReducerState } from "./state";
 import { DocumentVisitor } from "./visitor";
 import { Action } from "./state";
 import { configBuilderActions } from "./state/configBuilder";
@@ -73,6 +68,7 @@ import { configBuilderActions } from "./state/configBuilder";
 interface StringValue {
   type: "string";
   value: string;
+  loc: Loc;
 }
 
 interface IdentifierValue {
@@ -84,12 +80,14 @@ interface TimeExpressionValue {
   type: "time-expression";
   position: "before" | "after" | "before/on" | "after/on";
   relativeTo: ParsedTimeValue;
+  loc: Loc;
 }
 
 interface TimeListValue {
   type: "time-list";
   days: ParsedTimeValue[];
   hours: ParsedHourValue[] | null;
+  loc: Loc;
 }
 
 interface StudyDayValue {
@@ -215,6 +213,68 @@ class BaseConfigBuilder extends DocumentVisitor {
     }
   }
 
+  protected recordMilestoneReference(milestoneName: string, loc: Loc) {
+    const milestoneDef =
+      this.accessors.getState().defBuilder.milestoneDefs[milestoneName];
+
+    if (milestoneDef) {
+      this.addFileDependency(milestoneDef.file);
+    } else {
+      this.addDiagnostic({
+        code: DiagnosticCode.NOT_FOUND,
+        scope: DiagnosticScope.LOCAL,
+        loc,
+        message: untab(`
+        Could not find milestone with name "${milestoneName}". Please add it:
+
+        milestone ${milestoneName} {
+          at: t"d7 +-2"
+        }
+      `),
+        defType: DefinitionType.MILESTONE,
+        name: milestoneName,
+      });
+    }
+  }
+
+  protected checkForExtraAttributes(
+    attributes: ReturnType<BaseConfigBuilder["getAttributes"]>,
+    expectedAttributes: Set<string>,
+    defType: ExtraAttributeDiagnostic["defType"]
+  ) {
+    for (const [attributeName, attribute] of Object.entries(attributes)) {
+      if (!expectedAttributes.has(attributeName)) {
+        this.addDiagnostic({
+          code: DiagnosticCode.EXTRA_ATTRIBUTE,
+          scope: DiagnosticScope.LOCAL,
+          loc: attribute!.loc,
+          message: untab(`
+            Extra attribute "${attributeName}"
+          `),
+          defType,
+          attributeName,
+        });
+      }
+    }
+  }
+
+  protected addTypeError(
+    { expectedType, actualType }: { expectedType: string; actualType: string },
+    example: string,
+    loc: Loc
+  ) {
+    this.addDiagnostic({
+      code: DiagnosticCode.INVALID_TYPE,
+      scope: DiagnosticScope.LOCAL,
+      loc,
+      message: untab(`
+        Invalid type: ${actualType}, should be a ${expectedType}. (e.g. ${example})
+      `),
+      actualType,
+      expectedType,
+    });
+  }
+
   protected getDatasets(): NamedDefMap<{ domain: Domain; dataset: Dataset }> {
     return Object.fromEntries(
       Object.values(
@@ -228,7 +288,9 @@ class BaseConfigBuilder extends DocumentVisitor {
     );
   }
 
-  protected getAttributes(keyValuePairs: KeyValuePair[]) {
+  protected getAttributes(keyValuePairs: KeyValuePair[]): {
+    [attrName: string]: ParsedValue | undefined;
+  } {
     return Object.fromEntries(keyValuePairs.map((node) => node.accept(this)));
   }
 
@@ -247,10 +309,14 @@ class BaseConfigBuilder extends DocumentVisitor {
   private parseTimeValue(value: TimeValue): ParsedTimeValue {
     switch (value.type) {
       case "identifier":
+        this.recordMilestoneReference(value.accept(this).value, {
+          ...value.loc,
+          filename: this.currentFile!.name,
+        });
         return {
           type: "milestone-identifier",
           milestoneName: value.accept(this).value,
-          loc: value.loc,
+          loc: { ...value.loc, filename: this.currentFile!.name },
         };
       default:
         return value.accept(this);
@@ -422,6 +488,7 @@ class BaseConfigBuilder extends DocumentVisitor {
         } as const
       )[node.operator.value],
       relativeTo: this.parseTimeValue(node.rhs),
+      loc: { ...node.loc, filename: this.currentFile!.name },
     };
   }
 
@@ -440,6 +507,7 @@ class BaseConfigBuilder extends DocumentVisitor {
       type: "time-list",
       hours: node.at?.map((hour) => hour.accept(this)) ?? null,
       days: node.items.map((item) => this.parseTimeValue(item)),
+      loc: { ...node.loc, filename: this.currentFile!.name },
     };
   }
 
@@ -459,7 +527,11 @@ class BaseConfigBuilder extends DocumentVisitor {
   }
 
   visitString(node: String): StringValue {
-    return { type: "string", value: node.value };
+    return {
+      type: "string",
+      value: node.value,
+      loc: { ...node.loc, filename: this.currentFile!.name },
+    };
   }
 
   visit(node: Document): Action[] {
@@ -523,18 +595,78 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
-    const timeconf = this.getAttributes(node.children).at;
-    assert(
-      timeconf.type === "time-list" || timeconf.type === "time-expression"
+    const attributes = this.getAttributes(node.children);
+    const { at: timeconf } = attributes;
+
+    if (!timeconf) {
+      this.addDiagnostic({
+        code: DiagnosticCode.MISSING_ATTRIBUTE,
+        scope: DiagnosticScope.LOCAL,
+        loc: { ...node.loc, filename: this.currentFile!.name },
+        message: untab(`
+          Milestones must have an "at" attribute. Please add one:
+
+          milestone ${node.name.accept(this).value} {
+            at: t"d0"
+          }
+        `),
+        attributeName: "at",
+        defType: DefinitionType.MILESTONE,
+      });
+      return [];
+    }
+
+    this.checkForExtraAttributes(
+      attributes,
+      new Set(["at"]),
+      DefinitionType.MILESTONE
     );
+
+    if (
+      !(timeconf.type === "time-list" || timeconf.type === "time-expression")
+    ) {
+      this.addTypeError(
+        { expectedType: "t-string", actualType: timeconf.type },
+        't"d0"',
+        timeconf.loc
+      );
+      return [];
+    }
 
     return [
       configBuilderActions.addMilestone(
         ((): Milestone => {
           switch (timeconf.type) {
             case "time-list": {
+              if (timeconf.days.length !== 1) {
+                this.addTypeError(
+                  {
+                    expectedType: "t-string with 1 item",
+                    actualType: `t-string with ${timeconf.days.length} item(s)`,
+                  },
+                  't"d0"',
+                  timeconf.loc
+                );
+              }
+
               const [expression] = timeconf.days;
-              assert(expression.type === "study-day");
+
+              if (expression.type !== "study-day") {
+                this.addTypeError(
+                  { expectedType: "day-of-study", actualType: expression.type },
+                  't"d0"',
+                  timeconf.loc
+                );
+                return {
+                  type: "absolute",
+                  day: 0,
+                  name: null,
+                  window: {
+                    after: 0,
+                    before: 0,
+                  },
+                };
+              }
 
               return {
                 type: "absolute",
@@ -551,7 +683,6 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
                 name: node.name.accept(this).value,
                 position,
                 relativeTo: ((): RelativeMilestone["relativeTo"] => {
-                  assert(relativeTo.type !== "time-range");
                   switch (relativeTo.type) {
                     case "milestone-identifier":
                       return {
@@ -566,6 +697,24 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
                           name: null,
                           day: relativeTo.day,
                           window: relativeTo.window,
+                        },
+                      };
+                    default:
+                      this.addTypeError(
+                        {
+                          expectedType: "milestone or day-of-study",
+                          actualType: relativeTo.type,
+                        },
+                        't"> BASELINE"',
+                        timeconf.loc
+                      );
+                      return {
+                        type: "anonymous",
+                        milestone: {
+                          type: "absolute",
+                          name: null,
+                          day: 0,
+                          window: { before: 0, after: 0 },
                         },
                       };
                   }
@@ -642,31 +791,6 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
           this.accessors.getState().configBuilder.result.milestones[
             dayValue.milestoneName
           ];
-        const milestoneDef =
-          this.accessors.getState().defBuilder.milestoneDefs[
-            dayValue.milestoneName
-          ];
-
-        if (milestoneDef) {
-          this.addFileDependency(milestoneDef.file);
-        }
-
-        if (!milestone) {
-          this.addDiagnostic({
-            code: DiagnosticCode.NOT_FOUND,
-            scope: DiagnosticScope.LOCAL,
-            loc: { ...dayValue.loc, filename: this.currentFile!.name },
-            message: untab(`
-              Could not find milestone with name "${dayValue.milestoneName}". Please add it:
-
-              milestone ${dayValue.milestoneName} {
-                at: t"d7 +-2"
-              }
-            `),
-            defType: DefinitionType.MILESTONE,
-            name: dayValue.milestoneName,
-          });
-        }
 
         return [
           {

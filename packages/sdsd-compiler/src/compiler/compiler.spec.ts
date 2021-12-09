@@ -115,6 +115,206 @@ study {
         expect(compiler.result).toMatchSnapshot();
       });
 
+      it("errors if a milestone has an invalid reference to another", () => {
+        compiler.updateFiles({ "bad.sdsd": 'milestone BAD { at: t"> FOO" }' });
+        expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "code": "not_found",
+    "defType": "milestone",
+    "loc": Object {
+      "end": Object {
+        "col": 27,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 25,
+        "line": 1,
+      },
+    },
+    "message": "Could not find milestone with name \\"FOO\\". Please add it:
+
+milestone FOO {
+  at: t\\"d7 +-2\\"
+}",
+    "name": "FOO",
+    "scope": "local",
+  },
+]
+`);
+      });
+
+      it('errors if the milestone does not have an "at" attribute', () => {
+        compiler.updateFiles({ "bad.sdsd": "milestone BAD {}" });
+        expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "attributeName": "at",
+    "code": "missing_attribute",
+    "defType": "milestone",
+    "loc": Object {
+      "end": Object {
+        "col": 16,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 1,
+        "line": 1,
+      },
+    },
+    "message": "Milestones must have an \\"at\\" attribute. Please add one:
+
+milestone BAD {
+  at: t\\"d0\\"
+}",
+    "scope": "local",
+  },
+]
+`);
+      });
+
+      it("errors if the milestone has extra attributes", () => {
+        compiler.updateFiles({
+          "bad.sdsd": `milestone BAD { at: t"d0" foo: "bar"}`,
+        });
+        expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "attributeName": "foo",
+    "code": "extra_attribute",
+    "defType": "milestone",
+    "loc": Object {
+      "end": Object {
+        "col": 36,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 32,
+        "line": 1,
+      },
+    },
+    "message": "Extra attribute \\"foo\\"",
+    "scope": "local",
+  },
+]
+`);
+      });
+
+      it('errors if the "at" attribute is not a time string', () => {
+        compiler.updateFiles({
+          "bad.sdsd": `milestone BAD { at: "d0" }`,
+        });
+        expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actualType": "string",
+    "code": "invalid_type",
+    "expectedType": "t-string",
+    "loc": Object {
+      "end": Object {
+        "col": 24,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 21,
+        "line": 1,
+      },
+    },
+    "message": "Invalid type: string, should be a t-string. (e.g. t\\"d0\\")",
+    "scope": "local",
+  },
+]
+`);
+      });
+
+      it("errors if the milestone has more than one day", () => {
+        compiler.updateFiles({
+          "bad.sdsd": `milestone BAD { at: t"d0, d1" }`,
+        });
+        expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actualType": "t-string with 2 item(s)",
+    "code": "invalid_type",
+    "expectedType": "t-string with 1 item",
+    "loc": Object {
+      "end": Object {
+        "col": 28,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 23,
+        "line": 1,
+      },
+    },
+    "message": "Invalid type: t-string with 2 item(s), should be a t-string with 1 item. (e.g. t\\"d0\\")",
+    "scope": "local",
+  },
+]
+`);
+      });
+
+      it('errors if the "at" attribute references another milestone', () => {
+        compiler.updateFiles({
+          "bad.sdsd": `milestone BAD { at: t"BASELINE" }`,
+        });
+        expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actualType": "milestone-identifier",
+    "code": "invalid_type",
+    "expectedType": "day-of-study",
+    "loc": Object {
+      "end": Object {
+        "col": 30,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 23,
+        "line": 1,
+      },
+    },
+    "message": "Invalid type: milestone-identifier, should be a day-of-study. (e.g. t\\"d0\\")",
+    "scope": "local",
+  },
+]
+`);
+      });
+
+      it('errors if the "at" attribute expression includes a time range', () => {
+        compiler.updateFiles({
+          "bad.sdsd": `milestone BAD { at: t"> BASELINE -> CLINIC_1" }`,
+        });
+        expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actualType": "time-range",
+    "code": "invalid_type",
+    "expectedType": "milestone or day-of-study",
+    "loc": Object {
+      "end": Object {
+        "col": 44,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 23,
+        "line": 1,
+      },
+    },
+    "message": "Invalid type: time-range, should be a milestone or day-of-study. (e.g. t\\"> BASELINE\\")",
+    "scope": "local",
+  },
+]
+`);
+      });
+
       it("can add milestones in a separate file", () => {
         compiler.updateFiles({
           "milestones2.sdsd": `
