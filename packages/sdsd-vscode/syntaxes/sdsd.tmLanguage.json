@@ -25,6 +25,9 @@
     },
     {
       "include": "#sql"
+    },
+    {
+      "include": "#json"
     }
   ],
   "repository": {
@@ -91,9 +94,15 @@
     },
     "sql": {
       "name": "meta.embedded.block.sql",
-      "begin": "\\\\`\\\\`\\\\`sql",
-      "end": "\\\\`\\\\`\\\\`",
+      "begin": "```sql",
+      "end": "```",
       "patterns": [{ "include": "source.sql" }]
+    },
+    "json": {
+      "name": "meta.embedded.block.json",
+      "begin": "```json",
+      "end": "```",
+      "patterns": [{ "include": "source.json" }]
     }
   },
   "scopeName": "source.sdsd"

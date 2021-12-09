@@ -120,51 +120,51 @@ extend domain "VITAL SIGNS" @abbr("VS") {
 }
 
 map dataset vs with VSTESTCD as ("HEIGHT", "HR", "TEMP", "WEIGHT") {
-          VSTESTCD from literal \`\`\`json
+          VSTESTCD from literal ```json
             "{{VSTESTCD}}"
-          \`\`\`
+          ```
           
-          VSPOS from esource \`\`\`path
+          VSPOS from esource ```path
             {{MILESTONE.NAME}}.VS.{{VSTESTCD}}POS
-          \`\`\`
+          ```
           
-          VSORRES from esource \`\`\`path
+          VSORRES from esource ```path
             {{MILESTONE.NAME}}.VS.{{VSTESTCD}}ORRES
-          \`\`\`
+          ```
           
-          VSORRESU from esource \`\`\`path
+          VSORRESU from esource ```path
             {{MILESTONE.NAME}}.VS{{VSTESTCD}}ORRESU
-          \`\`\`
+          ```
           
-          VSSTRESC from self \`\`\`sql
+          VSSTRESC from self ```sql
             SELECT
               CASE
                 WHEN vs.VSORRESU = "lbs" THEN vs.VSORRES / 2.2046
                 WHEN vs.VSORRESU = "F" THEN (cs.VSORRES - 32) * .5556
                 ELSE vs.VSORRES
             FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
-          \`\`\`
+          ```
           
-          VSSTRESN from self \`\`\`sql
+          VSSTRESN from self ```sql
             SELECT vs.VSORRES
             FROM vs WHERE VSTESTCD = "{{VSTESTCD}}" AND pg_typeof(vs.VSORRES) = "integer"
-          \`\`\`
+          ```
           
-          VSSTRESU from self \`\`\`sql
+          VSSTRESU from self ```sql
             SELECT
               CASE
                 WHEN vs.VSORRESU = "lbs" THEN "kg"
                 WHEN vs.VSORRESU = "F" THEN "C"
                 ELSE vs.VSORRESU
             FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
-          \`\`\`
+          ```
           
-          VSSTAT from self \`\`\`sql
+          VSSTAT from self ```sql
             SELECT CAST(vs.VSORRES as BOOLEAN)
             FROM vs WHERE VSTESTCD = "{{VSTESTCD}}"
-          \`\`\`
+          ```
           
-          VSREASND from esource \`\`\`path
+          VSREASND from esource ```path
             {{MILESTONE.NAME}}.VS.{{VSTESTCD}}REASND
-          \`\`\`
+          ```
 }
