@@ -25,14 +25,13 @@ const { actions, reducer } = createSlice({
       }: PayloadAction<{ filename: string; dependencyFilename: string }>
     ) => {
       const file = state[filename];
-      const dependencyFile = original(state)![dependencyFilename];
-      const fileIsAlreadyDependency = file.dependencies
-        .map(({ name }) => name)
-        .includes(dependencyFilename);
       const dependsOnSelf = filename === dependencyFilename;
 
-      if (!dependsOnSelf && !fileIsAlreadyDependency) {
-        file.dependencies.push(dependencyFile);
+      if (!dependsOnSelf) {
+        file.dependencies = new Set([
+          ...Array.from(file.dependencies),
+          dependencyFilename,
+        ]);
       }
     },
   },
@@ -42,7 +41,7 @@ export interface File {
   name: string;
   ast: Document | null;
   source: string;
-  dependencies: File[];
+  dependencies: Set<string>;
   parseDiagnostics: ParseDiagnostic[];
 }
 

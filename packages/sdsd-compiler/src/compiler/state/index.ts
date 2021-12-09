@@ -1,7 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import { enableMapSet } from "immer";
 import { ConfigBuilderAction, configBuilderReducer } from "./configBuilder";
 import { DefBuilderAction, defBuilderReducer } from "./defBuilder";
 import { filesReducer, FilesAction } from "./files";
+
+enableMapSet();
 
 export * from "./defBuilder";
 export * from "./files";

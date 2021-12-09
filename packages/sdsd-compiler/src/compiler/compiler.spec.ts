@@ -643,7 +643,15 @@ milestone BAD_MILESTONE {
         ],
       ];
       inOrderCompiler = new Compiler({});
-      inOrderCompiler.updateFiles(Object.fromEntries(fileEntries));
+      for (const [filename, source] of fileEntries) {
+        inOrderCompiler.updateFiles({ [filename]: source });
+      }
+    });
+
+    it("allows an entire study to be defined in order at once", () => {
+      compiler.updateFiles(Object.fromEntries(fileEntries));
+      expect(compiler.result).toEqual(inOrderCompiler.result);
+      expect(compiler.diagnostics).toEqual([]);
     });
 
     it("allows an entire study to be defined out of order at the same time", () => {

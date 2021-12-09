@@ -185,7 +185,7 @@ export class Compiler {
       source,
       ast,
       parseDiagnostics,
-      dependencies: [],
+      dependencies: new Set(),
     };
   }
 
@@ -202,19 +202,6 @@ export class Compiler {
         };
       })
     );
-  }
-
-  private recompileDependentFiles(files: File[]) {
-    const dependentFiles = files.flatMap((file) => file.dependencies);
-    const filesMap = Object.fromEntries(
-      dependentFiles.map((file) => [file.name, file.source])
-    );
-
-    if (dependentFiles.length === 0) {
-      return;
-    }
-
-    this.compileFiles(filesMap);
   }
 
   private compileFiles(filesMap: FileMap) {
@@ -240,14 +227,6 @@ export class Compiler {
     for (const ConfigBuilder of configBuilders) {
       this.applyActions(new ConfigBuilder(files, accessors).getActions());
     }
-
-    this.compiledFilenames = new Set([
-      ...Array.from(this.compiledFilenames),
-      ...Array.from(filenames),
-    ]);
-    this.recompileDependentFiles(
-      Array.from(files).map((file) => this.state.files[file.name])
-    );
   }
 
   updateFiles(filesMap: FileMap): void {
