@@ -1,0 +1,95 @@
+study {
+  id: "MY-STUDY"
+  name: "This is my study"
+}
+
+milestone SCREENING {
+  at: t"d-14"
+}
+
+milestone BASELINE {
+  at: t"d0"
+}
+
+milestone CLINIC_1 {
+  at: t"d7"
+}
+
+milestone CLINIC_2 {
+  at: t"d14"
+}
+
+milestone CLOSEOUT {
+  at: t"d21"
+}
+
+milestone EARLY_TERM {
+  at: t"> BASELINE"
+}
+
+codelist BodySide {
+  LEFT        @desc("Left side of the body")
+  RIGHT       @desc("Right side of the body")
+}
+
+codelist ArmPosition {
+  UPPER       @desc("Upper arm position")
+  LOWER       @desc("Lower arm position")
+}
+
+codelist VisitType {
+  SCREENING        @desc("A screening visit")
+  BASELINE         @desc("A baseline visit")
+  TREATMENT        @desc("A visit that occurs during the course of treatment")
+  EARLY_WITHDRAWAL @desc("A visit that occurs when the subject exits the study early")
+}
+interface base {
+  SUBJID  String                     @subject.id
+                                      @label("Subject id")
+                                      @desc("Identifier for subject in the study")
+  SUBJUID String                     @subject.uuid
+                                      @label("Subject universal id")
+                                      @desc("Universal subject id across studies")
+}
+
+interface visit_base {
+  VISTYP VisitType                   @label("The type of visit that occurred")
+                                      @desc("Indicates the category of the visit")
+}
+
+domain "VITAL SIGNS" @abbr("VS") {
+  dataset vs implements base, visit_base @milestone(t"SCREENING, BASELINEZ, CLINIC_1, CLINIC_2, CLOSEOUT") {
+    VSORRES Integer                  @label("Vital signs result")
+                                      @desc("Result of the vital signs measurement")
+    VSBOSI  BodySide                 @label("Body side")
+                                      @desc("The side of the body the measurement was taken on")
+    VSPOS   ArmPosition              @label("Arm position")
+                                      @desc("The position of the arm the measurement was taken on")
+  }
+}
+
+map dataset vs {
+  VISTYP from literal as VISIT_NAME ```json
+    "{{MILESTONE.NAME}}"
+  ``` => ```python
+    if VISIT_NAME == 'SCREENING':
+        return 'SCREENING'
+    if VISIT_NAME == 'BASELINE':
+        return 'BASELINE'
+    if VISIT_NAME == 'EARLY_TERM':
+        return 'EARLY_WITHDRAWAL'
+    return 'TREATMENT'
+  ```
+
+  VSORRES from esource ```path
+    {{MILESTONE.NAME}}.VS.VSORRES
+  ```
+
+  VSBOSI from esource ```path
+    {{MILESTONE.NAME}}.VS.VSBOSI
+  ```
+
+  VSPOS from esource ```path
+    {{MILESTONE.NAME}}.VS.VSPOS
+  ```
+}

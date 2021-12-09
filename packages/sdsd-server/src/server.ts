@@ -15,18 +15,19 @@ import {
   TextDocumentPositionParams,
   TextDocumentSyncKind,
   InitializeResult,
+  Position,
 } from "vscode-languageserver/node";
 
 import { TextDocument } from "vscode-languageserver-textdocument";
-// import { Compiler } from "sdsd-compiler";
+import { Compiler } from "sdsd-compiler";
 import nearley from "nearley";
 
-const grammar = nearley.Grammar.fromCompiled(require("../grammar.js"));
+// const grammar = nearley.Grammar.fromCompiled(require("../grammar.js"));
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all);
-// connection.console.log(Compiler);
+const compiler = new Compiler({});
 
 // Create a simple text document manager.
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
@@ -141,6 +142,7 @@ documents.onDidClose((e) => {
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent((change) => {
+  compiler.updateFiles({ [change.document.uri]: change.document.getText() });
   connection.console.log("didchangecontent");
   validateTextDocument(change.document);
 });
@@ -148,67 +150,35 @@ documents.onDidChangeContent((change) => {
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
   // In this simple example we get the settings for every validate run.
   const settings = await getDocumentSettings(textDocument.uri);
+  textDocument.positionAt(2);
 
   // The validator creates diagnostics for all uppercase words length 2 and more
   const text = textDocument.getText();
   const diagnostics: Diagnostic[] = [];
 
-  const parser = new nearley.Parser(grammar, { keepHistory: true });
+  // const parser = new nearley.Parser(grammar, { keepHistory: true });
   try {
-    const parseResult = parser.feed(text);
-    connection.console.log(JSON.stringify(parseResult.results));
+    // [{"code":"not_found","scope":"local","loc":{"start":{"line":61,"col":66},"end":{"line":61,"col":74},"filename":"file:///Users/evan/sdsd/packages/sdsd-vscode/single_file.sdsd"},"message":"Could not find milestone with name \"BASELINEZ\". Please add it:\n\nmilestone BASELINEZ {\n  at: t\"d7 +-2\"\n}","defType":"milestone","name":"BASELINEZ"}
+    const diagnostics: Diagnostic[] = compiler.diagnostics.map(
+      ({ code, scope, loc, message }) => ({
+        message,
+        code,
+        range: {
+          start: Position.create(
+            (loc?.start.line ?? 1) - 1,
+            (loc?.start.col ?? 0) - 1
+          ),
+          end: Position.create(
+            (loc?.end.line ?? Infinity) - 1,
+            loc?.end.col ?? Infinity
+          ),
+        },
+      })
+    );
+    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
   } catch (err: any) {
-    connection.console.log(err.offset);
-    const diagnostic: Diagnostic = {
-      severity: DiagnosticSeverity.Warning,
-      range: {
-        start: textDocument.positionAt(err.offset),
-        end: textDocument.positionAt(err.offset),
-      },
-      message: err.toString(),
-      source: "ex",
-    };
-    diagnostics.push(diagnostic);
+    connection.console.error(err);
   }
-
-  const pattern = /\b[A-Z]{2,}\b/g;
-  let m: RegExpExecArray | null;
-
-  let problems = 0;
-  while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
-    problems++;
-    const diagnostic: Diagnostic = {
-      severity: DiagnosticSeverity.Warning,
-      range: {
-        start: textDocument.positionAt(m.index),
-        end: textDocument.positionAt(m.index + m[0].length),
-      },
-      message: `${m[0]} is all uppercase.`,
-      source: "ex",
-    };
-    if (hasDiagnosticRelatedInformationCapability) {
-      diagnostic.relatedInformation = [
-        {
-          location: {
-            uri: textDocument.uri,
-            range: Object.assign({}, diagnostic.range),
-          },
-          message: "Spelling matters",
-        },
-        {
-          location: {
-            uri: textDocument.uri,
-            range: Object.assign({}, diagnostic.range),
-          },
-          message: "Particularly for names",
-        },
-      ];
-    }
-    diagnostics.push(diagnostic);
-  }
-
-  // Send the computed diagnostics to VSCode.
-  connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
 connection.onDidChangeWatchedFiles((_change) => {
@@ -218,20 +188,18 @@ connection.onDidChangeWatchedFiles((_change) => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
-  (_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+  (textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+    // connection.console.log(JSON.stringify(documents.keys()));
+    // connection.console.log(documents.get(textDocumentPosition.textDocument));
     // The pass parameter contains the position of the text document in
     // which code complete got requested. For the example we ignore this
     // info and always provide the same completion items.
     return [
       {
-        label: "TypeScript",
-        kind: CompletionItemKind.Text,
-        data: 1,
+        label: "foo",
       },
       {
-        label: "JavaScript",
-        kind: CompletionItemKind.Text,
-        data: 2,
+        label: "fooz",
       },
     ];
   }
@@ -240,12 +208,13 @@ connection.onCompletion(
 // This handler resolves additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
-  if (item.data === 1) {
-    item.detail = "TypeScript details";
-    item.documentation = "TypeScript documentation";
-  } else if (item.data === 2) {
-    item.detail = "JavaScript details";
-    item.documentation = "JavaScript documentation";
+  console.log("onCompletionResolve");
+  if (item.label === "foo") {
+    item.detail = "foo details";
+    item.documentation = "foo documentation";
+  } else if (item.label === "fooz") {
+    item.detail = "fooz details";
+    item.documentation = "fooz documentation";
   }
   return item;
 });
