@@ -434,18 +434,6 @@ class BaseConfigBuilder extends DocumentVisitor {
     return attributes;
   }
 
-  protected getDirectives(directives: Directive[]): {
-    [directiveName: string]: ParsedDirective | undefined;
-  } {
-    return Object.fromEntries(
-      directives.map((directive) => {
-        const parsed = directive.accept(this);
-
-        return [parsed.name, parsed];
-      })
-    );
-  }
-
   private typecheckDirective<Name extends keyof DirectiveTypes>(
     name: Name,
     directive: ParsedDirective
@@ -489,37 +477,32 @@ class BaseConfigBuilder extends DocumentVisitor {
     return [name, directive];
   }
 
-  protected getOptionalDirectives<
-    Names extends ReadonlyArray<keyof DirectiveTypes>
+  protected getDirectives<
+    RequiredNames extends ReadonlyArray<keyof DirectiveTypes>,
+    OptionalNames extends ReadonlyArray<keyof DirectiveTypes>
   >(
-    directives: ReturnType<BaseConfigBuilder["getDirectives"]>,
-    names: Names
-  ): { [K in Names[number]]: ParsedDirective<DirectiveTypes[K]> | null } {
-    return Object.fromEntries(
-      names.map((name): [Names[number], ParsedDirective | null] => {
-        const directive = directives[name];
-        const expectedArgTypes = DirectiveTypes[name];
-
-        if (!directive) {
-          return [name, null];
-        }
-
-        return this.typecheckDirective(name, directive);
-      })
-    ) as ReturnType<BaseConfigBuilder["getOptionalDirectives"]>;
-  }
-
-  protected getRequiredDirectives<
-    Names extends ReadonlyArray<keyof DirectiveTypes>
-  >(
-    directives: ReturnType<BaseConfigBuilder["getDirectives"]>,
-    names: Names,
+    directiveNodes: Directive[],
+    {
+      required,
+      optional,
+    }: { required: RequiredNames; optional: OptionalNames },
     parentLoc: Loc
-  ): { [K in Names[number]]: ParsedDirective<DirectiveTypes[K]> | null } {
-    return Object.fromEntries(
-      names.map((name): [Names[number], ParsedDirective | null] => {
+  ): {
+    [K in (RequiredNames | OptionalNames)[number]]: ParsedDirective<
+      DirectiveTypes[K]
+    > | null;
+  } {
+    type Names = (RequiredNames[number] | OptionalNames[number])[];
+    const directives = Object.fromEntries(
+      directiveNodes.map((directive) => {
+        const parsed = directive.accept(this);
+
+        return [parsed.name, parsed];
+      })
+    );
+    const result = Object.fromEntries([
+      ...required.map((name): [Names[number], ParsedDirective | null] => {
         const directive = directives[name];
-        const expectedArgTypes = DirectiveTypes[name];
 
         if (!directive) {
           this.addDiagnostic({
@@ -535,8 +518,19 @@ class BaseConfigBuilder extends DocumentVisitor {
         }
 
         return this.typecheckDirective(name, directive);
-      })
-    ) as ReturnType<BaseConfigBuilder["getRequiredDirectives"]>;
+      }),
+      ...optional.map((name): [Names[number], ParsedDirective | null] => {
+        const directive = directives[name];
+
+        if (!directive) {
+          return [name, null];
+        }
+
+        return this.typecheckDirective(name, directive);
+      }),
+    ]);
+
+    return result as any;
   }
 
   private parseTimeValue(value: TimeValue): ParsedTimeValue {
@@ -557,18 +551,19 @@ class BaseConfigBuilder extends DocumentVisitor {
   }
 
   visitColumnDefinition(node: ColumnDefinition): DatasetColumn {
-    const directives = this.getDirectives(node.directives);
-    const roleDirectives = this.getOptionalDirectives(directives, [
-      "milestone.study_day",
-      "milestone.hour",
-      "milestone.name",
-      "subject.id",
-      "subject.uuid",
-      "sequence",
-    ]);
-    const { label, desc } = this.getRequiredDirectives(
-      directives,
-      ["label", "desc"],
+    const { label, desc, ...roleDirectives } = this.getDirectives(
+      node.directives,
+      {
+        optional: [
+          "milestone.study_day",
+          "milestone.hour",
+          "milestone.name",
+          "subject.id",
+          "subject.uuid",
+          "sequence",
+        ],
+        required: ["label", "desc"],
+      },
       { ...node.loc, filename: this.currentFile!.name }
     );
 
@@ -984,11 +979,14 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitCodelistMember(node: CodelistMember): CodelistItem {
-    const directives = this.getDirectives(node.directives);
-    const { desc } = this.getRequiredDirectives(directives, ["desc"], {
-      ...node.loc,
-      filename: this.currentFile!.name,
-    });
+    const { desc } = this.getDirectives(
+      node.directives,
+      { required: ["desc"], optional: [] },
+      {
+        ...node.loc,
+        filename: this.currentFile!.name,
+      }
+    );
 
     return {
       value: node.name.accept(this).value,
@@ -1070,11 +1068,14 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitDomainDefinition(node: DomainDefinition): Action[] {
-    const directives = this.getDirectives(node.directives);
-    const { abbr } = this.getRequiredDirectives(directives, ["abbr"], {
-      ...node.loc,
-      filename: this.currentFile!.name,
-    });
+    const { abbr } = this.getDirectives(
+      node.directives,
+      { required: ["abbr"], optional: [] },
+      {
+        ...node.loc,
+        filename: this.currentFile!.name,
+      }
+    );
 
     return [
       configBuilderActions.addDomain({
@@ -1126,8 +1127,11 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
 
       return iface.columns;
     });
-    const directives = this.getDirectives(node.directives);
-    const { milestone } = this.getOptionalDirectives(directives, ["milestone"]);
+    const { milestone } = this.getDirectives(
+      node.directives,
+      { optional: ["milestone"], required: [] },
+      { ...node.loc, filename: this.currentFile!.name }
+    );
     const timelist = milestone?.args[0] ?? null;
 
     return {
