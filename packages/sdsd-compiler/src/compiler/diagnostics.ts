@@ -18,6 +18,8 @@ export const DiagnosticCode = {
   MISSING_ATTRIBUTE: "missing_attribute",
   EXTRA_ATTRIBUTE: "extra_attribute",
   INVALID_TYPE: "invalid_type",
+  DUPLICATE_ATTRIBUTE: "duplicate_attribute",
+  DUPLICATE_DEFINITION: "duplicate_definition",
 } as const;
 export type DiagnosticCode = typeof DiagnosticCode[keyof typeof DiagnosticCode];
 
@@ -79,6 +81,24 @@ export interface ExtraAttributeDiagnostic
   defType: typeof DefinitionType["MILESTONE"] | typeof DefinitionType["STUDY"];
 }
 
+export interface DuplicateAttributeDiagnostic
+  extends BaseDiagnostic<
+    typeof DiagnosticCode["DUPLICATE_ATTRIBUTE"],
+    typeof DiagnosticScope["LOCAL"]
+  > {
+  attributeName: string;
+  defType: typeof DefinitionType["MILESTONE"] | typeof DefinitionType["STUDY"];
+}
+
+export interface DuplicateDefinitionDiagnostic
+  extends BaseDiagnostic<
+    typeof DiagnosticCode["DUPLICATE_DEFINITION"],
+    typeof DiagnosticScope["LOCAL"]
+  > {
+  name: string | null;
+  defType: DefinitionType;
+}
+
 export interface InvalidTypeDiagnostic
   extends BaseDiagnostic<
     typeof DiagnosticCode["INVALID_TYPE"],
@@ -94,4 +114,6 @@ export type Diagnostic =
   | ParseDiagnostic
   | MissingAttributeDiagnostic
   | ExtraAttributeDiagnostic
-  | InvalidTypeDiagnostic;
+  | InvalidTypeDiagnostic
+  | DuplicateAttributeDiagnostic
+  | DuplicateDefinitionDiagnostic;

@@ -365,10 +365,31 @@ class BaseConfigBuilder extends DocumentVisitor {
     );
   }
 
-  protected getAttributes(keyValuePairs: KeyValuePair[]): {
+  protected getAttributes(
+    keyValuePairs: KeyValuePair[],
+    defType: ExtraAttributeDiagnostic["defType"]
+  ): {
     [attrName: string]: ParsedValue | undefined;
   } {
-    return Object.fromEntries(keyValuePairs.map((node) => node.accept(this)));
+    const attributes: ReturnType<BaseConfigBuilder["getAttributes"]> = {};
+
+    for (const node of keyValuePairs) {
+      const { key, value, loc } = node.accept(this);
+      if (!(key in attributes)) {
+        attributes[key] = value;
+      } else {
+        this.addDiagnostic({
+          code: DiagnosticCode.DUPLICATE_ATTRIBUTE,
+          scope: DiagnosticScope.LOCAL,
+          loc,
+          message: `Duplicate attribute ${key}`,
+          attributeName: key,
+          defType,
+        });
+      }
+    }
+
+    return attributes;
   }
 
   protected getDirectives(directives: Directive[]): {
@@ -506,11 +527,19 @@ class BaseConfigBuilder extends DocumentVisitor {
     return node.paths.map((path) => path.accept(this));
   }
 
-  visitKeyValuePair(node: KeyValuePair): [string, ParsedValue] {
+  visitKeyValuePair(node: KeyValuePair): {
+    key: string;
+    value: ParsedValue;
+    loc: Loc;
+  } {
     const key = node.lhs.accept(this);
     const value = node.rhs.accept(this);
 
-    return [key.value, value];
+    return {
+      key: key.value,
+      value,
+      loc: { ...node.loc, filename: this.currentFile!.name },
+    };
   }
 
   visitTimeconf(node: Timeconf): ParsedTimeconfValue {
@@ -658,7 +687,7 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitStudyDefinition(node: StudyDefinition): Action[] {
-    const attributes = this.getAttributes(node.children);
+    const attributes = this.getAttributes(node.children, DefinitionType.STUDY);
     const [id, name] = this.getStringAttributes(
       attributes,
       ["id", "name"],
@@ -687,7 +716,10 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitMilestoneDefinition(node: MilestoneDefinition): Action[] {
-    const attributes = this.getAttributes(node.children);
+    const attributes = this.getAttributes(
+      node.children,
+      DefinitionType.MILESTONE
+    );
     const [timeconf] = this.getTimeconfAttributes(
       attributes,
       ["at"],

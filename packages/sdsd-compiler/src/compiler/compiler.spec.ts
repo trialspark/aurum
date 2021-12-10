@@ -205,6 +205,34 @@ Array [
 `);
     });
 
+    it("errors if the study has duplicate attributes", () => {
+      compiler.updateFiles({
+        "study.sdsd": `study { id: "ID" id: "FOO" name: "HELLO"}`,
+      });
+      expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "attributeName": "id",
+    "code": "duplicate_attribute",
+    "defType": "study",
+    "loc": Object {
+      "end": Object {
+        "col": 26,
+        "line": 1,
+      },
+      "filename": "study.sdsd",
+      "start": Object {
+        "col": 18,
+        "line": 1,
+      },
+    },
+    "message": "Duplicate attribute id",
+    "scope": "local",
+  },
+]
+`);
+    });
+
     describe("and some milestones are added", () => {
       beforeEach(() => {
         compiler.updateFiles({
