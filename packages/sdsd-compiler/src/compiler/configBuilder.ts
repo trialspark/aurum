@@ -497,6 +497,16 @@ class BaseConfigBuilder extends DocumentVisitor {
       directiveNodes.map((directive) => {
         const parsed = directive.accept(this);
 
+        if (!(parsed.name in DirectiveTypes)) {
+          this.addDiagnostic({
+            code: DiagnosticCode.UNEXPECTED_DIRECTIVE,
+            scope: DiagnosticScope.LOCAL,
+            loc: parsed.loc,
+            message: `Did expect to see directive ${parsed.name} here.`,
+            name: parsed.name,
+          });
+        }
+
         return [parsed.name, parsed];
       })
     );

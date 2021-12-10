@@ -22,6 +22,7 @@ export const DiagnosticCode = {
   MISSING_STUDY_DEF: "missing_study_def",
   NOT_FOUND: "not_found",
   PARSE_FAILURE: "parse_failure",
+  UNEXPECTED_DIRECTIVE: "unexpected_directive",
 } as const;
 export type DiagnosticCode = typeof DiagnosticCode[keyof typeof DiagnosticCode];
 
@@ -127,6 +128,14 @@ export interface InvalidTypeDiagnostic
   actualType: string;
 }
 
+export interface UnexpectedDirectiveDiagnostic
+  extends BaseDiagnostic<
+    typeof DiagnosticCode["UNEXPECTED_DIRECTIVE"],
+    typeof DiagnosticScope["LOCAL"]
+  > {
+  name: string;
+}
+
 export type Diagnostic =
   | MissingStudyDefDiagnostic
   | NotFoundDiagnostic
@@ -137,4 +146,5 @@ export type Diagnostic =
   | DuplicateAttributeDiagnostic
   | DuplicateDefinitionDiagnostic
   | MissingDirectiveDiagnostic
-  | IncorrectNumberOfArgsDiagnostic;
+  | IncorrectNumberOfArgsDiagnostic
+  | UnexpectedDirectiveDiagnostic;

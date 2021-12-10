@@ -193,7 +193,7 @@ Object {
               "description": "Clinical encounter number.",
               "label": "Visit Number",
               "name": "VISITNUM",
-              "role": null,
+              "role": "milestone.study_day",
               "type": Array [
                 Object {
                   "type": "scalar",
@@ -403,6 +403,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "0",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -534,6 +543,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "7",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -669,6 +687,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "14",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -800,6 +827,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "21",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -935,6 +971,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "0",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -1066,6 +1111,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "7",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -1201,6 +1255,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "14",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -1332,6 +1395,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "21",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -1467,6 +1539,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "0",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -1598,6 +1679,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "7",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -1733,6 +1823,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "14",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -1864,6 +1963,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "21",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -1999,6 +2107,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "0",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -2130,6 +2247,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "7",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -2265,6 +2391,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "14",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -2396,6 +2531,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "21",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -2531,6 +2675,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "0",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -2671,6 +2824,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "7",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -2815,6 +2977,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "14",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -2957,6 +3128,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "21",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -3097,6 +3277,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "0",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -3220,6 +3409,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "7",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -3339,6 +3537,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "14",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -3462,6 +3669,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "21",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -3581,6 +3797,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "0",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -3704,6 +3929,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "7",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -3825,6 +4059,15 @@ Object {
                   "name": "VISITDY",
                   "variables": Array [],
                 },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "14",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
+                  "variables": Array [],
+                },
                 "VSORRES": Object {
                   "mappingLogic": Object {
                     "code": "
@@ -3944,6 +4187,15 @@ Object {
                     "source": "literal",
                   },
                   "name": "VISITDY",
+                  "variables": Array [],
+                },
+                "VISITNUM": Object {
+                  "mappingLogic": Object {
+                    "code": "21",
+                    "language": "json",
+                    "source": "literal",
+                  },
+                  "name": "VISITNUM",
                   "variables": Array [],
                 },
                 "VSORRES": Object {
@@ -11825,7 +12077,7 @@ Object {
               "description": "Clinical encounter number.",
               "label": "Visit Number",
               "name": "VISITNUM",
-              "role": null,
+              "role": "milestone.study_day",
               "type": Array [
                 Object {
                   "type": "scalar",

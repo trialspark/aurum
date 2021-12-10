@@ -508,7 +508,7 @@ Array [
               }
             
               interface visit_base {
-                VISITNUM Integer @milestone.number
+                VISITNUM Integer @milestone.study_day
                                  @label("Visit Number")
                                  @desc("Clinical encounter number.")
                                  
@@ -784,6 +784,34 @@ Array [
       },
     },
     "message": "Incorrect number of arguments. Expected 0 but got 1.",
+    "scope": "local",
+  },
+]
+`);
+            });
+
+            it("errors if a unexpected directive is included", () => {
+              compiler.updateFiles({
+                "bad.sdsd":
+                  'domain "A" @abbr("A") { dataset a { A String @label("A") @desc("A") @hehe }}',
+              });
+              expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "code": "unexpected_directive",
+    "loc": Object {
+      "end": Object {
+        "col": 73,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 69,
+        "line": 1,
+      },
+    },
+    "message": "Did expect to see directive hehe here.",
+    "name": "hehe",
     "scope": "local",
   },
 ]
@@ -1261,7 +1289,7 @@ Array [
           }
         
           interface visit_base {
-            VISITNUM Integer @milestone.number
+            VISITNUM Integer @milestone.study_day
                              @label("Visit Number")
                              @desc("Clinical encounter number.")
                              
