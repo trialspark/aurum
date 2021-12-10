@@ -524,6 +524,89 @@ Array [
           });
         });
 
+        it("errors if a directive is passed the wrong type", () => {
+          compiler.updateFiles({
+            "bad.sdsd": 'interface a { A String @label("A") @desc(t"d0") }',
+          });
+          expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actualType": "time-list",
+    "code": "invalid_type",
+    "expectedType": "string",
+    "loc": Object {
+      "end": Object {
+        "col": 45,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 44,
+        "line": 1,
+      },
+    },
+    "message": "Invalid type: time-list, should be a string.",
+    "scope": "local",
+  },
+]
+`);
+        });
+
+        it("errors if a directive is passed too few arguments", () => {
+          compiler.updateFiles({
+            "bad.sdsd": 'interface a { A String @label @desc("A") }',
+          });
+          expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actual": 0,
+    "code": "incorrect_number_of_args",
+    "expected": 1,
+    "loc": Object {
+      "end": Object {
+        "col": 29,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 24,
+        "line": 1,
+      },
+    },
+    "message": "Incorrect number of arguments. Expected 1 but got 0.",
+    "scope": "local",
+  },
+]
+`);
+        });
+
+        it("errors if a required directive is omitted", () => {
+          compiler.updateFiles({
+            "bad.sdsd": 'interface a { A String @label("A") }',
+          });
+          expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "code": "missing_directive",
+    "directiveName": "desc",
+    "loc": Object {
+      "end": Object {
+        "col": 34,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 15,
+        "line": 1,
+      },
+    },
+    "message": "Missing directive desc. Please add it (e.g. @desc(...)).",
+    "scope": "local",
+  },
+]
+`);
+        });
+
         describe("and some codelists are added", () => {
           beforeEach(() => {
             compiler.updateFiles({
@@ -676,6 +759,35 @@ Array [
           },
         ]
         `);
+            });
+
+            it("errors if an optional directive has the wrong args", () => {
+              compiler.updateFiles({
+                "bad.sdsd":
+                  'domain "A" @abbr("A") { dataset a { A String @label("A") @desc("A") @sequence("BAD") }}',
+              });
+              expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "actual": 1,
+    "code": "incorrect_number_of_args",
+    "expected": 0,
+    "loc": Object {
+      "end": Object {
+        "col": 84,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 69,
+        "line": 1,
+      },
+    },
+    "message": "Incorrect number of arguments. Expected 0 but got 1.",
+    "scope": "local",
+  },
+]
+`);
             });
 
             describe("and dataset mappings are added", () => {

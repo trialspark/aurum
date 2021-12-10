@@ -22,6 +22,7 @@ import {
   Loc,
   ExtraAttributeDiagnostic,
   MissingAttributeDiagnostic,
+  InvalidTypeDiagnostic,
 } from ".";
 import {
   Args,
@@ -114,9 +115,10 @@ interface TimeRangeValue {
   end: ParsedTimeValue;
 }
 
-interface ParsedDirective {
+interface ParsedDirective<A extends ParsedValue[] = ParsedValue[]> {
   name: string;
-  args: ParsedValue[];
+  args: A;
+  loc: Loc;
 }
 
 interface ParsedHourValue {
@@ -153,6 +155,43 @@ interface ParsedSourceCode {
   code: string;
 }
 
+type DirectiveTypes = {
+  label: [StringValue];
+  desc: [StringValue];
+  abbr: [StringValue];
+  milestone: [TimeListValue];
+  "milestone.study_day": [];
+  "milestone.name": [];
+  "milestone.hour": [];
+  sequence: [];
+  "subject.id": [];
+  "subject.uuid": [];
+};
+type ParsedValueTypes<Tuple extends [...ParsedValue[]]> = {
+  [Index in keyof Tuple]: Tuple[Index] extends { type: string }
+    ? Tuple[Index]["type"]
+    : never;
+};
+type HandleEmpty<T> = T extends never[] ? [] : T;
+const DirectiveTypes: {
+  [T in keyof DirectiveTypes]: HandleEmpty<{
+    [Index in keyof DirectiveTypes[T]]: ParsedValueTypes<
+      DirectiveTypes[T]
+    >[Index];
+  }>;
+} = {
+  label: ["string"],
+  desc: ["string"],
+  abbr: ["string"],
+  milestone: ["time-list"],
+  "milestone.hour": [],
+  "milestone.name": [],
+  "milestone.study_day": [],
+  "subject.id": [],
+  "subject.uuid": [],
+  sequence: [],
+};
+
 /**
  * Parses/transforms core/shared entities like directives/args/identifiers/strings/values/etc.
  */
@@ -174,8 +213,9 @@ class BaseConfigBuilder extends DocumentVisitor {
   >[] = [];
   private filesActions: ReturnType<typeof filesActions["addDependency"]>[] = [];
 
-  protected addDiagnostic(diagnostic: Diagnostic) {
+  protected addDiagnostic<D extends Diagnostic>(diagnostic: D): D {
     this.diagnosticActions.push(configBuilderActions.addDiagnostic(diagnostic));
+    return diagnostic;
   }
 
   protected addFileDependency(parent: File) {
@@ -264,12 +304,14 @@ class BaseConfigBuilder extends DocumentVisitor {
     example: string,
     loc: Loc
   ) {
-    this.addDiagnostic({
+    return this.addDiagnostic({
       code: DiagnosticCode.INVALID_TYPE,
       scope: DiagnosticScope.LOCAL,
       loc,
       message: untab(`
-        Invalid type: ${actualType}, should be a ${expectedType}. (e.g. ${example})
+        Invalid type: ${actualType}, should be a ${expectedType}.${
+        example ? ` (e.g. ${example})` : ""
+      }
       `),
       actualType,
       expectedType,
@@ -393,7 +435,7 @@ class BaseConfigBuilder extends DocumentVisitor {
   }
 
   protected getDirectives(directives: Directive[]): {
-    [directiveName: string]: ParsedDirective;
+    [directiveName: string]: ParsedDirective | undefined;
   } {
     return Object.fromEntries(
       directives.map((directive) => {
@@ -402,6 +444,99 @@ class BaseConfigBuilder extends DocumentVisitor {
         return [parsed.name, parsed];
       })
     );
+  }
+
+  private typecheckDirective<Name extends keyof DirectiveTypes>(
+    name: Name,
+    directive: ParsedDirective
+  ): [Name, ParsedDirective | null] {
+    const expectedArgTypes = DirectiveTypes[name];
+
+    if (directive.args.length !== expectedArgTypes.length) {
+      this.addDiagnostic({
+        code: DiagnosticCode.INCORRECT_NUMBER_OF_ARGS,
+        scope: DiagnosticScope.LOCAL,
+        loc: directive.loc,
+        message: `Incorrect number of arguments. Expected ${expectedArgTypes.length} but got ${directive.args.length}.`,
+        expected: expectedArgTypes.length,
+        actual: directive.args.length,
+      });
+      return [name, null];
+    }
+
+    const typeErrors = directive.args.flatMap(
+      (arg, index): InvalidTypeDiagnostic[] => {
+        const expectedType = expectedArgTypes[index];
+
+        if (arg.type !== expectedType) {
+          return [
+            this.addTypeError(
+              { actualType: arg.type, expectedType },
+              "",
+              arg.loc
+            ),
+          ];
+        }
+
+        return [];
+      }
+    );
+
+    if (typeErrors.length > 0) {
+      return [name, null];
+    }
+
+    return [name, directive];
+  }
+
+  protected getOptionalDirectives<
+    Names extends ReadonlyArray<keyof DirectiveTypes>
+  >(
+    directives: ReturnType<BaseConfigBuilder["getDirectives"]>,
+    names: Names
+  ): { [K in Names[number]]: ParsedDirective<DirectiveTypes[K]> | null } {
+    return Object.fromEntries(
+      names.map((name): [Names[number], ParsedDirective | null] => {
+        const directive = directives[name];
+        const expectedArgTypes = DirectiveTypes[name];
+
+        if (!directive) {
+          return [name, null];
+        }
+
+        return this.typecheckDirective(name, directive);
+      })
+    ) as ReturnType<BaseConfigBuilder["getOptionalDirectives"]>;
+  }
+
+  protected getRequiredDirectives<
+    Names extends ReadonlyArray<keyof DirectiveTypes>
+  >(
+    directives: ReturnType<BaseConfigBuilder["getDirectives"]>,
+    names: Names,
+    parentLoc: Loc
+  ): { [K in Names[number]]: ParsedDirective<DirectiveTypes[K]> | null } {
+    return Object.fromEntries(
+      names.map((name): [Names[number], ParsedDirective | null] => {
+        const directive = directives[name];
+        const expectedArgTypes = DirectiveTypes[name];
+
+        if (!directive) {
+          this.addDiagnostic({
+            code: DiagnosticCode.MISSING_DIRECTIVE,
+            scope: DiagnosticScope.LOCAL,
+            loc: parentLoc,
+            message: untab(`
+              Missing directive ${name}. Please add it (e.g. @${name}(...)).
+            `),
+            directiveName: name,
+          });
+          return [name, null];
+        }
+
+        return this.typecheckDirective(name, directive);
+      })
+    ) as ReturnType<BaseConfigBuilder["getRequiredDirectives"]>;
   }
 
   private parseTimeValue(value: TimeValue): ParsedTimeValue {
@@ -423,25 +558,27 @@ class BaseConfigBuilder extends DocumentVisitor {
 
   visitColumnDefinition(node: ColumnDefinition): DatasetColumn {
     const directives = this.getDirectives(node.directives);
-    const {
-      label: {
-        args: [label],
-      },
-      desc: {
-        args: [desc],
-      },
-    } = directives;
-
-    assert(label.type === "string");
-    assert(desc.type === "string");
+    const roleDirectives = this.getOptionalDirectives(directives, [
+      "milestone.study_day",
+      "milestone.hour",
+      "milestone.name",
+      "subject.id",
+      "subject.uuid",
+      "sequence",
+    ]);
+    const { label, desc } = this.getRequiredDirectives(
+      directives,
+      ["label", "desc"],
+      { ...node.loc, filename: this.currentFile!.name }
+    );
 
     return {
       name: node.columnName.accept(this).value,
-      label: label.value,
-      description: desc.value,
+      label: label?.args[0].value ?? "",
+      description: desc?.args[0].value ?? "",
       type: node.columnType.accept(this),
       role: ((): DatasetColumnRole | null => {
-        const roles: { [R in DatasetColumnRole]: null } = {
+        const roles: { [R in keyof typeof roleDirectives]: null } = {
           "milestone.study_day": null,
           "milestone.hour": null,
           "milestone.name": null,
@@ -451,7 +588,7 @@ class BaseConfigBuilder extends DocumentVisitor {
         };
 
         for (const role in roles) {
-          if (role in directives) {
+          if (roleDirectives[role as keyof typeof roles]) {
             return role as DatasetColumnRole;
           }
         }
@@ -465,6 +602,7 @@ class BaseConfigBuilder extends DocumentVisitor {
     return {
       name: node.name,
       args: node.args?.accept(this) ?? [],
+      loc: { ...node.loc, filename: this.currentFile!.name },
     };
   }
 
@@ -846,12 +984,15 @@ export class Phase1ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitCodelistMember(node: CodelistMember): CodelistItem {
-    const { desc } = this.getDirectives(node.directives);
-    assert(desc.args[0].type === "string");
+    const directives = this.getDirectives(node.directives);
+    const { desc } = this.getRequiredDirectives(directives, ["desc"], {
+      ...node.loc,
+      filename: this.currentFile!.name,
+    });
 
     return {
       value: node.name.accept(this).value,
-      description: desc.args[0].value,
+      description: desc?.args[0].value ?? "",
     };
   }
 }
@@ -929,14 +1070,16 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
   }
 
   visitDomainDefinition(node: DomainDefinition): Action[] {
-    const { abbr } = this.getDirectives(node.directives);
-
-    assert(abbr.args[0].type === "string");
+    const directives = this.getDirectives(node.directives);
+    const { abbr } = this.getRequiredDirectives(directives, ["abbr"], {
+      ...node.loc,
+      filename: this.currentFile!.name,
+    });
 
     return [
       configBuilderActions.addDomain({
         name: node.name.accept(this).value,
-        abbr: abbr.args[0].value,
+        abbr: abbr?.args[0].value ?? "",
         datasets: Object.fromEntries(
           node.children.map((child) => {
             const dataset = child.accept(this);
@@ -983,13 +1126,9 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
 
       return iface.columns;
     });
-    const {
-      milestone: {
-        args: [timelist],
-      },
-    } = this.getDirectives(node.directives);
-
-    assert(timelist.type === "time-list");
+    const directives = this.getDirectives(node.directives);
+    const { milestone } = this.getOptionalDirectives(directives, ["milestone"]);
+    const timelist = milestone?.args[0] ?? null;
 
     return {
       name: node.name.accept(this).value,
@@ -997,17 +1136,18 @@ export class Phase3ConfigBuilder extends BaseConfigBuilder {
         ...interfaceColumns.flat(),
         ...node.columns.map((column) => column.accept(this)),
       ],
-      milestones: timelist.days
-        .flatMap((item) => this.getDatasetMilestonesFromTimeValue(item))
-        .flatMap(
-          (data): DatasetMilestone[] =>
-            timelist.hours?.map(({ hour }) => ({ ...data, hour })) ?? [
-              {
-                ...data,
-                hour: null,
-              },
-            ]
-        ),
+      milestones:
+        timelist?.days
+          ?.flatMap((item) => this.getDatasetMilestonesFromTimeValue(item))
+          .flatMap(
+            (data): DatasetMilestone[] =>
+              timelist?.hours?.map(({ hour }) => ({ ...data, hour })) ?? [
+                {
+                  ...data,
+                  hour: null,
+                },
+              ]
+          ) ?? [],
       mappings: [],
     };
   }

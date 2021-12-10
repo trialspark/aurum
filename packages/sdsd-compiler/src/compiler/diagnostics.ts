@@ -12,14 +12,16 @@ export type DiagnosticScope =
   typeof DiagnosticScope[keyof typeof DiagnosticScope];
 
 export const DiagnosticCode = {
+  DUPLICATE_ATTRIBUTE: "duplicate_attribute",
+  DUPLICATE_DEFINITION: "duplicate_definition",
+  EXTRA_ATTRIBUTE: "extra_attribute",
+  INVALID_TYPE: "invalid_type",
+  MISSING_ATTRIBUTE: "missing_attribute",
+  MISSING_DIRECTIVE: "missing_directive",
+  INCORRECT_NUMBER_OF_ARGS: "incorrect_number_of_args",
   MISSING_STUDY_DEF: "missing_study_def",
   NOT_FOUND: "not_found",
   PARSE_FAILURE: "parse_failure",
-  MISSING_ATTRIBUTE: "missing_attribute",
-  EXTRA_ATTRIBUTE: "extra_attribute",
-  INVALID_TYPE: "invalid_type",
-  DUPLICATE_ATTRIBUTE: "duplicate_attribute",
-  DUPLICATE_DEFINITION: "duplicate_definition",
 } as const;
 export type DiagnosticCode = typeof DiagnosticCode[keyof typeof DiagnosticCode];
 
@@ -72,6 +74,23 @@ export interface MissingAttributeDiagnostic
   defType: typeof DefinitionType["MILESTONE"] | typeof DefinitionType["STUDY"];
 }
 
+export interface MissingDirectiveDiagnostic
+  extends BaseDiagnostic<
+    typeof DiagnosticCode["MISSING_DIRECTIVE"],
+    typeof DiagnosticScope["LOCAL"]
+  > {
+  directiveName: string;
+}
+
+export interface IncorrectNumberOfArgsDiagnostic
+  extends BaseDiagnostic<
+    typeof DiagnosticCode["INCORRECT_NUMBER_OF_ARGS"],
+    typeof DiagnosticScope["LOCAL"]
+  > {
+  actual: number;
+  expected: number;
+}
+
 export interface ExtraAttributeDiagnostic
   extends BaseDiagnostic<
     typeof DiagnosticCode["EXTRA_ATTRIBUTE"],
@@ -116,4 +135,6 @@ export type Diagnostic =
   | ExtraAttributeDiagnostic
   | InvalidTypeDiagnostic
   | DuplicateAttributeDiagnostic
-  | DuplicateDefinitionDiagnostic;
+  | DuplicateDefinitionDiagnostic
+  | MissingDirectiveDiagnostic
+  | IncorrectNumberOfArgsDiagnostic;
