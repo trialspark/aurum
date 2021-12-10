@@ -607,6 +607,34 @@ Array [
 `);
         });
 
+        it("errors if a required directive is duplicated", () => {
+          compiler.updateFiles({
+            "bad.sdsd":
+              'interface a { A String @label("A") @desc("A") @desc("B") }',
+          });
+          expect(compiler.diagnostics).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "code": "duplicate_directive",
+    "directiveName": "desc",
+    "loc": Object {
+      "end": Object {
+        "col": 56,
+        "line": 1,
+      },
+      "filename": "bad.sdsd",
+      "start": Object {
+        "col": 47,
+        "line": 1,
+      },
+    },
+    "message": "Duplicate directive: @desc",
+    "scope": "local",
+  },
+]
+`);
+        });
+
         describe("and some codelists are added", () => {
           beforeEach(() => {
             compiler.updateFiles({
@@ -793,7 +821,7 @@ Array [
             it("errors if a unexpected directive is included", () => {
               compiler.updateFiles({
                 "bad.sdsd":
-                  'domain "A" @abbr("A") { dataset a { A String @label("A") @desc("A") @hehe }}',
+                  'domain "A" @abbr("A") { dataset a { A String @label("A") @desc("A") @abbr("B") }}',
               });
               expect(compiler.diagnostics).toMatchInlineSnapshot(`
 Array [
@@ -801,7 +829,7 @@ Array [
     "code": "unexpected_directive",
     "loc": Object {
       "end": Object {
-        "col": 73,
+        "col": 78,
         "line": 1,
       },
       "filename": "bad.sdsd",
@@ -810,8 +838,8 @@ Array [
         "line": 1,
       },
     },
-    "message": "Did expect to see directive hehe here.",
-    "name": "hehe",
+    "message": "Did not expect to see directive abbr here.",
+    "name": "abbr",
     "scope": "local",
   },
 ]

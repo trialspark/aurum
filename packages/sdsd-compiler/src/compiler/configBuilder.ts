@@ -477,6 +477,30 @@ class BaseConfigBuilder extends DocumentVisitor {
     return [name, directive];
   }
 
+  private getDirectivesMap(directives: Directive[]): {
+    [name: string]: ParsedDirective;
+  } {
+    const map: ReturnType<BaseConfigBuilder["getDirectivesMap"]> = {};
+
+    for (const directive of directives) {
+      const parsed = directive.accept(this);
+
+      if (!(parsed.name in map)) {
+        map[parsed.name] = parsed;
+      } else {
+        this.addDiagnostic({
+          code: DiagnosticCode.DUPLICATE_DIRECTIVE,
+          scope: DiagnosticScope.LOCAL,
+          loc: parsed.loc,
+          message: `Duplicate directive: @${parsed.name}`,
+          directiveName: parsed.name,
+        });
+      }
+    }
+
+    return map;
+  }
+
   protected getDirectives<
     RequiredNames extends ReadonlyArray<keyof DirectiveTypes>,
     OptionalNames extends ReadonlyArray<keyof DirectiveTypes>
@@ -493,23 +517,25 @@ class BaseConfigBuilder extends DocumentVisitor {
     > | null;
   } {
     type Names = (RequiredNames[number] | OptionalNames[number])[];
-    const directives = Object.fromEntries(
-      directiveNodes.map((directive) => {
-        const parsed = directive.accept(this);
+    const expectedNames = new Set([...required, ...optional]);
+    const directives = this.getDirectivesMap(directiveNodes);
 
-        if (!(parsed.name in DirectiveTypes)) {
-          this.addDiagnostic({
-            code: DiagnosticCode.UNEXPECTED_DIRECTIVE,
-            scope: DiagnosticScope.LOCAL,
-            loc: parsed.loc,
-            message: `Did expect to see directive ${parsed.name} here.`,
-            name: parsed.name,
-          });
-        }
+    for (const directive of Object.values(directives)) {
+      if (
+        !expectedNames.has(
+          directive.name as Parameters<typeof expectedNames["has"]>[0]
+        )
+      ) {
+        this.addDiagnostic({
+          code: DiagnosticCode.UNEXPECTED_DIRECTIVE,
+          scope: DiagnosticScope.LOCAL,
+          loc: directive.loc,
+          message: `Did not expect to see directive ${directive.name} here.`,
+          name: directive.name,
+        });
+      }
+    }
 
-        return [parsed.name, parsed];
-      })
-    );
     const result = Object.fromEntries([
       ...required.map((name): [Names[number], ParsedDirective | null] => {
         const directive = directives[name];
