@@ -5,12 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Extension",
+      "name": "Attach to LSP server",
+      "port": 6009,
+      "request": "attach",
+      "type": "pwa-node",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/packages/sdsd-server/build/**/*.js"]
+    },
+    {
+      "name": "Debug Extension",
       "type": "extensionHost",
       "request": "launch",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}/packages/sdsd-vscode"
       ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Extension and Server",
+      "configurations": ["Debug Extension", "Attach to LSP server"]
     }
   ]
 }
